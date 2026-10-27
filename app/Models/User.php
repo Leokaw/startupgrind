@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Storage;
 use Laravel\Cashier\Billable;
 
 #[ObservedBy([UserObserver::class])]
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable 
 {
     use HasFactory, Notifiable, HasUuids, Billable;
 

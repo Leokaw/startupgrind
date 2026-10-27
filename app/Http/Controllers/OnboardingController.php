@@ -50,11 +50,8 @@ class OnboardingController extends Controller
         // land on /dashboard?verified=1 (which would remount the gate
         // with stale shared props).
         return redirect()
-            ->route('dashboard')
-            ->with('toast', [
-                'type'    => 'success',
-                'message' => "You're all set. Welcome aboard!",
-            ]);
+            ->route('dashboard');
+            
     }
 
     public function skip(Request $request): RedirectResponse
@@ -66,9 +63,6 @@ class OnboardingController extends Controller
 
         return redirect()
             ->route('dashboard')
-            ->with('toast', [
-                'type'    => 'info',
-                'message' => 'You can complete your profile any time from Settings.',
-            ]);
+;
     }
 }

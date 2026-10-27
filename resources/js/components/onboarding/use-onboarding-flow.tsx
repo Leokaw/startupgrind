@@ -1,5 +1,6 @@
 import { router } from '@inertiajs/react';
 import { useCallback, useState, type ReactNode } from 'react';
+import { toast } from 'sonner';
 import {
     Briefcase,
     Calendar,
@@ -27,10 +28,7 @@ export type ChoiceGroupItem = {
 };
 
 /* =================================================================
- |  Config — the data that feeds each step
- |
- |  Images live in `public/onboarding/` and are served at the root,
- |  e.g. public/onboarding/part1_1.webp → /onboarding/part1_1.webp
+ |  Config
  | ================================================================= */
 
 export const FEATURES: Feature[] = [
@@ -102,11 +100,6 @@ export const TOTAL_STEPS = 6;
  |  Helpers
  | ================================================================= */
 
-/**
- * Convert the server's category map (`{ key: 'Label' }`) into the shape
- * `ChoiceGroup` expects. Keys are preserved so the backend's `in:`
- * validation on `area_of_work` accepts them without translation.
- */
 export function categoriesToOptions(
     categories: Record<string, string>,
 ): ChoiceGroupItem[] {
@@ -117,14 +110,11 @@ export function categoriesToOptions(
 }
 
 /* =================================================================
- |  Hook — the API that drives the stepper
+ |  Hook
  | ================================================================= */
 
 type OnboardingFlowOptions = {
-    /** Category map from the server (`key => label`). Used to validate
-     *  the industry selection before it's sent to the backend. */
     categories: Record<string, string>;
-    /** Called when the flow finishes successfully. */
     onClose: () => void;
 };
 
@@ -134,18 +124,10 @@ export function useOnboardingFlow({
 }: OnboardingFlowOptions) {
     // ── Step 1 ────────────────────────────────────────────────────────
     const [featureIndex, setFeatureIndex] = useState(0);
-
-    // Tracks which slides have been viewed. Seeded with 0 because the
-    // first slide is on screen the moment step 1 mounts.
     const [visitedFeatures, setVisitedFeatures] = useState<Set<number>>(
         () => new Set([0]),
     );
 
-    /**
-     * Change the active slide AND record it as visited.
-     * Use this everywhere the user can change the slide — clicking a
-     * list item, clicking a dot, or any programmatic change.
-     */
     const selectFeature = useCallback((i: number) => {
         setFeatureIndex(i);
         setVisitedFeatures((prev) => {
@@ -156,29 +138,17 @@ export function useOnboardingFlow({
         });
     }, []);
 
-    /** True once every slide has been viewed at least once. */
     const allFeaturesVisited = visitedFeatures.size >= FEATURES.length;
 
-    // ── Step 2 ────────────────────────────────────────────────────────
+    // ── Step 2–5 ──────────────────────────────────────────────────────
     const [role, setRole] = useState<string | null>(null);
-
-    // ── Step 3 ────────────────────────────────────────────────────────
     const [goal, setGoal] = useState<string | null>(null);
-
-    // ── Step 4 ────────────────────────────────────────────────────────
     const [industry, setIndustry] = useState<string | null>(null);
-
-    // ── Step 5 ────────────────────────────────────────────────────────
     const [description, setDescription] = useState('');
 
     // ── Shared ────────────────────────────────────────────────────────
     const [submitting, setSubmitting] = useState(false);
 
-    /**
-     * The industry key is only sent if it exists in the server-provided
-     * `categories` map. Otherwise the backend's `in:` validation would
-     * reject it.
-     */
     const resolvedAreaOfWork =
         industry && categories[industry] !== undefined ? industry : null;
 
@@ -194,47 +164,43 @@ export function useOnboardingFlow({
                 description: description.trim() || null,
             },
             {
-                preserveScroll: false,
-                preserveState: false,
-                onFinish: () => setSubmitting(false),
+                preserveScroll: true,   // 👈 don't jump the page
+                preserveState: true,    // 👈 keep the layout mounted (was false)
                 onSuccess: () => {
-                    // Close locally so the modal disappears immediately.
                     onClose();
-
-                    // Force-refresh the shared `onboarding` prop so a fresh
-                    // gate mounted by the redirect sees `required: false`.
-                    router.reload({ only: ['onboarding', 'auth'] });
+                    toast.success("You're all set. Welcome aboard!");
                 },
+                onError: (errors) => {
+                    const hasFieldErrors =
+                        errors && Object.keys(errors).length > 0;
+                    if (!hasFieldErrors) {
+                        toast.error('Something went wrong. Please try again.');
+                    }
+                },
+                onFinish: () => setSubmitting(false),
             },
         );
     }, [role, goal, resolvedAreaOfWork, description, onClose]);
 
     return {
-        // Step 1
         featureIndex,
         selectFeature,
         allFeaturesVisited,
 
-        // Step 2
         role,
         setRole,
 
-        // Step 3
         goal,
         setGoal,
 
-        // Step 4
         industry,
         setIndustry,
 
-        // Step 5
         description,
         setDescription,
 
-        // Derived
         resolvedAreaOfWork,
 
-        // Actions
         submitting,
         submit,
     };
