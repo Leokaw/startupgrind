@@ -21,7 +21,7 @@ export default function CommunityCta() {
                     Whether you're building your MVP, raising your first round, or scaling to Series A and beyond: we're here to help you grow.
                 </p>
 
-                <div className="mt-8 flex flex-col gap-3">
+                <div className="mt-8 flex lg:mb-0 mb-6 flex-col gap-3">
                     <Button className='!h-9' variant="outline">
                  
                             Attend an event

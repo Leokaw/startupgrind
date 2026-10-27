@@ -15,15 +15,21 @@ use Inertia\Response;
 
 class ProfileController extends Controller
 {
-    public function edit(Request $request): Response
-    {
-        return Inertia::render('settings/profile', [
-            'mustVerifyEmail'   => $request->user() instanceof MustVerifyEmail,
-            'status'            => $request->session()->get('status'),
-            // needed by the dropdown on the profile page.
-            'serviceCategories' => ServiceCategory::all(),
-        ]);
-    }
+   public function edit(Request $request): Response
+{
+    return Inertia::render('settings/profile', [
+        'mustVerifyEmail'   => $request->user() instanceof MustVerifyEmail,
+        'status'            => $request->session()->get('status'),
+        'serviceCategories' => ServiceCategory::all(),
+        'user'              => $request->user()->only([
+            'name',
+            'email',
+            'email_verified_at',
+            'area_of_work',
+            'description',
+        ]),
+    ]);
+}
 
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {

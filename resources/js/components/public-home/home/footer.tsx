@@ -96,12 +96,12 @@ export default function Footer() {
                         </h3>
                         <ul className="space-y-1 text-sm">
                             <li>
-                                <Link href="/terms" className="transition-colors hover:text-primary">
+                                <Link href="https://www.startupgrind.com/terms-of-service/" target='_blank' className="transition-colors hover:text-primary">
                                     Terms of use
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/code-of-conduct" className="transition-colors hover:text-primary">
+                                <Link  href="https://www.startupgrind.com/code-of-conduct/" target='_blank' className="transition-colors hover:text-primary">
                                     Code of conduct
                                 </Link>
                             </li>
@@ -115,12 +115,12 @@ export default function Footer() {
                         <img 
                             src="/branding/logo-big.png" 
                             alt="Startup Grind" 
-                            className="h-7 w-auto object-contain " 
+                            className="h-5 w-auto object-contain " 
                         />
                     </a>
                     
                     <div className="flex items-center gap-4 text-foreground">
-                        <a href="#" className="transition-colors hover:text-primary" aria-label="Twitter">
+                        <a href="" className="transition-colors hover:text-primary" aria-label="Twitter">
                             <Twitter className="h-[18px] w-[18px] fill-current" />
                         </a>
                         <a href="#" className="transition-colors hover:opacity-70" aria-label="YouTube">

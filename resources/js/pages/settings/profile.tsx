@@ -1,5 +1,5 @@
 import { Form, Head, Link, usePage } from '@inertiajs/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
 import DeleteUser from '@/components/delete-user';
@@ -28,6 +28,13 @@ type Props = {
     mustVerifyEmail: boolean;
     status?: string;
     serviceCategories: Record<string, string>;
+    user: {
+        name: string;
+        email: string;
+        email_verified_at: string | null;
+        area_of_work: string | null;
+        description: string | null;
+    };
 };
 
 const triggerClasses =
@@ -40,18 +47,44 @@ export default function Profile({
     mustVerifyEmail,
     status,
     serviceCategories,
+    user,
 }: Props) {
     const { auth } = usePage<PageProps>().props;
 
-    // The profile page is behind `auth` middleware, so a user is always
-    // present at runtime. This guard just satisfies TypeScript.
+    // ============================================================
+    // 🐛 DEBUG BLOCK — delete this useEffect once you've confirmed
+    // which source is populated.
+    // ============================================================
+    useEffect(() => {
+        console.group('%c[Profile Debug]', 'color:#0af;font-weight:bold');
+        console.log('auth.user (shared)      →', auth?.user);
+        console.log(
+            'auth.user.area_of_work  →',
+       
+            auth?.user?.area_of_work,
+        );
+        console.log(
+            'auth.user.description   →',
+      
+            auth?.user?.description,
+        );
+        console.log('user prop (controller)  →', user);
+        console.log('user.area_of_work       →', user?.area_of_work);
+        console.log('user.description        →', user?.description);
+        console.groupEnd();
+    }, [auth, user]);
+    // ============================================================
+
+    // Hooks must run unconditionally — before any early return.
+    const [areaOfWork, setAreaOfWork] = useState<string>(
+        user?.area_of_work ?? '',
+    );
+
+    // The profile page is behind `auth` middleware, so a user is
+    // always present at runtime. This guard just satisfies TS.
     if (!auth.user) {
         return null;
     }
-
-    const [areaOfWork, setAreaOfWork] = useState<string>(
-        auth.user.area_of_work ?? '',
-    );
 
     return (
         <>
@@ -114,7 +147,7 @@ export default function Profile({
                                 />
                             </div>
 
-                            {/* ========== Area of work ========== */} 
+                            {/* ========== Area of work ========== */}
                             <div className="grid gap-2">
                                 <Label htmlFor="area_of_work">
                                     Area of work
@@ -194,7 +227,7 @@ export default function Profile({
                                     name="description"
                                     rows={5}
                                     maxLength={1000}
-                                    defaultValue={auth.user!.description ?? ''}
+                                    defaultValue={user.description ?? ''}
                                     placeholder="A short bio about yourself, what you build, who you help, what you're looking for. (Optional)"
                                     className={textareaClasses}
                                 />
