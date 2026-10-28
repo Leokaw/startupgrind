@@ -41,7 +41,7 @@ type OnboardingShared = {
 /**
  * Step image used on the left column of split steps (2–6).
  * Darkened slightly so it doesn't compete with the content on the
- * right. Shows a subtle pulse while the image downloads.
+ * right. Shows a pulse + spinner while the image downloads.
  */
 function StepImage({ src, alt }: { src: string; alt: string }) {
     const [loaded, setLoaded] = useState(false);
@@ -49,9 +49,14 @@ function StepImage({ src, alt }: { src: string; alt: string }) {
 
     return (
         <div className="relative h-full w-full overflow-hidden">
-            {/* Pulse skeleton while the image downloads */}
+            {/* Pulse skeleton + centered spinner while the image downloads */}
             {!loaded && !errored && (
-                <div className="absolute inset-0 animate-pulse bg-muted-foreground/10" />
+                <>
+                    <div className="absolute inset-0 animate-pulse bg-muted-foreground/10" />
+                    <div className="absolute inset-0 z-10 flex items-center justify-center">
+                        <Loader2 className="size-6 animate-spin text-muted-foreground/50" />
+                    </div>
+                </>
             )}
 
             {/* Fallback if the file is missing or fails to load */}

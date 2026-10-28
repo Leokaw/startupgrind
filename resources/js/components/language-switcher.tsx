@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Languages, Check } from 'lucide-react';
+import { Languages, Check, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -24,15 +24,67 @@ type Language = {
 
 const LANGUAGES: Language[] = [
     { code: 'en', label: 'English', flag: '/uk-flag.png' },
-    { code: 'hu', label: 'Magyar',  flag: '/hungarian-flag.png' },
+    { code: 'hu', label: 'Magyar', flag: '/hungarian-flag.png' },
 ];
 
 const STORAGE_KEY = 'app.locale';
 
+/* =================================================================
+ |  Flag image with loading state
+ |
+ |  Fills its parent (which owns the size + ring). Shows a small
+ |  centered spinner and a `bg-muted` placeholder while the PNG
+ |  downloads, then fades the flag in.
+ | ================================================================= */
+
+function FlagImage({ src, alt }: { src: string; alt: string }) {
+    const [loaded, setLoaded] = useState(false);
+    const [errored, setErrored] = useState(false);
+
+    // Reset if `src` changes (e.g. user switches language in the
+    // trigger) so we don't show a stale state for the new image.
+    useEffect(() => {
+        setLoaded(false);
+        setErrored(false);
+    }, [src]);
+
+    return (
+        <span
+            className={cn(
+                'relative flex h-full w-full items-center justify-center overflow-hidden',
+                !loaded && !errored && 'bg-muted',
+            )}
+        >
+            {!loaded && !errored && (
+                <Loader2 className="absolute size-2.5 animate-spin text-muted-foreground/60" />
+            )}
+            {errored && (
+                <span className="absolute text-[9px] font-medium text-muted-foreground">
+                    ?
+                </span>
+            )}
+            <img
+                src={src}
+                alt={alt}
+                className={cn(
+                    'h-full w-full object-cover transition-opacity duration-200 ease-out',
+                    loaded ? 'opacity-100' : 'opacity-0',
+                )}
+                draggable={false}
+                onLoad={() => setLoaded(true)}
+                onError={() => setErrored(true)}
+            />
+        </span>
+    );
+}
+
+/* =================================================================
+ |  Switcher
+ | ================================================================= */
+
 export function LanguageSwitcher() {
     const [locale, setLocale] = useState<string>('en');
 
-    // Read on mount — SSR-safe since this only runs client-side.
     useEffect(() => {
         const stored = window.localStorage.getItem(STORAGE_KEY);
         if (stored && LANGUAGES.some((l) => l.code === stored)) {
@@ -63,17 +115,11 @@ export function LanguageSwitcher() {
                             className="rounded-full"
                             aria-label={`Change language (currently ${current.label})`}
                         >
-                            {/*
-                                Flag shown inside the trigger button.
-                                overflow-hidden + rounded-full keeps the PNG
-                                inside the circular button, whatever aspect
-                                ratio the source image has.
-                            */}
                             <span className="flex h-5 w-5 items-center justify-center overflow-hidden rounded-full ring-1 ring-border">
-                                <img
+                                <FlagImage
+                                    key={current.flag}
                                     src={current.flag}
                                     alt={current.label}
-                                    className="h-full w-full object-cover"
                                 />
                             </span>
                         </Button>
@@ -96,11 +142,7 @@ export function LanguageSwitcher() {
                         className="flex items-center gap-2"
                     >
                         <span className="flex h-4 w-4 shrink-0 items-center justify-center overflow-hidden rounded-full ring-1 ring-border">
-                            <img
-                                src={lang.flag}
-                                alt=""
-                                className="h-full w-full object-cover"
-                            />
+                            <FlagImage src={lang.flag} alt="" />
                         </span>
                         <span className="flex-1">{lang.label}</span>
                         {locale === lang.code && (

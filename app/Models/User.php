@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Storage;
 use Laravel\Cashier\Billable;
 
 #[ObservedBy([UserObserver::class])]
-class User extends Authenticatable 
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable, HasUuids, Billable;
 
@@ -38,19 +38,19 @@ class User extends Authenticatable
     protected $with = ['membership'];
 
     protected $fillable = [
-          'name',
-    'email',
-    'password',
-    'user_type',
-    'company_id',
-    'profile_photo_path',
-    'email_verified_at',
-    'onboarded_at',
-    'approved_at',
-    'description',
-    'area_of_work',
-    'role',
-    'goal',
+        'name',
+        'email',
+        'password',
+        'user_type',
+        'company_id',
+        'profile_photo_path',
+        'email_verified_at',
+        'onboarded_at',
+        'approved_at',
+        'description',
+        'area_of_work',
+        'role',
+        'goal',
     ];
 
     protected function casts(): array
@@ -223,31 +223,31 @@ class User extends Authenticatable
 
 
     protected function roleLabel(): Attribute
-{
-    return Attribute::get(fn () => match ($this->role) {
-        'founder'    => 'Founder',
-        'investor'   => 'Investor',
-        'operator'   => 'Operator',
-        'freelancer' => 'Freelancer',
-        'designer'   => 'Designer',
-        'developer'  => 'Developer',
-        default      => $this->role,
-    });
-}
+    {
+        return Attribute::get(fn() => match ($this->role) {
+            'founder'    => 'Founder',
+            'investor'   => 'Investor',
+            'operator'   => 'Operator',
+            'freelancer' => 'Freelancer',
+            'designer'   => 'Designer',
+            'developer'  => 'Developer',
+            default      => $this->role,
+        });
+    }
 
-/**
- * Human-readable label for the `goal` field.
- */
-protected function goalLabel(): Attribute
-{
-    return Attribute::get(fn () => match ($this->goal) {
-        'raise'     => 'Raise funds',
-        'cofounder' => 'Find a co-founder',
-        'hire'      => 'Hire talent',
-        'network'   => 'Grow my network',
-        'learn'     => 'Learn from others',
-        'events'    => 'Find events',
-        default     => $this->goal,
-    });
-}
+    /**
+     * Human-readable label for the `goal` field.
+     */
+    protected function goalLabel(): Attribute
+    {
+        return Attribute::get(fn() => match ($this->goal) {
+            'raise'     => 'Raise funds',
+            'cofounder' => 'Find a co-founder',
+            'hire'      => 'Hire talent',
+            'network'   => 'Grow my network',
+            'learn'     => 'Learn from others',
+            'events'    => 'Find events',
+            default     => $this->goal,
+        });
+    }
 }
