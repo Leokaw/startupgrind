@@ -11,7 +11,7 @@ const highlights = [
     { icon: Lock, title: 'Secure Platform', text: 'Trusted by 5M+ members' },
 ];
 
-const GRID_SIZE = 56; 
+const GRID_SIZE = 56;
 const line = 'color-mix(in srgb, currentColor 9%, transparent)';
 
 const gridStyle: CSSProperties = {
@@ -40,8 +40,8 @@ const description =
 const countWords = (text: string) => text.split(' ').length;
 const TEXT_DONE_MS = (0.2 + (Math.max(countWords(intro), countWords(description)) - 1) * 0.1 + 0.5) * 1000;
 
-const FADE_MS = 1000; 
-const FADE_STAGGER_MS = 200; 
+const FADE_MS = 1000;
+const FADE_STAGGER_MS = 200;
 
 export default function Hero() {
     const [showExtras, setShowExtras] = useState(false);
@@ -74,7 +74,7 @@ export default function Hero() {
                 <div className="max-w-2xl">
                     <h1 className="relative z-20 text-4xl leading-[1] text-gray-700 tracking-tight font-thin text-foreground lg:text-5xl">
                         <TextAnimate as="span" by="word" type="fadeInUp" text="Where Ambition" className="" style={visible} />
-                        
+
                         {/* Apply w-max and whitespace-nowrap to the wrapper only */}
                         <span className="block w-max whitespace-nowrap">
                             <TextAnimate
@@ -115,17 +115,22 @@ export default function Hero() {
                             showExtras ? 'hero-fade-in' : 'invisible opacity-0',
                         )}
                     >
-                        <Button className="md:text-lg md:px-20"  asChild size="lg">
-                            <Link  href="/register">
+                        <Button className="md:text-lg md:px-20" asChild size="lg">
+                            <Link href="/register">
                                 Try it for free
                                 <ChevronRight className="size-4" />
                             </Link>
                         </Button>
-                        <Button className="md:text-lg text-gray-800 px-6"  asChild size="lg"  variant="outline">
-                            <Link  href="/manifest">
+                        <Button className="md:text-lg text-gray-800 px-6" asChild size="lg" variant="outline">
+                            <a
+                                href="#about"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+                                }}
+                            >
                                 Our manifest
-                        
-                            </Link>
+                            </a>
                         </Button>
                     </div>
 

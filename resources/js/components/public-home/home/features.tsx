@@ -6,16 +6,16 @@ import { Button } from '@/components/ui/button';
 import { TextAnimate } from '@/components/ui/text-animate';
 import { cn } from '@/lib/utils';
 
-const heading = ['A framework for', 'developers and agents'];
+const heading = ['A global community', 'for founders and builders'];
 
 const description =
-    "Laravel has opinions on everything: routing, queues, authentication, and more. That's thousands of decisions an agent doesn't have to make. The result? Clean code that anyone can understand.";
+    "For 15 years, Startup Grind has brought founders together with the people building what comes next. Founded in Silicon Valley, we've reached over 5 million entrepreneurs across 100 countries.";
 
 const features = [
-    'Starter kits for React, Vue, and Svelte',
-    'AI SDK and Boost AI assistant',
-    'Database ORM, queues, routing, and more',
-    'Open source ecosystem of over 30 packages',
+    '300+ chapters hosting 125+ monthly events worldwide',
+    '5,000+ founders, builders, and investors at our annual conference',
+    'Programs for every stage — from MVP to Series A and beyond',
+    'We believe in making friends, not contacts',
 ];
 
 const visible = { overflow: 'visible' } as const;
@@ -33,7 +33,6 @@ const FADE_MS = 1400;
 const FADE_STAGGER_MS = 300;
 
 function Corner({ className }: { className: string }) {
-    // Added 'hidden lg:block' so it only shows on desktop
     return <span aria-hidden className={`hidden lg:block absolute z-20 size-1.5 bg-primary ${className}`} />;
 }
 
@@ -66,18 +65,16 @@ export default function Features() {
                 <Corner className="-bottom-[3.5px] -left-[3.5px]" />
                 <Corner className="-right-[3.5px] -bottom-[3.5px]" />
 
-                {/* Glow overflowing to all sides, with a deeper bottom overflow */}
                 <div
                     aria-hidden
                     className="pointer-events-none absolute -top-24 -bottom-64 -right-32 -left-10 rounded-full bg-primary/15 blur-[120px] z-0"
                 />
 
-                {/* Content wrapper with overflow-hidden to clip the image at the borders */}
                 <div className="relative overflow-hidden z-10">
                     <div className="relative grid gap-10 px-4 pt-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-12 lg:px-12 lg:pt-0">
                         {/* Left: texts */}
                         <div ref={ref} className="flex flex-col justify-center lg:py-8">
-                            <h2 className="text-3xl  leading-[1] font-thin tracking-tight text-foreground sm:text-4xl">
+                            <h2 className="text-3xl leading-[1] font-thin tracking-tight text-foreground sm:text-4xl">
                                 {heading.map((line) => (
                                     <TextAnimate
                                         key={line}
@@ -107,7 +104,7 @@ export default function Features() {
                                 className={cn('mt-6 space-y-1', showExtras ? 'features-fade-in' : 'invisible opacity-0')}
                             >
                                 {features.map((feature) => (
-                                    <li key={feature} className="flex items-center gap-1.5  text-sm text-foreground">
+                                    <li key={feature} className="flex items-center gap-1.5 text-sm text-foreground">
                                         <Check className="size-3.5 shrink-0 text-primary" />
                                         {feature}
                                     </li>
@@ -119,8 +116,8 @@ export default function Features() {
                                 style={{ animationDelay: `${FADE_STAGGER_MS}ms` }}
                             >
                                 <Button asChild variant="outline">
-                                    <Link href="/features">
-                                        Explore the framework
+                                    <Link href={"https://about.startupgrind.com/?utm_source=website&utm_medium=navigation"} target='_blank'>
+                                        Learn more about us
                                         <ArrowUpRight className="size-4 text-primary" />
                                     </Link>
                                 </Button>
@@ -132,10 +129,10 @@ export default function Features() {
                             <div className="rounded-tl-[1.75rem] border-t border-l border-border bg-background">
                                 <img
                                     src="/onboarding/step2.webp"
-                                    alt="Platform preview"
+                                    alt="Startup Grind community"
                                     loading="lazy"
                                     draggable={false}
-                                    className="block h-auto w-full rounded-tl-[1.75rem] shadow-xl  select-none brightness-80"
+                                    className="block h-auto w-full rounded-tl-[1.75rem] shadow-xl select-none brightness-80"
                                 />
                             </div>
                         </div>

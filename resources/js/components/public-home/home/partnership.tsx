@@ -13,19 +13,27 @@ const startIcon = (
 );
 
 const endIcon = (
-    <img
-        src="/branding/tech_city.png"
-        alt="Tech in the City"
-        draggable={false}
-        className="size-full object-contain select-none"
-    />
+    <a
+        href="https://www.techinthecity.hu/"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Visit Tech in the City"
+        className="block size-full cursor-pointer"
+    >
+        <img
+            src="/branding/tech_city.png"
+            alt="Tech in the City"
+            draggable={false}
+            className="size-full object-contain select-none"
+        />
+    </a>
 );
 
 const bubbleVariants = [
-    { size: 'sm', className: 'sm:hidden' }, // Bumped from 'xs' to 'sm' for mobile
-    { size: 'md', className: 'hidden sm:block lg:hidden' }, // Bumped from 'sm' to 'md'
-    { size: 'lg', className: 'hidden lg:block xl:hidden' }, // Bumped from 'md' to 'lg'
-    { size: 'lg', className: 'hidden xl:block scale-120' }, // Added a slight scale for extra large screens
+    { size: 'sm', className: 'sm:hidden' },
+    { size: 'md', className: 'hidden sm:block lg:hidden' },
+    { size: 'lg', className: 'hidden lg:block xl:hidden' },
+    { size: 'lg', className: 'hidden xl:block scale-120' },
 ] as const;
 
 function ResponsiveBubbles() {
@@ -41,7 +49,6 @@ function ResponsiveBubbles() {
 }
 
 function Corner({ className }: { className: string }) {
-    // Added 'hidden lg:block' to hide on mobile/tablet
     return <span aria-hidden className={`hidden lg:block absolute z-20 size-1.5 bg-primary ${className}`} />;
 }
 
@@ -54,14 +61,11 @@ const visible = { overflow: 'visible' } as const;
 
 export default function Partnership() {
     const ref = useRef<HTMLElement>(null);
-    // Trigger the animation when the section is 30% visible in the viewport
     const inView = useInView(ref, { once: true, amount: 0.3 });
     const [showExtras, setShowExtras] = useState(false);
 
     useEffect(() => {
-        // Only start the timer if the element has scrolled into view
         if (!inView) return;
-        
         const timer = setTimeout(() => setShowExtras(true), TEXT_DONE_MS);
         return () => clearTimeout(timer);
     }, [inView]);
@@ -86,24 +90,23 @@ export default function Partnership() {
 
                 <div className="grid items-center gap-10 px-6 py-14 lg:grid-cols-2 lg:gap-12 lg:px-12 lg:py-20">
                     {/* Left: headline */}
-                    <h2 className=" leading-[1] font-thin tracking-tight">
+                    <h2 className="leading-[1] font-thin tracking-tight">
                         <TextAnimate
                             as="span"
                             by="word"
                             type="fadeInUp"
                             text={headline}
                             style={visible}
-                            className=' text-gray-700 text-center text-4xl lg:text-6xl lg:font-thin'
-                            // Tie the text animation to the inView state
+                            className="text-gray-700 text-center text-4xl lg:text-6xl lg:font-thin"
                             animate={inView ? 'visible' : 'hidden'}
                         />
                     </h2>
 
                     {/* Right: merging bubbles + partnership caption */}
-                    <div 
+                    <div
                         className={cn(
                             'flex flex-col items-center gap-5 lg:items-end',
-                            showExtras ? 'partnership-fade-in' : 'invisible opacity-0'
+                            showExtras ? 'partnership-fade-in' : 'invisible opacity-0',
                         )}
                     >
                         <ResponsiveBubbles />

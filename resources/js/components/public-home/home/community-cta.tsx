@@ -22,11 +22,12 @@ export default function CommunityCta() {
                 </p>
 
                 <div className="mt-8 flex lg:mb-0 mb-6 flex-col gap-3">
-                    <Button className='!h-9' variant="outline">
-                 
+                    <Button asChild className='!h-9' variant="outline">
+                        <Link href={"/events"}>
                             Attend an event
                             <ArrowUpRight className="size-4 text-primary" />
-            
+                        </Link>
+
                     </Button>
                 </div>
             </div>

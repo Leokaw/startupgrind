@@ -50,7 +50,7 @@ class OnboardingController extends Controller
         // land on /dashboard?verified=1 (which would remount the gate
         // with stale shared props).
         return redirect()
-            ->route('dashboard');
+            ->route('events.index');
             
     }
 
@@ -62,7 +62,7 @@ class OnboardingController extends Controller
         $user->refresh();
 
         return redirect()
-            ->route('dashboard')
+            ->route('events.index')
 ;
     }
 }

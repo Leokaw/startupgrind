@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Rules\BusinessEmailDomain;                    // ← added
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -28,19 +29,23 @@ class RegisteredUserController extends Controller
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => [
+            'email' => array_filter([                    // ← wrapped in array_filter
                 'required',
                 'string',
                 'lowercase',
                 'email',
                 'max:255',
                 'unique:' . User::class,
-            ],
+                // Only enforce a professional email when registering as a company.
+                $request->input('user_type') === 'company'
+                    ? new BusinessEmailDomain()
+                    : null,
+            ]),                                          // ← end array_filter
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'user_type' => ['required', 'string', 'in:company,user,freelancer'],
         ]);
 
-        // Cross-check account_type and role for consistency.
+        // ... everything below stays exactly as it was ...
         if (
             $request->input('account_type') === 'community' &&
             ! in_array($request->input('role'), ['user', 'freelancer'], true)
@@ -59,15 +64,12 @@ class RegisteredUserController extends Controller
             ]);
         }
 
-        // Hard guard: even if validation somehow passed with an empty value,
-        // fail with a proper form error instead of a 500 from the DB.
         if (empty($validated['user_type'])) {
             throw ValidationException::withMessages([
                 'user_type' => 'Registration could not determine the account type. Please try again.',
             ]);
         }
 
-        // Diagnostic — remove once the flow is confirmed stable.
         Log::info('Register diagnostic', [
             'validated_user_type' => $validated['user_type'] ?? null,
             'fillable'            => (new User)->getFillable(),
@@ -75,8 +77,6 @@ class RegisteredUserController extends Controller
             'user_model_file'     => (new \ReflectionClass(User::class))->getFileName(),
         ]);
 
-        // Use forceFill so nothing in $fillable/$guarded can silently drop
-        // user_type on the way to the DB.
         $user = new User();
         $user->forceFill([
             'name'      => $validated['name'],
@@ -90,6 +90,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('dashboard');
+        return redirect()->route('events');
     }
 }

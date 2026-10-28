@@ -120,23 +120,23 @@ export default function Footer() {
                     </a>
                     
                     <div className="flex items-center gap-4 text-foreground">
-                        <a href="" className="transition-colors hover:text-primary" aria-label="Twitter">
+                        <a href="https://x.com/StartupGrind" target='_blank' className="transition-colors hover:text-primary" aria-label="Twitter">
                             <Twitter className="h-[18px] w-[18px] fill-current" />
                         </a>
-                        <a href="#" className="transition-colors hover:opacity-70" aria-label="YouTube">
+                        <a href="https://www.youtube.com/user/StartupGrind" target='_blank' className="transition-colors hover:opacity-70" aria-label="YouTube">
                             <img 
                                 src="/home/youtube_logo.svg" 
                                 alt="YouTube" 
                                 className="h-[20px] transition-colors w-[20px] object-contain" 
                             />
                         </a>
-                        <a href="#" className="transition-colors hover:text-primary" aria-label="Facebook">
+                        <a href="https://www.facebook.com/StartupGrind/" target='_blank' className="transition-colors hover:text-primary" aria-label="Facebook">
                             <Facebook className="h-[18px] w-[18px] fill-current" />
                         </a>
-                        <a href="#" className="transition-colors hover:text-primary" aria-label="Instagram">
+                        <a href="https://www.instagram.com/startup" target='_blank' className="transition-colors hover:text-primary" aria-label="Instagram">
                             <Instagram className="h-[18px] w-[18px]" />
                         </a>
-                        <a href="#" className="transition-colors hover:text-primary" aria-label="LinkedIn">
+                        <a href="https://www.linkedin.com/company/startup-grind" target='_blank' className="transition-colors hover:text-primary" aria-label="LinkedIn">
                             <Linkedin className="h-[18px] w-[18px] fill-current" />
                         </a>
                     </div>
@@ -148,11 +148,11 @@ export default function Footer() {
                     
                     <p>
                         Provided and maintained by{' '}
-                        <a href="#" className="font-medium text-[#E33D42] hover:underline">
+                        <a href="https://www.linkedin.com/in/leoreus/" target='_blank' className="font-medium text-[#E33D42] hover:underline">
                             Leo Reus
                         </a>{' '}
                         and{' '}
-                        <a href="#" className="font-medium text-[#E33D42] hover:underline">
+                        <a href="https://www.linkedin.com/in/maddicted/" target='_blank' className="font-medium text-[#E33D42] hover:underline">
                             Balázs Horváth
                         </a>
                     </p>
