@@ -32,32 +32,32 @@ class MessageNotification extends Notification
     {
         $base = [
             'message_id' => $this->message->id,
-            'topic'      => $this->message->topic,
-            'direction'  => $this->direction,
+            'topic' => $this->message->topic,
+            'direction' => $this->direction,
         ];
 
         if ($this->direction === 'sent') {
-            $balanceAfter  = $this->message->sender->membership->credits_balance;
-            $creditsCost   = $this->message->credits_cost;
+            $balanceAfter = $this->message->sender->membership->credits_balance;
+            $creditsCost = $this->message->credits_cost;
             $balanceBefore = $balanceAfter + $creditsCost;
 
             return $base + [
-                'title'           => 'Message sent',
-                'body'            => "You sent a message to {$this->message->receiver->name}.",
-                'receiver_id'     => $this->message->receiver_id,
-                'receiver_name'   => $this->message->receiver->name,
-                'credits_spent'   => $creditsCost,
-                'balance_before'  => $balanceBefore,
-                'balance_after'   => $balanceAfter,
+                'title' => 'Message sent',
+                'body' => "You sent a message to {$this->message->receiver->name}.",
+                'receiver_id' => $this->message->receiver_id,
+                'receiver_name' => $this->message->receiver->name,
+                'credits_spent' => $creditsCost,
+                'balance_before' => $balanceBefore,
+                'balance_after' => $balanceAfter,
             ];
         }
 
         return $base + [
-            'title'         => 'New message received',
-            'body'          => "{$this->message->sender->name} sent you a message.",
-            'sender_id'     => $this->message->sender_id,
-            'sender_name'   => $this->message->sender->name,
-            'message_body'  => $this->message->body,
+            'title' => 'New message received',
+            'body' => "{$this->message->sender->name} sent you a message.",
+            'sender_id' => $this->message->sender_id,
+            'sender_name' => $this->message->sender->name,
+            'message_body' => $this->message->body,
         ];
     }
 }

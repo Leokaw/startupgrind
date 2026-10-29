@@ -18,7 +18,7 @@ class DiscountTicketController extends Controller
             ->when($request->input('search'), function ($query, $search) {
                 $query->where(function ($q) use ($search) {
                     $q->where('name', 'like', "%{$search}%")
-                      ->orWhere('code', 'like', "%{$search}%");
+                        ->orWhere('code', 'like', "%{$search}%");
                 });
             })
             ->when($request->input('status'), function ($query, $status) {
@@ -42,19 +42,19 @@ class DiscountTicketController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'name'                => ['required', 'string', 'max:50'],
-            'description'         => ['nullable', 'string', 'max:200'],
-            'event_url'           => ['required', 'url:http,https', 'max:2048'],
+            'name' => ['required', 'string', 'max:50'],
+            'description' => ['nullable', 'string', 'max:200'],
+            'event_url' => ['required', 'url:http,https', 'max:2048'],
             'discount_percentage' => ['required', 'numeric', 'between:0,100'],
-            'valid_until'         => ['required', 'date', 'after:now'],
+            'valid_until' => ['required', 'date', 'after:now'],
         ], [
             'event_url.required' => 'Please provide a link to the event this discount is for.',
-            'event_url.url'      => 'Please enter a full URL, including the https:// part.',
-            'event_url.max'      => 'The link is too long (max 2048 characters).',
-            'valid_until.after'  => 'The expiry date must be in the future.',
+            'event_url.url' => 'Please enter a full URL, including the https:// part.',
+            'event_url.max' => 'The link is too long (max 2048 characters).',
+            'valid_until.after' => 'The expiry date must be in the future.',
         ]);
 
-        $validated['code']      = $this->generateUniqueCode();
+        $validated['code'] = $this->generateUniqueCode();
         $validated['is_active'] = true;
 
         $request->user()->discountTickets()->create($validated);
@@ -91,16 +91,16 @@ class DiscountTicketController extends Controller
         );
 
         $validated = $request->validate([
-            'name'                => ['required', 'string', 'max:50'],
-            'description'         => ['nullable', 'string', 'max:200'],
-            'event_url'           => ['required', 'url:http,https', 'max:2048'],
+            'name' => ['required', 'string', 'max:50'],
+            'description' => ['nullable', 'string', 'max:200'],
+            'event_url' => ['required', 'url:http,https', 'max:2048'],
             'discount_percentage' => ['nullable', 'numeric', 'min:0', 'max:100'],
-            'valid_until'         => ['required', 'date'],
-            'is_active'           => ['required', 'boolean'],
+            'valid_until' => ['required', 'date'],
+            'is_active' => ['required', 'boolean'],
         ], [
             'event_url.required' => 'Please provide a link to the event this discount is for.',
-            'event_url.url'      => 'Please enter a full URL, including the https:// part.',
-            'event_url.max'      => 'The link is too long (max 2048 characters).',
+            'event_url.url' => 'Please enter a full URL, including the https:// part.',
+            'event_url.max' => 'The link is too long (max 2048 characters).',
         ]);
 
         $discountTicket->update($validated);

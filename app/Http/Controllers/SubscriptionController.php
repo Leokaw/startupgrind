@@ -6,13 +6,14 @@ use App\Models\SubscriptionSuccessToken;
 use App\Services\StripePlanResolver;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class SubscriptionController extends Controller
 {
-    public function checkout(Request $request, StripePlanResolver $resolver): RedirectResponse|\Illuminate\Http\Response
+    public function checkout(Request $request, StripePlanResolver $resolver): RedirectResponse|Response
     {
         $validated = $request->validate([
             'plan' => [
@@ -22,8 +23,8 @@ class SubscriptionController extends Controller
             ],
         ]);
 
-        $slug    = $validated['plan'];
-        $plan    = config("subscriptions.plans.{$slug}");
+        $slug = $validated['plan'];
+        $plan = config("subscriptions.plans.{$slug}");
         $priceId = $resolver->priceIdFor($slug);
 
         if (! $priceId) {
@@ -71,10 +72,10 @@ class SubscriptionController extends Controller
         // First-time subscriber → Stripe Checkout
         // -----------------------------------------------------------------
         $successToken = SubscriptionSuccessToken::create([
-            'user_id'    => $user->id,
-            'token'      => Str::random(48),
-            'plan_slug'  => $slug,
-            'status'     => 'pending',
+            'user_id' => $user->id,
+            'token' => Str::random(48),
+            'plan_slug' => $slug,
+            'status' => 'pending',
             'expires_at' => now()->addDay(),
         ]);
 
@@ -82,17 +83,17 @@ class SubscriptionController extends Controller
             ->newSubscription('default', $priceId)
             ->checkout([
                 'success_url' => route('billing.success', ['token' => $successToken->token]),
-                'cancel_url'  => route('billing') . '?checkout=cancelled',
-                'metadata'    => [
+                'cancel_url' => route('billing').'?checkout=cancelled',
+                'metadata' => [
                     'success_token' => $successToken->token,
-                    'user_id'       => $user->id,
-                    'plan_slug'     => $slug,
+                    'user_id' => $user->id,
+                    'plan_slug' => $slug,
                 ],
                 'subscription_data' => [
                     'metadata' => [
                         'success_token' => $successToken->token,
-                        'user_id'       => $user->id,
-                        'plan_slug'     => $slug,
+                        'user_id' => $user->id,
+                        'plan_slug' => $slug,
                     ],
                 ],
             ]);

@@ -12,15 +12,14 @@ class InviteTicketNotification extends Notification
     use Queueable;
 
     /**
-     * @param  InviteTicket  $inviteTicket       The invite record (holds the bcrypt hash in DB).
-     * @param  string        $plainTextPassword  The plaintext password to show the invitee.
-     *                                           This never gets persisted anywhere.
+     * @param  InviteTicket  $inviteTicket  The invite record (holds the bcrypt hash in DB).
+     * @param  string  $plainTextPassword  The plaintext password to show the invitee.
+     *                                     This never gets persisted anywhere.
      */
     public function __construct(
         public InviteTicket $inviteTicket,
         public string $plainTextPassword,
-    ) {
-    }
+    ) {}
 
     public function via(object $notifiable): array
     {

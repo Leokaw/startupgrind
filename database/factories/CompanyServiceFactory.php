@@ -32,13 +32,13 @@ class CompanyServiceFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id'     => User::factory(),
-            'name'        => Str::title(fake()->words(rand(2, 4), true)),
+            'user_id' => User::factory(),
+            'name' => Str::title(fake()->words(rand(2, 4), true)),
             'description' => fake()->paragraph(3),
-            'price'       => fake()->randomFloat(2, 20, 500),
-            'category'    => fake()->randomElement(self::CATEGORIES),
+            'price' => fake()->randomFloat(2, 20, 500),
+            'category' => fake()->randomElement(self::CATEGORIES),
             // ~85% active — gives your table filters something to bite on.
-            'is_active'   => fake()->boolean(85),
+            'is_active' => fake()->boolean(85),
         ];
     }
 

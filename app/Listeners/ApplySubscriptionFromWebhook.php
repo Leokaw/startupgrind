@@ -15,11 +15,11 @@ class ApplySubscriptionFromWebhook
         $type = $event->payload['type'] ?? null;
 
         match ($type) {
-            'checkout.session.completed'    => $this->onCheckoutCompleted($event->payload),
+            'checkout.session.completed' => $this->onCheckoutCompleted($event->payload),
             'customer.subscription.created',
             'customer.subscription.updated' => $this->onSubscription($event->payload),
-            'invoice.payment_succeeded'     => $this->onInvoicePaid($event->payload),
-            default                         => null,
+            'invoice.payment_succeeded' => $this->onInvoicePaid($event->payload),
+            default => null,
         };
     }
 
@@ -30,7 +30,7 @@ class ApplySubscriptionFromWebhook
         if ($token) {
             SubscriptionSuccessToken::where('token', $token)->first()?->markReady(
                 checkoutSessionId: $payload['data']['object']['id'] ?? null,
-                subscriptionId:    $payload['data']['object']['subscription'] ?? null,
+                subscriptionId: $payload['data']['object']['subscription'] ?? null,
             );
         }
     }
@@ -54,7 +54,7 @@ class ApplySubscriptionFromWebhook
         }
 
         $customerId = $invoice['customer'] ?? null;
-        $user       = $customerId ? User::where('stripe_id', $customerId)->first() : null;
+        $user = $customerId ? User::where('stripe_id', $customerId)->first() : null;
         $subscription = $user?->subscription('default');
 
         if (! $subscription || ! $subscription->pending_stripe_price) {
@@ -72,7 +72,7 @@ class ApplySubscriptionFromWebhook
     private function onSubscription(array $payload): void
     {
         $subscription = $payload['data']['object'];
-        $userId       = $this->userIdFor($subscription['customer'] ?? null);
+        $userId = $this->userIdFor($subscription['customer'] ?? null);
 
         if (! $userId) {
             return;
@@ -98,8 +98,8 @@ class ApplySubscriptionFromWebhook
         }
 
         $planSlug = $subscription['metadata']['plan_slug'] ?? null;
-        $plan     = $planSlug ? config("subscriptions.plans.{$planSlug}") : null;
-        $tier     = MembershipTier::tryFrom($plan['membership_tier'] ?? '');
+        $plan = $planSlug ? config("subscriptions.plans.{$planSlug}") : null;
+        $tier = MembershipTier::tryFrom($plan['membership_tier'] ?? '');
 
         if (! $plan || ! $tier) {
             return;

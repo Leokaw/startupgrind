@@ -29,10 +29,10 @@ class CreditTransaction extends Model
     protected function casts(): array
     {
         return [
-            'amount'        => 'integer',
+            'amount' => 'integer',
             'balance_after' => 'integer',
-            'category'      => CreditTransactionCategory::class,
-            'metadata'      => 'array',
+            'category' => CreditTransactionCategory::class,
+            'metadata' => 'array',
         ];
     }
 
@@ -133,7 +133,7 @@ class CreditTransaction extends Model
      */
     public function signedAmount(): string
     {
-        return ($this->amount >= 0 ? '+' : '−') . abs($this->amount);
+        return ($this->amount >= 0 ? '+' : '−').abs($this->amount);
     }
 
     /* -----------------------------------------------------------------

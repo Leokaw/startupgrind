@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\CompanyService;
+use App\Support\ServiceCategory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
-use App\Support\ServiceCategory;
 use Illuminate\Validation\Rule;
+use Inertia\Inertia;
 
 class CompanyServiceController extends Controller
 {
@@ -17,6 +17,7 @@ class CompanyServiceController extends Controller
     public function index()
     {
         $companyServices = CompanyService::all();
+
         return response()->json($companyServices);
     }
 
@@ -45,7 +46,6 @@ class CompanyServiceController extends Controller
         return redirect()->back()->with('success', 'Company service created successfully.');
     }
 
-
     /**
      * Display the specified resource.
      */
@@ -66,40 +66,40 @@ class CompanyServiceController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, CompanyService $companyService): RedirectResponse
-{
-    abort_unless(
-        $companyService->user_id === $request->user()->id,
-        403,
-    );
+    {
+        abort_unless(
+            $companyService->user_id === $request->user()->id,
+            403,
+        );
 
-    $validated = $request->validate([
-        'name'        => ['required', 'string', 'max:50'],
-        'description' => ['nullable', 'string', 'max:200'],
-        'category'    => ['required', Rule::in(ServiceCategory::values())],
-        'is_active'   => ['required', 'boolean'],
-    ]);
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:50'],
+            'description' => ['nullable', 'string', 'max:200'],
+            'category' => ['required', Rule::in(ServiceCategory::values())],
+            'is_active' => ['required', 'boolean'],
+        ]);
 
-    $companyService->update($validated);
+        $companyService->update($validated);
 
-    return redirect()
-        ->back()
-        ->with('success', 'Company service updated successfully.');
-}
+        return redirect()
+            ->back()
+            ->with('success', 'Company service updated successfully.');
+    }
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Request $request, CompanyService $companyService): RedirectResponse
-{
-    abort_unless(
-        $companyService->user_id === $request->user()->id,
-        403,
-    );
+    {
+        abort_unless(
+            $companyService->user_id === $request->user()->id,
+            403,
+        );
 
-    $companyService->delete();
+        $companyService->delete();
 
-    return redirect()
-        ->back()
-        ->with('success', 'Company service deleted successfully.');
-}
+        return redirect()
+            ->back()
+            ->with('success', 'Company service deleted successfully.');
+    }
 }

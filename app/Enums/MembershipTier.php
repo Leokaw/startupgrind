@@ -4,8 +4,8 @@ namespace App\Enums;
 
 enum MembershipTier: string
 {
-    case FREE       = 'free';
-    case PRO        = 'pro';
+    case FREE = 'free';
+    case PRO = 'pro';
     case ENTERPRISE = 'enterprise';
 
     /**
@@ -14,8 +14,8 @@ enum MembershipTier: string
     public function level(): int
     {
         return match ($this) {
-            self::FREE       => 0,
-            self::PRO        => 1,
+            self::FREE => 0,
+            self::PRO => 1,
             self::ENTERPRISE => 2,
         };
     }
@@ -26,8 +26,8 @@ enum MembershipTier: string
     public function monthlyCredits(): int
     {
         return match ($this) {
-            self::FREE       => 500,
-            self::PRO        => 10_000,
+            self::FREE => 500,
+            self::PRO => 10_000,
             self::ENTERPRISE => 25_000,
         };
     }
@@ -38,8 +38,8 @@ enum MembershipTier: string
     public function label(): string
     {
         return match ($this) {
-            self::FREE       => 'Free',
-            self::PRO        => 'Pro',
+            self::FREE => 'Free',
+            self::PRO => 'Pro',
             self::ENTERPRISE => 'Enterprise',
         };
     }
@@ -54,8 +54,8 @@ enum MembershipTier: string
     public function priceInHuf(): int
     {
         return match ($this) {
-            self::FREE       => 0,
-            self::PRO        => 5_000,
+            self::FREE => 0,
+            self::PRO => 5_000,
             self::ENTERPRISE => 10_000,
         };
     }
@@ -77,8 +77,8 @@ enum MembershipTier: string
     public function planSlug(): ?string
     {
         return match ($this) {
-            self::FREE       => null,
-            self::PRO        => 'pro',
+            self::FREE => null,
+            self::PRO => 'pro',
             self::ENTERPRISE => 'enterprise',
         };
     }

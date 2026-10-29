@@ -11,7 +11,7 @@ class MessageNotification extends Notification
     use Queueable;
 
     /**
-     * @param  Message  $message    The message that was sent/received.
+     * @param  Message  $message  The message that was sent/received.
      * @param  'sent'|'received'  $direction  Who this notification is for.
      */
     public function __construct(
@@ -37,38 +37,38 @@ class MessageNotification extends Notification
     {
         $base = [
             'message_id' => $this->message->id,
-            'topic'      => $this->message->topic,
-            'direction'  => $this->direction,
+            'topic' => $this->message->topic,
+            'direction' => $this->direction,
         ];
 
         if ($this->direction === 'sent') {
-            $receiver    = $this->message->receiver;
-            $sender      = $this->message->sender;
-            $cost        = $this->message->credits_cost;
+            $receiver = $this->message->receiver;
+            $sender = $this->message->sender;
+            $cost = $this->message->credits_cost;
 
             // The sender's balance after this spend. Because the
             // controller loads `sender.membership` before firing
             // notifications, this read is accurate.
-            $balanceAfter  = $sender->membership?->credits_balance ?? 0;
+            $balanceAfter = $sender->membership?->credits_balance ?? 0;
             $balanceBefore = $balanceAfter + $cost;
 
             return $base + [
-                'title'          => 'Message sent',
-                'body'           => "You sent a message to {$receiver->name}.",
-                'receiver_id'    => $receiver->id,
-                'receiver_name'  => $receiver->name,
-                'credits_spent'  => $cost,
+                'title' => 'Message sent',
+                'body' => "You sent a message to {$receiver->name}.",
+                'receiver_id' => $receiver->id,
+                'receiver_name' => $receiver->name,
+                'credits_spent' => $cost,
                 'balance_before' => $balanceBefore,
-                'balance_after'  => $balanceAfter,
+                'balance_after' => $balanceAfter,
             ];
         }
 
         // Received
         return $base + [
-            'title'        => 'New message received',
-            'body'         => "{$this->message->sender->name} sent you a message.",
-            'sender_id'    => $this->message->sender_id,
-            'sender_name'  => $this->message->sender->name,
+            'title' => 'New message received',
+            'body' => "{$this->message->sender->name} sent you a message.",
+            'sender_id' => $this->message->sender_id,
+            'sender_name' => $this->message->sender->name,
             'message_body' => $this->message->body,
         ];
     }

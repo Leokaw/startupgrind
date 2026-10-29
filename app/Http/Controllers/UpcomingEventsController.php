@@ -13,9 +13,13 @@ use Inertia\Response;
 class UpcomingEventsController extends Controller
 {
     private const API_URL = 'https://www.startupgrind.com/api/search/';
+
     private const CACHE_KEY = 'upcoming_events';
+
     private const CACHE_SYNCED_KEY = 'upcoming_events_synced_at';
+
     private const CACHE_TTL_HOURS = 8;
+
     private const PER_PAGE = 6;
 
     public function __invoke(Request $request): Response
@@ -85,58 +89,58 @@ class UpcomingEventsController extends Controller
         ]);
     }
 
-   private function buildOptions(array $events): array
-{
-    $countries = [];   // code => ['name' => ..., 'count' => ...]
-    $tags = [];
+    private function buildOptions(array $events): array
+    {
+        $countries = [];   // code => ['name' => ..., 'count' => ...]
+        $tags = [];
 
-    foreach ($events as $event) {
-        $code = $event['chapter']['country'] ?? null;
-        $name = $event['chapter']['country_name'] ?? $code;
+        foreach ($events as $event) {
+            $code = $event['chapter']['country'] ?? null;
+            $name = $event['chapter']['country_name'] ?? $code;
 
-        if ($code) {
-            if (! isset($countries[$code])) {
-                $countries[$code] = ['name' => $name, 'count' => 0];
+            if ($code) {
+                if (! isset($countries[$code])) {
+                    $countries[$code] = ['name' => $name, 'count' => 0];
+                }
+                $countries[$code]['count']++;
             }
-            $countries[$code]['count']++;
+
+            foreach ($event['tags'] as $tag) {
+                $tags[$tag] = ($tags[$tag] ?? 0) + 1;
+            }
         }
 
-        foreach ($event['tags'] as $tag) {
-            $tags[$tag] = ($tags[$tag] ?? 0) + 1;
-        }
-    }
+        // Sort countries alphabetically by their display name.
+        uasort($countries, fn ($a, $b) => strcasecmp($a['name'], $b['name']));
 
-    // Sort countries alphabetically by their display name.
-    uasort($countries, fn ($a, $b) => strcasecmp($a['name'], $b['name']));
+        arsort($tags);
 
-    arsort($tags);
-
-    return [
-        'countries' => array_map(
-            fn ($code, $data) => [
-                'value' => $code,
-                'label' => $data['name'],
-                'count' => $data['count'],
+        return [
+            'countries' => array_map(
+                fn ($code, $data) => [
+                    'value' => $code,
+                    'label' => $data['name'],
+                    'count' => $data['count'],
+                ],
+                array_keys($countries),
+                array_values($countries),
+            ),
+            'tags' => array_map(
+                fn ($name, $count) => ['value' => $name, 'label' => $name, 'count' => $count],
+                array_keys($tags),
+                array_values($tags),
+            ),
+            'types' => [
+                ['value' => 'in_person', 'label' => 'In-person'],
+                ['value' => 'virtual', 'label' => 'Virtual'],
+                ['value' => 'community', 'label' => 'Community'],
             ],
-            array_keys($countries),
-            array_values($countries),
-        ),
-        'tags' => array_map(
-            fn ($name, $count) => ['value' => $name, 'label' => $name, 'count' => $count],
-            array_keys($tags),
-            array_values($tags),
-        ),
-        'types' => [
-            ['value' => 'in_person', 'label' => 'In-person'],
-            ['value' => 'virtual', 'label' => 'Virtual'],
-            ['value' => 'community', 'label' => 'Community'],
-        ],
-        'prices' => [
-            ['value' => 'free', 'label' => 'Free'],
-            ['value' => 'paid', 'label' => 'Paid'],
-        ],
-    ];
-}
+            'prices' => [
+                ['value' => 'free', 'label' => 'Free'],
+                ['value' => 'paid', 'label' => 'Paid'],
+            ],
+        ];
+    }
 
     private function applyFilters(array $events, array $filters): array
     {

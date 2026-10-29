@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\CompanyService;
 use App\Models\DiscountTicket;
 use App\Models\User;
-use Database\Factories\UserFactory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Artisan;
 
@@ -33,22 +32,22 @@ class DatabaseSeeder extends Seeder
             ->withGoal('hire')
             ->withDescription(
                 'We build internal tools and data pipelines for fast-growing SaaS teams. '
-                    . 'Our team of six ships end-to-end: discovery, design, implementation, and ongoing support.'
+                    .'Our team of six ships end-to-end: discovery, design, implementation, and ongoing support.'
             )
             ->areaOfWork('development')
             ->onboarded()
             ->create([
-                'name'  => 'Test Company',
+                'name' => 'Test Company',
                 'email' => 'company@example.com',
             ]);
         $mainCompany->membership()->update([
-            'tier'            => 'pro',
+            'tier' => 'pro',
             'monthly_credits' => 10000,
             'credits_balance' => 10000,
         ]);
 
         User::factory()->pendingCompany()->create([
-            'name'  => 'Pending Company',
+            'name' => 'Pending Company',
             'email' => 'pending@example.com',
         ]);
 
@@ -58,16 +57,16 @@ class DatabaseSeeder extends Seeder
             ->withGoal('network')
             ->withDescription(
                 'Freelance product designer with eight years of experience across fintech and healthcare. '
-                    . 'I help early-stage teams go from rough idea to shipped product — research, UX, and UI.'
+                    .'I help early-stage teams go from rough idea to shipped product — research, UX, and UI.'
             )
             ->areaOfWork('design')
             ->onboarded()
             ->create([
-                'name'  => 'Test Freelancer',
+                'name' => 'Test Freelancer',
                 'email' => 'freelancer@example.com',
             ]);
         $mainFreelancer->membership()->update([
-            'tier'            => 'pro',
+            'tier' => 'pro',
             'monthly_credits' => 10000,
             'credits_balance' => 10000,
         ]);
@@ -78,12 +77,12 @@ class DatabaseSeeder extends Seeder
             ->withGoal('learn')
             ->withDescription(
                 'Founder-curious operator. Currently exploring the AI tooling space. '
-                    . 'Happy to chat about go-to-market, hiring, or anything founder-adjacent.'
+                    .'Happy to chat about go-to-market, hiring, or anything founder-adjacent.'
             )
             ->areaOfWork('consulting')
             ->onboarded()
             ->create([
-                'name'  => 'Test User',
+                'name' => 'Test User',
                 'email' => 'user@example.com',
             ]);
 
@@ -109,7 +108,7 @@ class DatabaseSeeder extends Seeder
             ->each(function (User $company) {
                 if (rand(1, 3) === 1) {
                     $company->membership()->update([
-                        'tier'            => 'pro',
+                        'tier' => 'pro',
                         'monthly_credits' => 10000,
                         'credits_balance' => 10000,
                     ]);
@@ -143,7 +142,7 @@ class DatabaseSeeder extends Seeder
             ->each(function (User $freelancer) {
                 if (fake()->boolean(25)) {
                     $freelancer->membership()->update([
-                        'tier'            => 'pro',
+                        'tier' => 'pro',
                         'monthly_credits' => 10000,
                         'credits_balance' => 10000,
                     ]);

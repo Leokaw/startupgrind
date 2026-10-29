@@ -26,7 +26,7 @@ class InviteTicketController extends Controller
         $inviteTickets = InviteTicket::with(['user', 'acceptedBy'])
             ->whereHas('user', function ($q) use ($company) {
                 $q->where('id', $company->id)
-                  ->orWhere('company_id', $company->id);
+                    ->orWhere('company_id', $company->id);
             })
             ->latest()
             ->get();
@@ -56,37 +56,37 @@ class InviteTicketController extends Controller
         }
 
         $validated = $request->validate([
-            'invited_name'  => ['required', 'string', 'max:50'],
+            'invited_name' => ['required', 'string', 'max:50'],
             'invited_email' => [
                 'required', 'email', 'max:255',
                 'unique:invite_tickets,invited_email',
                 'unique:users,email',
             ],
-            'expires_at'    => ['nullable', 'date', 'after:today'],
-            'max_uses'      => ['nullable', 'integer', 'min:1'],
+            'expires_at' => ['nullable', 'date', 'after:today'],
+            'max_uses' => ['nullable', 'integer', 'min:1'],
         ]);
 
         $tempPassword = Str::password(12, symbols: false);
-        $hashed       = Hash::make($tempPassword);
+        $hashed = Hash::make($tempPassword);
 
         User::create([
-            'name'              => $validated['invited_name'],
-            'email'             => $validated['invited_email'],
-            'password'          => $hashed,
-            'user_type'         => User::TYPE_EMPLOYEE,
-            'company_id'        => $company->id,
+            'name' => $validated['invited_name'],
+            'email' => $validated['invited_email'],
+            'password' => $hashed,
+            'user_type' => User::TYPE_EMPLOYEE,
+            'company_id' => $company->id,
             'email_verified_at' => null,
         ]);
 
         $invite = $request->user()->inviteTickets()->create([
-            'code'               => $this->generateUniqueCode(),
-            'invited_name'       => $validated['invited_name'],
-            'invited_email'      => $validated['invited_email'],
+            'code' => $this->generateUniqueCode(),
+            'invited_name' => $validated['invited_name'],
+            'invited_email' => $validated['invited_email'],
             'temporary_password' => $hashed,
-            'expires_at'         => $validated['expires_at'] ?? null,
-            'max_uses'           => $validated['max_uses'] ?? 1,
-            'status'             => 'pending',
-            'is_active'          => true,
+            'expires_at' => $validated['expires_at'] ?? null,
+            'max_uses' => $validated['max_uses'] ?? 1,
+            'status' => 'pending',
+            'is_active' => true,
         ]);
 
         Notification::route('mail', $invite->invited_email)

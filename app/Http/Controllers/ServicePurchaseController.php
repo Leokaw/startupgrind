@@ -26,7 +26,7 @@ class ServicePurchaseController extends Controller
 
     public function store(Request $request, CompanyService $service): RedirectResponse
     {
-        $buyer  = $request->user();
+        $buyer = $request->user();
         $seller = $service->user;
 
         abort_if($buyer->id === $seller->id, 422, 'You cannot purchase your own service.');
@@ -47,38 +47,38 @@ class ServicePurchaseController extends Controller
                 $membership, $sellerMembership,
             ) {
                 $purchase = Purchase::create([
-                    'buyer_id'         => $buyer->id,
-                    'seller_id'        => $seller->id,
+                    'buyer_id' => $buyer->id,
+                    'seller_id' => $seller->id,
                     'purchasable_type' => CompanyService::class,
-                    'purchasable_id'   => $service->id,
-                    'subtotal'         => $amount,
-                    'platform_fee'     => 0,
-                    'seller_payout'    => $amount,
-                    'status'           => PurchaseStatus::PENDING,
+                    'purchasable_id' => $service->id,
+                    'subtotal' => $amount,
+                    'platform_fee' => 0,
+                    'seller_payout' => $amount,
+                    'status' => PurchaseStatus::PENDING,
                 ]);
 
                 // Debit the buyer.
                 $this->credits->spend(
-                    membership:  $membership,
-                    amount:      $amount,
-                    category:    CreditTransactionCategory::SERVICE_PURCHASE,
+                    membership: $membership,
+                    amount: $amount,
+                    category: CreditTransactionCategory::SERVICE_PURCHASE,
                     description: "Purchased \"{$service->name}\" from {$seller->name}",
-                    reference:   $service,
-                    purchase:    $purchase,
+                    reference: $service,
+                    purchase: $purchase,
                 );
 
                 // Credit the seller with the full amount.
                 $this->credits->grant(
-                    membership:  $sellerMembership,
-                    amount:      $amount,
-                    category:    CreditTransactionCategory::SERVICE_SALE,
+                    membership: $sellerMembership,
+                    amount: $amount,
+                    category: CreditTransactionCategory::SERVICE_SALE,
                     description: "Sold \"{$service->name}\" to {$buyer->name}",
-                    reference:   $service,
-                    purchase:    $purchase,
+                    reference: $service,
+                    purchase: $purchase,
                 );
 
                 $purchase->update([
-                    'status'       => PurchaseStatus::COMPLETED,
+                    'status' => PurchaseStatus::COMPLETED,
                     'completed_at' => now(),
                 ]);
 

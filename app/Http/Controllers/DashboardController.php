@@ -29,7 +29,7 @@ class DashboardController extends Controller
             ->when($request->input('ticket_search'), function ($query, $search) {
                 $query->where(function ($q) use ($search) {
                     $q->where('name', 'like', "%{$search}%")
-                      ->orWhere('code', 'like', "%{$search}%");
+                        ->orWhere('code', 'like', "%{$search}%");
                 });
             })
             ->when($request->input('ticket_status'), function ($query, $status) {
@@ -49,7 +49,7 @@ class DashboardController extends Controller
                 ->when($request->input('employee_search'), function ($query, $search) {
                     $query->where(function ($q) use ($search) {
                         $q->where('name', 'like', "%{$search}%")
-                          ->orWhere('email', 'like', "%{$search}%");
+                            ->orWhere('email', 'like', "%{$search}%");
                     });
                 })
                 ->when($request->input('employee_status'), function ($query, $status) {
@@ -67,11 +67,11 @@ class DashboardController extends Controller
         }
 
         return Inertia::render('dashboard', [
-            'services'        => $services,
-            'filters'         => $request->only(['search', 'category']),
-            'tickets'         => $tickets,
-            'ticketFilters'   => $request->only(['ticket_search', 'ticket_status']),
-            'employees'       => $employees,
+            'services' => $services,
+            'filters' => $request->only(['search', 'category']),
+            'tickets' => $tickets,
+            'ticketFilters' => $request->only(['ticket_search', 'ticket_status']),
+            'employees' => $employees,
             'employeeFilters' => $employeeFilters,
         ]);
     }

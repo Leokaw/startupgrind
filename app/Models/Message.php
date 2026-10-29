@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Message extends Model
 {
-    use HasUuids, HasFactory;
+    use HasFactory, HasUuids;
 
     protected $fillable = [
         'sender_id',
@@ -24,7 +24,7 @@ class Message extends Model
     {
         return [
             'credits_cost' => 'integer',
-            'read_at'      => 'datetime',
+            'read_at' => 'datetime',
         ];
     }
 

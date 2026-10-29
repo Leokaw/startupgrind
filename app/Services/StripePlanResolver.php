@@ -25,8 +25,8 @@ class StripePlanResolver
             function () use ($lookupKey) {
                 $prices = Cashier::stripe()->prices->all([
                     'lookup_keys' => [$lookupKey],
-                    'active'      => true,
-                    'limit'       => 1,
+                    'active' => true,
+                    'limit' => 1,
                 ]);
 
                 return $prices->data[0]->id ?? null;

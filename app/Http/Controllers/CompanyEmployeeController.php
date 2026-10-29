@@ -23,7 +23,7 @@ class CompanyEmployeeController extends Controller
 
         $employee->forceFill([
             'company_id' => null,
-            'user_type'  => User::TYPE_USER,
+            'user_type' => User::TYPE_USER,
         ])->save();
 
         return redirect()

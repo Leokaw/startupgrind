@@ -23,10 +23,10 @@ class SubscriptionSuccessController extends Controller
         $plan = config("subscriptions.plans.{$record->plan_slug}");
 
         return Inertia::render('billing/success', [
-            'token'  => $record->token,
+            'token' => $record->token,
             'status' => $record->status,
-            'plan'   => [
-                'name'  => $plan['name'],
+            'plan' => [
+                'name' => $plan['name'],
                 'badge' => $plan['badge'] ?? null,
             ],
             'perks' => $plan['tour_perks'] ?? [],
@@ -38,7 +38,7 @@ class SubscriptionSuccessController extends Controller
         $record = $this->resolveToken($request, $token);
 
         return response()->json([
-            'status'   => $record->status,
+            'status' => $record->status,
             'ready_at' => $record->ready_at?->toIso8601String(),
         ]);
     }
@@ -49,7 +49,7 @@ class SubscriptionSuccessController extends Controller
 
         if ($record->status !== 'completed') {
             $record->update([
-                'status'       => 'completed',
+                'status' => 'completed',
                 'completed_at' => now(),
             ]);
         }

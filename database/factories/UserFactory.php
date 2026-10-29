@@ -42,22 +42,22 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name'               => fake()->name(),
-            'email'              => fake()->unique()->safeEmail(),
-            'email_verified_at'  => now(),
-            'password'           => static::$password ??= Hash::make('password'),
-            'remember_token'     => Str::random(10),
-            'user_type'          => User::TYPE_USER,
-            'company_id'         => null,
-            'approved_at'        => null,
+            'name' => fake()->name(),
+            'email' => fake()->unique()->safeEmail(),
+            'email_verified_at' => now(),
+            'password' => static::$password ??= Hash::make('password'),
+            'remember_token' => Str::random(10),
+            'user_type' => User::TYPE_USER,
+            'company_id' => null,
+            'approved_at' => null,
             'profile_photo_path' => null,
             // Optional onboarding fields — all null by default. States
             // below fill them.
-            'onboarded_at'       => null,
-            'role'               => null,
-            'goal'               => null,
-            'description'        => null,
-            'area_of_work'       => null,
+            'onboarded_at' => null,
+            'role' => null,
+            'goal' => null,
+            'description' => null,
+            'area_of_work' => null,
         ];
     }
 
@@ -68,7 +68,7 @@ class UserFactory extends Factory
     public function company(): static
     {
         return $this->state(fn () => [
-            'user_type'   => User::TYPE_COMPANY,
+            'user_type' => User::TYPE_COMPANY,
             'approved_at' => now(),
         ]);
     }
@@ -76,7 +76,7 @@ class UserFactory extends Factory
     public function pendingCompany(): static
     {
         return $this->state(fn () => [
-            'user_type'   => User::TYPE_COMPANY,
+            'user_type' => User::TYPE_COMPANY,
             'approved_at' => null,
         ]);
     }
@@ -84,7 +84,7 @@ class UserFactory extends Factory
     public function freelancer(): static
     {
         return $this->state(fn () => [
-            'user_type'  => User::TYPE_FREELANCER,
+            'user_type' => User::TYPE_FREELANCER,
             'company_id' => null,
         ]);
     }
@@ -92,7 +92,7 @@ class UserFactory extends Factory
     public function community(): static
     {
         return $this->state(fn () => [
-            'user_type'  => User::TYPE_USER,
+            'user_type' => User::TYPE_USER,
             'company_id' => null,
         ]);
     }
@@ -104,7 +104,7 @@ class UserFactory extends Factory
     public function employee(): static
     {
         return $this->state(fn () => [
-            'user_type'  => User::TYPE_EMPLOYEE,
+            'user_type' => User::TYPE_EMPLOYEE,
             'company_id' => null,
         ]);
     }
@@ -112,7 +112,7 @@ class UserFactory extends Factory
     public function employeeOf(User $company): static
     {
         return $this->state(fn () => [
-            'user_type'  => User::TYPE_EMPLOYEE,
+            'user_type' => User::TYPE_EMPLOYEE,
             'company_id' => $company->id,
         ]);
     }
@@ -125,8 +125,8 @@ class UserFactory extends Factory
     public function pendingEmployeeOf(User $company): static
     {
         return $this->state(fn () => [
-            'user_type'         => User::TYPE_EMPLOYEE,
-            'company_id'        => $company->id,
+            'user_type' => User::TYPE_EMPLOYEE,
+            'company_id' => $company->id,
             'email_verified_at' => null,
         ]);
     }
@@ -191,9 +191,9 @@ class UserFactory extends Factory
 
             return [
                 'onboarded_at' => now(),
-                'role'         => fake()->randomElement(self::ROLES),
-                'goal'         => fake()->randomElement(self::GOALS),
-                'description'  => fake()->paragraphs(2, true),
+                'role' => fake()->randomElement(self::ROLES),
+                'goal' => fake()->randomElement(self::GOALS),
+                'description' => fake()->paragraphs(2, true),
                 'area_of_work' => fake()->randomElement($areas),
             ];
         });

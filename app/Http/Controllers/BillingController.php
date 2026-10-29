@@ -15,7 +15,7 @@ class BillingController extends Controller
 {
     public function __invoke(Request $request, StripePlanResolver $resolver): Response
     {
-        $user         = $request->user();
+        $user = $request->user();
         $subscription = $user->subscription('default');
 
         $activeSubscription = $subscription && $subscription->valid()
@@ -24,7 +24,7 @@ class BillingController extends Controller
 
         $plans = collect(config('subscriptions.plans'))
             ->map(fn ($plan, $slug) => array_merge($plan, [
-                'slug'            => $slug,
+                'slug' => $slug,
                 'stripe_price_id' => $resolver->priceIdFor($slug),
             ]))
             ->values()
@@ -58,34 +58,34 @@ class BillingController extends Controller
             'currentPlan' => $resolver->planSlugFor($activeSubscription?->stripe_price),
 
             'subscription' => $activeSubscription ? [
-                'status'               => $activeSubscription->stripe_status,
-                'stripe_price'         => $activeSubscription->stripe_price,
+                'status' => $activeSubscription->stripe_status,
+                'stripe_price' => $activeSubscription->stripe_price,
                 'current_period_start' => $activeSubscription->current_period_start?->toIso8601String(),
-                'current_period_end'   => $activeSubscription->current_period_end?->toIso8601String(),
-                'ends_at'              => $activeSubscription->ends_at?->toIso8601String(),
+                'current_period_end' => $activeSubscription->current_period_end?->toIso8601String(),
+                'ends_at' => $activeSubscription->ends_at?->toIso8601String(),
 
-                'has_trial'            => $activeSubscription->trial_ends_at !== null,
-                'trial_started_at'     => $trialStartedAt,
-                'trial_ends_at'        => $activeSubscription->trial_ends_at?->toIso8601String(),
-                'on_trial'             => $activeSubscription->onTrial(),
+                'has_trial' => $activeSubscription->trial_ends_at !== null,
+                'trial_started_at' => $trialStartedAt,
+                'trial_ends_at' => $activeSubscription->trial_ends_at?->toIso8601String(),
+                'on_trial' => $activeSubscription->onTrial(),
 
-                'pending_plan'         => $pendingPlan,
+                'pending_plan' => $pendingPlan,
 
-                'on_grace_period'      => $activeSubscription->onGracePeriod(),
-                'canceled'             => $activeSubscription->canceled(),
+                'on_grace_period' => $activeSubscription->onGracePeriod(),
+                'canceled' => $activeSubscription->canceled(),
             ] : null,
 
             'subscriptionToken' => $subscriptionToken ? [
-                'token'     => $subscriptionToken->token,
-                'status'    => $subscriptionToken->status,
+                'token' => $subscriptionToken->token,
+                'status' => $subscriptionToken->status,
                 'plan_slug' => $subscriptionToken->plan_slug,
             ] : null,
 
             'flash' => [
-                'success'  => session('success'),
-                'error'    => session('error'),
+                'success' => session('success'),
+                'error' => session('error'),
                 'checkout' => $request->query('checkout'),
-                'toast'    => session('toast'),
+                'toast' => session('toast'),
             ],
         ]);
     }
@@ -99,10 +99,10 @@ class BillingController extends Controller
             'plan' => ['required', 'in:pro,enterprise'],
         ]);
 
-        $user     = $request->user();
+        $user = $request->user();
         $planSlug = $request->input('plan');
-        $plan     = config("subscriptions.plans.{$planSlug}");
-        $priceId  = $resolver->priceIdFor($planSlug);
+        $plan = config("subscriptions.plans.{$planSlug}");
+        $priceId = $resolver->priceIdFor($planSlug);
 
         abort_if(
             $priceId === null,
@@ -116,7 +116,7 @@ class BillingController extends Controller
         if ($subscription && $subscription->valid()) {
             if ($subscription->stripe_price === $priceId) {
                 return back()->with('toast', [
-                    'type'    => 'info',
+                    'type' => 'info',
                     'message' => "You're already on {$plan['name']}.",
                 ]);
             }
@@ -126,7 +126,7 @@ class BillingController extends Controller
             $endsAt = $subscription->current_period_end?->format('M j, Y');
 
             return back()->with('toast', [
-                'type'    => 'success',
+                'type' => 'success',
                 'message' => $endsAt
                     ? "We'll switch you to {$plan['name']} on {$endsAt}."
                     : "We'll switch you to {$plan['name']} at your next billing cycle.",
@@ -141,7 +141,7 @@ class BillingController extends Controller
             ])
             ->checkout([
                 'success_url' => route('billing.index', ['checkout' => 'success']),
-                'cancel_url'  => route('billing.index', ['checkout' => 'cancelled']),
+                'cancel_url' => route('billing.index', ['checkout' => 'cancelled']),
             ]);
     }
 
@@ -154,14 +154,14 @@ class BillingController extends Controller
 
         if (! $subscription || ! $subscription->valid()) {
             return back()->with('toast', [
-                'type'    => 'error',
+                'type' => 'error',
                 'message' => 'No active subscription to cancel.',
             ]);
         }
 
         if ($subscription->onGracePeriod()) {
             return back()->with('toast', [
-                'type'    => 'info',
+                'type' => 'info',
                 'message' => 'Cancellation is already scheduled.',
             ]);
         }
@@ -171,7 +171,7 @@ class BillingController extends Controller
         $endsAt = $subscription->ends_at?->format('M j, Y');
 
         return back()->with('toast', [
-            'type'    => 'success',
+            'type' => 'success',
             'message' => $endsAt
                 ? "Subscription cancelled. Access ends {$endsAt}."
                 : 'Subscription cancelled.',
@@ -187,7 +187,7 @@ class BillingController extends Controller
 
         if (! $subscription || ! $subscription->onGracePeriod()) {
             return back()->with('toast', [
-                'type'    => 'error',
+                'type' => 'error',
                 'message' => 'Nothing to resume.',
             ]);
         }
@@ -195,7 +195,7 @@ class BillingController extends Controller
         $subscription->resume();
 
         return back()->with('toast', [
-            'type'    => 'success',
+            'type' => 'success',
             'message' => 'Subscription resumed. Welcome back.',
         ]);
     }

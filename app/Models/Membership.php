@@ -22,12 +22,17 @@ class Membership extends Model
      * because billing providers (Stripe, Paddle) send these as strings
      * and matching them 1:1 avoids a translation layer.
      */
-    public const STATUS_ACTIVE     = 'active';
-    public const STATUS_TRIALING   = 'trialing';
-    public const STATUS_PAST_DUE   = 'past_due';
-    public const STATUS_CANCELED   = 'canceled';
+    public const STATUS_ACTIVE = 'active';
+
+    public const STATUS_TRIALING = 'trialing';
+
+    public const STATUS_PAST_DUE = 'past_due';
+
+    public const STATUS_CANCELED = 'canceled';
+
     public const STATUS_INCOMPLETE = 'incomplete';
-    public const STATUS_PAUSED     = 'paused';
+
+    public const STATUS_PAUSED = 'paused';
 
     protected $fillable = [
         'user_id',
@@ -49,16 +54,16 @@ class Membership extends Model
     protected function casts(): array
     {
         return [
-            'tier'                     => MembershipTier::class,
-            'credits_balance'          => 'integer',
-            'monthly_credits'          => 'integer',
-            'credits_reset_at'         => 'datetime',
+            'tier' => MembershipTier::class,
+            'credits_balance' => 'integer',
+            'monthly_credits' => 'integer',
+            'credits_reset_at' => 'datetime',
             'bonus_credits_awarded_at' => 'datetime',
-            'current_period_start'     => 'datetime',
-            'current_period_end'       => 'datetime',
-            'cancel_at_period_end'     => 'boolean',
-            'trial_ends_at'            => 'datetime',
-            'canceled_at'              => 'datetime',
+            'current_period_start' => 'datetime',
+            'current_period_end' => 'datetime',
+            'cancel_at_period_end' => 'boolean',
+            'trial_ends_at' => 'datetime',
+            'canceled_at' => 'datetime',
         ];
     }
 
@@ -116,8 +121,6 @@ class Membership extends Model
     {
         return $this->tier === MembershipTier::FREE;
     }
-
-
 
     public function isPro(): bool
     {
@@ -189,8 +192,6 @@ class Membership extends Model
      |  Credit helpers
      | ----------------------------------------------------------------- */
 
-
-
     /**
      * Apply the effects of a new Stripe subscription:
      *  - upgrade the tier
@@ -219,21 +220,21 @@ class Membership extends Model
             $periodEnd,
             $signupBonusCredits,
         ) {
-        // Re-fetch under lock so concurrent webhook deliveries can't race
-        // each other across the bonus check.
+            // Re-fetch under lock so concurrent webhook deliveries can't race
+            // each other across the bonus check.
             /** @var self $fresh */
             $fresh = self::query()->lockForUpdate()->find($this->id);
 
             $fresh->update([
-                'tier'                     => $tier,
-                'status'                   => self::STATUS_ACTIVE,
-                'monthly_credits'          => $tier->monthlyCredits(),
+                'tier' => $tier,
+                'status' => self::STATUS_ACTIVE,
+                'monthly_credits' => $tier->monthlyCredits(),
                 'external_subscription_id' => $externalSubscriptionId,
-                'current_period_start'     => $periodStart ?? $fresh->current_period_start,
-                'current_period_end'       => $periodEnd ?? $fresh->current_period_end,
-                'credits_reset_at'         => $periodEnd ?? now()->addMonth(),
-                'cancel_at_period_end'     => false,
-                'canceled_at'              => null,
+                'current_period_start' => $periodStart ?? $fresh->current_period_start,
+                'current_period_end' => $periodEnd ?? $fresh->current_period_end,
+                'credits_reset_at' => $periodEnd ?? now()->addMonth(),
+                'cancel_at_period_end' => false,
+                'canceled_at' => null,
             ]);
 
             // One-time bonus — never more than once per membership lifetime.
@@ -325,7 +326,6 @@ class Membership extends Model
     {
         return $query->where('status', self::STATUS_CANCELED);
     }
-
 
     public function limit(string $key, int $default = 0): int
     {

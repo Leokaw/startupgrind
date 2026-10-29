@@ -7,7 +7,6 @@ use App\Exceptions\InsufficientCreditsException;
 use App\Models\CreditTransaction;
 use App\Models\Membership;
 use App\Models\Purchase;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
@@ -57,14 +56,14 @@ class CreditService
 
             return CreditTransaction::create([
                 'membership_id' => $membership->id,
-                'user_id'       => $membership->user_id,
-                'purchase_id'   => $purchase?->id,
-                'amount'        => -$amount,
+                'user_id' => $membership->user_id,
+                'purchase_id' => $purchase?->id,
+                'amount' => -$amount,
                 'balance_after' => $membership->credits_balance,
-                'category'      => $category,
-                'description'   => $description,
+                'category' => $category,
+                'description' => $description,
                 'reference_type' => $reference ? $reference::class : null,
-                'reference_id'   => $reference?->getKey(),
+                'reference_id' => $reference?->getKey(),
                 'metadata' => [
                     'balance_before' => $balanceBefore,
                 ],
@@ -107,14 +106,14 @@ class CreditService
 
             return CreditTransaction::create([
                 'membership_id' => $membership->id,
-                'user_id'       => $membership->user_id,
-                'purchase_id'   => $purchase?->id,
-                'amount'        => $amount,
+                'user_id' => $membership->user_id,
+                'purchase_id' => $purchase?->id,
+                'amount' => $amount,
                 'balance_after' => $membership->credits_balance,
-                'category'      => $category,
-                'description'   => $description,
+                'category' => $category,
+                'description' => $description,
                 'reference_type' => $reference ? $reference::class : null,
-                'reference_id'   => $reference?->getKey(),
+                'reference_id' => $reference?->getKey(),
                 'metadata' => [
                     'balance_before' => $balanceBefore,
                 ],

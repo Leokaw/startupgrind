@@ -22,9 +22,9 @@ class SubscriptionSuccessToken extends Model
     protected function casts(): array
     {
         return [
-            'ready_at'     => 'datetime',
+            'ready_at' => 'datetime',
             'completed_at' => 'datetime',
-            'expires_at'   => 'datetime',
+            'expires_at' => 'datetime',
         ];
     }
 
@@ -40,10 +40,10 @@ class SubscriptionSuccessToken extends Model
         }
 
         $this->update([
-            'status'                     => 'ready',
+            'status' => 'ready',
             'stripe_checkout_session_id' => $checkoutSessionId ?? $this->stripe_checkout_session_id,
-            'stripe_subscription_id'     => $subscriptionId ?? $this->stripe_subscription_id,
-            'ready_at'                   => now(),
+            'stripe_subscription_id' => $subscriptionId ?? $this->stripe_subscription_id,
+            'ready_at' => now(),
         ]);
     }
 

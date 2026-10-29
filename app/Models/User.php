@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Observers\UserObserver;
 use App\Support\ServiceCategory;
-use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -13,6 +12,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
@@ -21,12 +21,15 @@ use Laravel\Cashier\Billable;
 #[ObservedBy([UserObserver::class])]
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasFactory, Notifiable, HasUuids, Billable;
+    use Billable, HasFactory, HasUuids, Notifiable;
 
-    public const TYPE_COMPANY    = 'company';
-    public const TYPE_USER       = 'user';
+    public const TYPE_COMPANY = 'company';
+
+    public const TYPE_USER = 'user';
+
     public const TYPE_FREELANCER = 'freelancer';
-    public const TYPE_EMPLOYEE   = 'employee';
+
+    public const TYPE_EMPLOYEE = 'employee';
 
     protected $hidden = [
         'password',
@@ -57,9 +60,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return [
             'email_verified_at' => 'datetime',
-            'onboarded_at'      => 'datetime',
-            'approved_at'       => 'datetime',
-            'password'          => 'hashed',
+            'onboarded_at' => 'datetime',
+            'approved_at' => 'datetime',
+            'password' => 'hashed',
         ];
     }
 
@@ -75,14 +78,14 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return Attribute::get(function () {
             if ($this->profile_photo_path) {
-                /** @var \Illuminate\Filesystem\FilesystemAdapter $disk */
+                /** @var FilesystemAdapter $disk */
                 $disk = Storage::disk('public');
 
                 return $disk->url($this->profile_photo_path);
             }
 
             return 'https://ui-avatars.com/api/?background=random&name='
-                . urlencode($this->name);
+                .urlencode($this->name);
         });
     }
 
@@ -169,6 +172,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->onboarded_at === null;
     }
+
     public function isFreelancer(): bool
     {
         return $this->user_type === self::TYPE_FREELANCER;
@@ -218,20 +222,16 @@ class User extends Authenticatable implements MustVerifyEmail
         return $company !== null && $company->approved_at !== null;
     }
 
-
-
-
-
     protected function roleLabel(): Attribute
     {
-        return Attribute::get(fn() => match ($this->role) {
-            'founder'    => 'Founder',
-            'investor'   => 'Investor',
-            'operator'   => 'Operator',
+        return Attribute::get(fn () => match ($this->role) {
+            'founder' => 'Founder',
+            'investor' => 'Investor',
+            'operator' => 'Operator',
             'freelancer' => 'Freelancer',
-            'designer'   => 'Designer',
-            'developer'  => 'Developer',
-            default      => $this->role,
+            'designer' => 'Designer',
+            'developer' => 'Developer',
+            default => $this->role,
         });
     }
 
@@ -240,14 +240,14 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected function goalLabel(): Attribute
     {
-        return Attribute::get(fn() => match ($this->goal) {
-            'raise'     => 'Raise funds',
+        return Attribute::get(fn () => match ($this->goal) {
+            'raise' => 'Raise funds',
             'cofounder' => 'Find a co-founder',
-            'hire'      => 'Hire talent',
-            'network'   => 'Grow my network',
-            'learn'     => 'Learn from others',
-            'events'    => 'Find events',
-            default     => $this->goal,
+            'hire' => 'Hire talent',
+            'network' => 'Grow my network',
+            'learn' => 'Learn from others',
+            'events' => 'Find events',
+            default => $this->goal,
         });
     }
 }

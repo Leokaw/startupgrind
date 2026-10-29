@@ -3,6 +3,7 @@
 namespace App\Concerns;
 
 use App\Models\User;
+use App\Support\ServiceCategory;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Validation\Rule;
 
@@ -16,16 +17,16 @@ trait ProfileValidationRules
     protected function profileRules(?string $userId = null): array
     {
         return [
-            'name'  => $this->nameRules(),
+            'name' => $this->nameRules(),
             'email' => $this->emailRules($userId),
 
             // 👇 new — both optional, both validated against the same
             // source the profile form uses for its dropdown options.
-            'description'  => ['nullable', 'string', 'max:1000'],
+            'description' => ['nullable', 'string', 'max:1000'],
             'area_of_work' => [
                 'nullable',
                 'string',
-                Rule::in(array_keys(\App\Support\ServiceCategory::all())),
+                Rule::in(array_keys(ServiceCategory::all())),
             ],
         ];
     }

@@ -11,11 +11,13 @@ use Stripe\Product;
 class SyncStripePlans extends Command
 {
     protected $signature = 'stripe:sync-plans {--dry-run : Show what would be created without hitting the API}';
+
     protected $description = 'Create/update Stripe products and prices from config/subscriptions.php';
 
     /**
      * Stripe zero-decimal currencies: their smallest unit IS the major unit.
      * Everything else is assumed to be 2-decimal.
+     *
      * @see https://docs.stripe.com/currencies#zero-decimal
      */
     private const ZERO_DECIMAL = [
@@ -25,13 +27,14 @@ class SyncStripePlans extends Command
 
     public function handle(): int
     {
-        $plans    = config('subscriptions.plans');
+        $plans = config('subscriptions.plans');
         $currency = strtolower(config('subscriptions.currency'));
-        $dryRun   = (bool) $this->option('dry-run');
+        $dryRun = (bool) $this->option('dry-run');
 
         foreach ($plans as $slug => $plan) {
             if (empty($plan['lookup_key']) || (int) $plan['price'] <= 0) {
                 $this->line("  · skipping <fg=gray>{$slug}</> (free plan)");
+
                 continue;
             }
 
@@ -46,7 +49,7 @@ class SyncStripePlans extends Command
 
             try {
                 $product = $this->findOrCreateProduct($slug, $plan);
-                $price   = $this->findOrCreatePrice($product, $plan, $currency, $unitAmount);
+                $price = $this->findOrCreatePrice($product, $plan, $currency, $unitAmount);
 
                 $this->line("    product: <fg=yellow>{$product->id}</>");
                 $this->line("    price:   <fg=yellow>{$price->id}</>  (lookup_key: {$price->lookup_key})");
@@ -55,6 +58,7 @@ class SyncStripePlans extends Command
                 Cache::forget("stripe.price_id.{$plan['lookup_key']}");
             } catch (\Throwable $e) {
                 $this->error("    failed: {$e->getMessage()}");
+
                 return self::FAILURE;
             }
         }
@@ -85,15 +89,15 @@ class SyncStripePlans extends Command
             $product = $existing->data[0];
 
             return $stripe->products->update($product->id, [
-                'name'        => $plan['name'],
+                'name' => $plan['name'],
                 'description' => $plan['description'] ?? null,
             ]);
         }
 
         return $stripe->products->create([
-            'name'        => $plan['name'],
+            'name' => $plan['name'],
             'description' => $plan['description'] ?? null,
-            'metadata'    => ['app_slug' => $slug],
+            'metadata' => ['app_slug' => $slug],
         ]);
     }
 
@@ -107,8 +111,8 @@ class SyncStripePlans extends Command
 
         $existing = $stripe->prices->all([
             'lookup_keys' => [$plan['lookup_key']],
-            'active'      => true,
-            'limit'       => 1,
+            'active' => true,
+            'limit' => 1,
         ]);
 
         if (! empty($existing->data)) {
@@ -124,21 +128,21 @@ class SyncStripePlans extends Command
             $this->line("    <fg=yellow>amount drifted</> ({$price->unit_amount} → {$unitAmount}); creating new price");
 
             return $stripe->prices->create([
-                'product'             => $product->id,
-                'unit_amount'         => $unitAmount,
-                'currency'            => $currency,
-                'recurring'           => ['interval' => 'month'],
-                'lookup_key'          => $plan['lookup_key'],
+                'product' => $product->id,
+                'unit_amount' => $unitAmount,
+                'currency' => $currency,
+                'recurring' => ['interval' => 'month'],
+                'lookup_key' => $plan['lookup_key'],
                 'transfer_lookup_key' => true,
             ]);
         }
 
         return $stripe->prices->create([
-            'product'     => $product->id,
+            'product' => $product->id,
             'unit_amount' => $unitAmount,
-            'currency'    => $currency,
-            'recurring'   => ['interval' => 'month'],
-            'lookup_key'  => $plan['lookup_key'],
+            'currency' => $currency,
+            'recurring' => ['interval' => 'month'],
+            'lookup_key' => $plan['lookup_key'],
         ]);
     }
 }

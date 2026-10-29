@@ -19,22 +19,22 @@ class DiscountTicketFactory extends Factory
         $isPercentage = fake()->boolean(70);
 
         return [
-            'user_id'             => User::factory(),
-            'code'                => 'DISC-'.strtoupper(Str::random(8)),
-            'name'                => Str::title(fake()->words(rand(2, 4), true)),
-            'description'         => fake()->sentence(rand(8, 15)),
-            'event_url'           => 'https://www.startupgrind.com/events/details/'
-                . Str::slug(fake()->words(rand(3, 6), true)),
+            'user_id' => User::factory(),
+            'code' => 'DISC-'.strtoupper(Str::random(8)),
+            'name' => Str::title(fake()->words(rand(2, 4), true)),
+            'description' => fake()->sentence(rand(8, 15)),
+            'event_url' => 'https://www.startupgrind.com/events/details/'
+                .Str::slug(fake()->words(rand(3, 6), true)),
             'discount_percentage' => $isPercentage
                 ? fake()->randomFloat(2, 5, 50)
                 : null,
-            'discount_amount'     => $isPercentage
+            'discount_amount' => $isPercentage
                 ? null
                 : fake()->randomFloat(2, 5, 100),
-            'valid_until'         => now()->addDays(rand(7, 90)),
-            'usage_limit'         => fake()->boolean(70) ? rand(10, 500) : null,
-            'times_used'          => 0,
-            'is_active'           => fake()->boolean(90),
+            'valid_until' => now()->addDays(rand(7, 90)),
+            'usage_limit' => fake()->boolean(70) ? rand(10, 500) : null,
+            'times_used' => 0,
+            'is_active' => fake()->boolean(90),
         ];
     }
 
@@ -46,7 +46,7 @@ class DiscountTicketFactory extends Factory
     {
         return $this->state(fn () => [
             'valid_until' => now()->subDays(30),
-            'is_active'   => false,
+            'is_active' => false,
         ]);
     }
 
@@ -54,14 +54,14 @@ class DiscountTicketFactory extends Factory
     {
         return $this->state(fn () => [
             'discount_percentage' => $percent,
-            'discount_amount'     => null,
+            'discount_amount' => null,
         ]);
     }
 
     public function amount(float $amount): static
     {
         return $this->state(fn () => [
-            'discount_amount'     => $amount,
+            'discount_amount' => $amount,
             'discount_percentage' => null,
         ]);
     }
@@ -69,9 +69,9 @@ class DiscountTicketFactory extends Factory
     public function exhausted(): static
     {
         return $this->state(fn () => [
-            'times_used'  => 10,
+            'times_used' => 10,
             'usage_limit' => 10,
-            'is_active'   => false,
+            'is_active' => false,
         ]);
     }
 

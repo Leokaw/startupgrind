@@ -1,27 +1,24 @@
 <?php
 
+use App\Http\Controllers\BillingController;
+use App\Http\Controllers\CommunityController;
+use App\Http\Controllers\CompanyEmployeeController;
 use App\Http\Controllers\CompanyServiceController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DiscountTicketController;
 use App\Http\Controllers\InviteAcceptanceController;
 use App\Http\Controllers\InviteTicketController;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\CompanyEmployeeController;
-use App\Http\Controllers\CommunityController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\ProfilePhotoController;
 use App\Http\Controllers\ServicePurchaseController;
-use App\Http\Controllers\TicketPurchaseController;
-use App\Http\Controllers\BillingController;
-use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\StripeWebhookController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\SubscriptionSuccessController;
+use App\Http\Controllers\TicketPurchaseController;
 use App\Http\Controllers\UpcomingEventsController;
-
-
-
+use Illuminate\Support\Facades\Route;
 
 Route::inertia('/', 'welcome')->name('home');
 // Public — invitees are not logged in yet
@@ -30,22 +27,18 @@ Route::get('/invite/{code}', [InviteAcceptanceController::class, 'show'])
 Route::post('/invite/{code}', [InviteAcceptanceController::class, 'store'])
     ->name('invites.accept.store');
 
-
 Route::post('/stripe/webhook', [StripeWebhookController::class, 'handleWebhook'])
     ->name('cashier.webhook');
 
-    Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::post('/onboarding/complete', [OnboardingController::class, 'complete'])
         ->name('onboarding.complete');
     Route::post('/onboarding/skip', [OnboardingController::class, 'skip'])
         ->name('onboarding.skip');
 });
 
-
-
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', DashboardController::class)->name('dashboard');
-
 
     // Discount tickets
     Route::get('/tickets/discounted/create', [DiscountTicketController::class, 'create'])
@@ -65,17 +58,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/services/company', [CompanyServiceController::class, 'store'])
         ->name('services.company.store');
 
-
     Route::get('/tickets/invite/create', [InviteTicketController::class, 'create'])
         ->name('tickets.invite.create');
     Route::post('/tickets/invite', [InviteTicketController::class, 'store'])
         ->name('tickets.invite.store');
 
-
-
     Route::patch('/services/company/{companyService}', [CompanyServiceController::class, 'update'])
         ->name('services.company.update');
-
 
     Route::delete('/services/company/{companyService}', [CompanyServiceController::class, 'destroy'])
         ->name('services.company.destroy');
@@ -110,8 +99,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/tickets/{ticket}/purchase', [TicketPurchaseController::class, 'store'])
         ->name('tickets.purchase');
 
-
-    Route::get('billing', \App\Http\Controllers\BillingController::class)
+    Route::get('billing', BillingController::class)
         ->name('billing');
 
     Route::post('/billing/subscribe', [SubscriptionController::class, 'checkout'])
@@ -123,8 +111,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/billing/resume', [SubscriptionController::class, 'resume'])
         ->name('billing.resume');
 
-
-
     Route::get('/tickets/discounted', [DiscountTicketController::class, 'index'])
         ->name('tickets.discounted.index');
     Route::patch('/tickets/discounted/{discountTicket}', [DiscountTicketController::class, 'update'])
@@ -135,8 +121,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/company/employees/{employee}', [CompanyEmployeeController::class, 'destroy'])
         ->name('company.employees.destroy');
 
-
-
     Route::get('/billing/success/{token}', [SubscriptionSuccessController::class, 'show'])
         ->name('billing.success');
 
@@ -146,7 +130,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/billing/success/{token}/complete', [SubscriptionSuccessController::class, 'complete'])
         ->name('billing.success.complete');
 
-
     Route::get('/events', UpcomingEventsController::class)
         ->name('events.index');
 
@@ -154,11 +137,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('events.show');
 });
 
-
-
-
 Route::get('billing', BillingController::class)->name('billing');
 
-
-
-require __DIR__ . '/settings.php';
+require __DIR__.'/settings.php';

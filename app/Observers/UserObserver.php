@@ -16,10 +16,10 @@ class UserObserver
         Membership::firstOrCreate(
             ['user_id' => $user->id],
             [
-                'tier'             => MembershipTier::FREE,
-                'status'           => Membership::STATUS_ACTIVE,
-                'credits_balance'  => MembershipTier::FREE->monthlyCredits(),
-                'monthly_credits'  => MembershipTier::FREE->monthlyCredits(),
+                'tier' => MembershipTier::FREE,
+                'status' => Membership::STATUS_ACTIVE,
+                'credits_balance' => MembershipTier::FREE->monthlyCredits(),
+                'monthly_credits' => MembershipTier::FREE->monthlyCredits(),
                 'credits_reset_at' => now()->addMonth(),
             ],
         );

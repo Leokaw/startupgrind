@@ -23,7 +23,7 @@ class MessageController extends Controller
     public function store(Request $request, User $receiver): RedirectResponse
     {
         $validated = $request->validate([
-            'topic'   => ['required', 'string', 'max:120'],
+            'topic' => ['required', 'string', 'max:120'],
             'message' => ['required', 'string', 'max:5000'],
         ]);
 
@@ -39,20 +39,20 @@ class MessageController extends Controller
             /** @var Message $message */
             $message = DB::transaction(function () use ($sender, $receiver, $validated, $membership) {
                 $message = Message::create([
-                    'sender_id'    => $sender->id,
-                    'receiver_id'  => $receiver->id,
-                    'topic'        => $validated['topic'],
-                    'body'         => $validated['message'],
+                    'sender_id' => $sender->id,
+                    'receiver_id' => $receiver->id,
+                    'topic' => $validated['topic'],
+                    'body' => $validated['message'],
                     'credits_cost' => self::MESSAGE_COST,
                 ]);
 
                 // Debit the sender. This is the atomic step.
                 $this->credits->spend(
-                    membership:  $membership,
-                    amount:      self::MESSAGE_COST,
-                    category:    CreditTransactionCategory::MESSAGE_SENT,
+                    membership: $membership,
+                    amount: self::MESSAGE_COST,
+                    category: CreditTransactionCategory::MESSAGE_SENT,
                     description: "Sent a message to {$receiver->name}",
-                    reference:   $message,
+                    reference: $message,
                 );
 
                 return $message;

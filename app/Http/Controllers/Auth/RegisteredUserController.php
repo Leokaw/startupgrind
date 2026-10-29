@@ -35,10 +35,10 @@ class RegisteredUserController extends Controller
                 'lowercase',
                 'email',
                 'max:255',
-                'unique:' . User::class,
+                'unique:'.User::class,
                 // Only enforce a professional email when registering as a company.
                 $request->input('user_type') === 'company'
-                    ? new BusinessEmailDomain()
+                    ? new BusinessEmailDomain
                     : null,
             ]),                                          // ← end array_filter
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
@@ -72,16 +72,16 @@ class RegisteredUserController extends Controller
 
         Log::info('Register diagnostic', [
             'validated_user_type' => $validated['user_type'] ?? null,
-            'fillable'            => (new User)->getFillable(),
-            'guarded'             => (new User)->getGuarded(),
-            'user_model_file'     => (new \ReflectionClass(User::class))->getFileName(),
+            'fillable' => (new User)->getFillable(),
+            'guarded' => (new User)->getGuarded(),
+            'user_model_file' => (new \ReflectionClass(User::class))->getFileName(),
         ]);
 
-        $user = new User();
+        $user = new User;
         $user->forceFill([
-            'name'      => $validated['name'],
-            'email'     => $validated['email'],
-            'password'  => Hash::make($validated['password']),
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
             'user_type' => $validated['user_type'],
         ]);
         $user->save();

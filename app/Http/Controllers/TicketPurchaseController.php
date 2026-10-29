@@ -26,7 +26,7 @@ class TicketPurchaseController extends Controller
 
     public function store(Request $request, DiscountTicket $ticket): RedirectResponse
     {
-        $buyer  = $request->user();
+        $buyer = $request->user();
         $seller = $ticket->user;
 
         abort_if($buyer->id === $seller->id, 422, 'You cannot purchase your own ticket.');
@@ -57,41 +57,41 @@ class TicketPurchaseController extends Controller
                 $membership, $sellerMembership,
             ) {
                 $purchase = Purchase::create([
-                    'buyer_id'         => $buyer->id,
-                    'seller_id'        => $seller->id,
+                    'buyer_id' => $buyer->id,
+                    'seller_id' => $seller->id,
                     'purchasable_type' => DiscountTicket::class,
-                    'purchasable_id'   => $ticket->id,
-                    'subtotal'         => $amount,
-                    'platform_fee'     => 0,
-                    'seller_payout'    => $amount,
-                    'status'           => PurchaseStatus::PENDING,
+                    'purchasable_id' => $ticket->id,
+                    'subtotal' => $amount,
+                    'platform_fee' => 0,
+                    'seller_payout' => $amount,
+                    'status' => PurchaseStatus::PENDING,
                 ]);
 
                 // Debit the buyer.
                 $this->credits->spend(
-                    membership:  $membership,
-                    amount:      $amount,
-                    category:    CreditTransactionCategory::TICKET_PURCHASE,
+                    membership: $membership,
+                    amount: $amount,
+                    category: CreditTransactionCategory::TICKET_PURCHASE,
                     description: "Purchased ticket \"{$ticket->name}\" from {$seller->name}",
-                    reference:   $ticket,
-                    purchase:    $purchase,
+                    reference: $ticket,
+                    purchase: $purchase,
                 );
 
                 // Credit the seller with the full amount.
                 $this->credits->grant(
-                    membership:  $sellerMembership,
-                    amount:      $amount,
-                    category:    CreditTransactionCategory::TICKET_SALE,
+                    membership: $sellerMembership,
+                    amount: $amount,
+                    category: CreditTransactionCategory::TICKET_SALE,
                     description: "Sold ticket \"{$ticket->name}\" to {$buyer->name}",
-                    reference:   $ticket,
-                    purchase:    $purchase,
+                    reference: $ticket,
+                    purchase: $purchase,
                 );
 
                 // Increment usage counter on the ticket itself.
                 $ticket->increment('times_used');
 
                 $purchase->update([
-                    'status'       => PurchaseStatus::COMPLETED,
+                    'status' => PurchaseStatus::COMPLETED,
                     'completed_at' => now(),
                 ]);
 

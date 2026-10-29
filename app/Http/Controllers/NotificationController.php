@@ -18,17 +18,17 @@ class NotificationController extends Controller
 
         // Filter by type (basename of the notification class).
         if (is_string($type) && $type !== '' && $type !== 'all') {
-            $query->where('type', 'like', '%\\' . $type);
+            $query->where('type', 'like', '%\\'.$type);
         }
 
         $notifications = $query
             ->paginate(5)
             ->withQueryString()
             ->through(fn ($n) => [
-                'id'         => $n->id,
-                'type'       => class_basename($n->type),
-                'data'       => $n->data,
-                'read_at'    => $n->read_at,
+                'id' => $n->id,
+                'type' => class_basename($n->type),
+                'data' => $n->data,
+                'read_at' => $n->read_at,
                 'created_at' => $n->created_at,
             ]);
 
@@ -43,10 +43,10 @@ class NotificationController extends Controller
             ->all();
 
         return Inertia::render('notifications/index', [
-            'notifications'  => $notifications,
-            'unreadCount'    => $user->unreadNotifications()->count(),
+            'notifications' => $notifications,
+            'unreadCount' => $user->unreadNotifications()->count(),
             'availableTypes' => $availableTypes,
-            'filters'        => [
+            'filters' => [
                 'type' => $type ?? 'all',
             ],
         ]);

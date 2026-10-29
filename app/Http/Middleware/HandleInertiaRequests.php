@@ -49,35 +49,35 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
 
             'serviceCategories' => $serviceCategories,
-            'name'              => config('app.name'),
+            'name' => config('app.name'),
 
             'auth' => [
                 'user' => $user ? [
-                    'id'                       => $user->id,
-                    'name'                     => $user->name,
-                    'email'                    => $user->email,
-                    'user_type'                => $user->user_type,
-                    'approved_at'              => $user->approved_at,
-                    'email_verified_at'        => $user->email_verified_at,
-                    'profile_photo_url'        => $user->profile_photo_url,
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'user_type' => $user->user_type,
+                    'approved_at' => $user->approved_at,
+                    'email_verified_at' => $user->email_verified_at,
+                    'profile_photo_url' => $user->profile_photo_url,
                     'has_custom_profile_photo' => $user->hasCustomProfilePhoto(),
 
                     // Onboarding-relevant fields — needed by the
                     // settings/profile page and any UI that shows the
                     // user's bio / area of work / role.
-                    'area_of_work'       => $user->area_of_work,
+                    'area_of_work' => $user->area_of_work,
                     'area_of_work_label' => $user->area_of_work_label,
-                    'description'        => $user->description,
-                    'role'               => $user->role,
-                    'role_label'         => $user->role_label,
-                    'goal'               => $user->goal,
-                    'goal_label'         => $user->goal_label,
-                    'onboarded_at'       => $user->onboarded_at,
+                    'description' => $user->description,
+                    'role' => $user->role,
+                    'role_label' => $user->role_label,
+                    'goal' => $user->goal,
+                    'goal_label' => $user->goal_label,
+                    'onboarded_at' => $user->onboarded_at,
 
                     // Membership is optional — a user may not have one yet.
                     'membership' => $user->membership ? [
-                        'tier'            => $user->membership->tier,
-                        'status'          => $user->membership->status,
+                        'tier' => $user->membership->tier,
+                        'status' => $user->membership->status,
                         'credits_balance' => $user->membership->credits_balance,
                     ] : null,
                 ] : null,
@@ -88,7 +88,7 @@ class HandleInertiaRequests extends Middleware
             // moment a user registers and until they finish (or skip)
             // the flow in OnboardingController.
             'onboarding' => $user ? [
-                'required'   => $user->onboarded_at === null,
+                'required' => $user->onboarded_at === null,
                 'categories' => $serviceCategories,
             ] : null,
 
@@ -105,11 +105,11 @@ class HandleInertiaRequests extends Middleware
 
             'flash' => [
                 'success' => fn () => $request->session()->get('success'),
-                'error'   => fn () => $request->session()->get('error'),
+                'error' => fn () => $request->session()->get('error'),
 
                 // 👇 OnboardingController writes ->with('toast', [...]) —
                 // without this entry the flash is silently discarded.
-                'toast'   => fn () => $request->session()->get('toast'),
+                'toast' => fn () => $request->session()->get('toast'),
             ],
 
             'sidebarOpen' => ! $request->hasCookie('sidebar_state')

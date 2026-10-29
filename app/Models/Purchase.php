@@ -32,14 +32,14 @@ class Purchase extends Model
     protected function casts(): array
     {
         return [
-            'status'         => PurchaseStatus::class,
-            'subtotal'       => 'integer',
-            'platform_fee'   => 'integer',
-            'seller_payout'  => 'integer',
-            'completed_at'   => 'datetime',
-            'refunded_at'    => 'datetime',
-            'canceled_at'    => 'datetime',
-            'metadata'       => 'array',
+            'status' => PurchaseStatus::class,
+            'subtotal' => 'integer',
+            'platform_fee' => 'integer',
+            'seller_payout' => 'integer',
+            'completed_at' => 'datetime',
+            'refunded_at' => 'datetime',
+            'canceled_at' => 'datetime',
+            'metadata' => 'array',
         ];
     }
 

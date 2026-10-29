@@ -40,7 +40,6 @@ return [
             'transport' => 'resend',
         ],
 
-
         'smtp' => [
             'transport' => 'smtp',
             'scheme' => env('MAIL_SCHEME'),
@@ -64,8 +63,6 @@ return [
             //     'timeout' => 5,
             // ],
         ],
-
-     
 
         'sendmail' => [
             'transport' => 'sendmail',

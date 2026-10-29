@@ -12,7 +12,7 @@ class OnboardingController extends Controller
     public function complete(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'role'         => ['required', 'string', Rule::in([
+            'role' => ['required', 'string', Rule::in([
                 'founder',
                 'investor',
                 'operator',
@@ -20,7 +20,7 @@ class OnboardingController extends Controller
                 'designer',
                 'developer',
             ])],
-            'goal'         => ['required', 'string', Rule::in([
+            'goal' => ['required', 'string', Rule::in([
                 'raise',
                 'cofounder',
                 'hire',
@@ -29,16 +29,16 @@ class OnboardingController extends Controller
                 'events',
             ])],
             'area_of_work' => ['required', 'string', Rule::in(ServiceCategory::values())],
-            'description'  => ['required', 'string', 'max:500'],
+            'description' => ['required', 'string', 'max:500'],
         ]);
 
         $user = $request->user();
 
         $user->forceFill([
-            'role'         => $validated['role'],
-            'goal'         => $validated['goal'],
+            'role' => $validated['role'],
+            'goal' => $validated['goal'],
             'area_of_work' => $validated['area_of_work'],
-            'description'  => $validated['description'],
+            'description' => $validated['description'],
             'onboarded_at' => now(),
         ])->save();
 
@@ -51,7 +51,7 @@ class OnboardingController extends Controller
         // with stale shared props).
         return redirect()
             ->route('events.index');
-            
+
     }
 
     public function skip(Request $request): RedirectResponse
@@ -62,7 +62,6 @@ class OnboardingController extends Controller
         $user->refresh();
 
         return redirect()
-            ->route('events.index')
-;
+            ->route('events.index');
     }
 }

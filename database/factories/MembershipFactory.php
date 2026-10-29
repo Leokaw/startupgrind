@@ -19,14 +19,14 @@ class MembershipFactory extends Factory
         $tier = MembershipTier::FREE;
 
         return [
-            'user_id'          => User::factory(),
-            'tier'             => $tier,
-            'status'           => Membership::STATUS_ACTIVE,
-            'credits_balance'  => $tier->monthlyCredits(),
-            'monthly_credits'  => $tier->monthlyCredits(),
+            'user_id' => User::factory(),
+            'tier' => $tier,
+            'status' => Membership::STATUS_ACTIVE,
+            'credits_balance' => $tier->monthlyCredits(),
+            'monthly_credits' => $tier->monthlyCredits(),
             'credits_reset_at' => now()->addMonth(),
             'current_period_start' => now(),
-            'current_period_end'   => now()->addMonth(),
+            'current_period_end' => now()->addMonth(),
             'cancel_at_period_end' => false,
         ];
     }
@@ -37,7 +37,7 @@ class MembershipFactory extends Factory
     public function tier(MembershipTier $tier): static
     {
         return $this->state(fn () => [
-            'tier'            => $tier,
+            'tier' => $tier,
             'monthly_credits' => $tier->monthlyCredits(),
             'credits_balance' => $tier->monthlyCredits(),
         ]);
@@ -48,7 +48,6 @@ class MembershipFactory extends Factory
         return $this->tier(MembershipTier::FREE);
     }
 
-  
     public function pro(): static
     {
         return $this->tier(MembershipTier::PRO);
@@ -71,7 +70,7 @@ class MembershipFactory extends Factory
     public function canceled(): static
     {
         return $this->state(fn () => [
-            'status'      => Membership::STATUS_CANCELED,
+            'status' => Membership::STATUS_CANCELED,
             'canceled_at' => now(),
         ]);
     }
@@ -79,7 +78,7 @@ class MembershipFactory extends Factory
     public function trialing(): static
     {
         return $this->state(fn () => [
-            'status'        => Membership::STATUS_TRIALING,
+            'status' => Membership::STATUS_TRIALING,
             'trial_ends_at' => now()->addDays(14),
         ]);
     }
