@@ -2,14 +2,7 @@ import { router, usePage } from '@inertiajs/react';
 import { motion } from 'motion/react';
 import { useRef, useState } from 'react';
 import { toast } from 'sonner';
-import {
-    Camera,
-    Trash2,
-    Mail,
-    ImageOff,
-    User,
-    Loader2,
-} from 'lucide-react';
+import { Camera, Trash2, Mail, ImageOff, User, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
     Tooltip,
@@ -160,14 +153,18 @@ export function UserCard({ user }: Props) {
 
     const badge = userTypeStyles[user.user_type];
     const showTrash =
-        isCurrentUser && hovering && user.has_custom_profile_photo && !processing;
+        isCurrentUser &&
+        hovering &&
+        user.has_custom_profile_photo &&
+        !processing;
 
     return (
         <>
             <CutoutCard
                 className={cn(
                     cutoutCardSurfaceClassName,
-                    isCurrentUser && 'ring-2 ring-primary/60 dark:ring-primary/50',
+                    isCurrentUser &&
+                        'ring-2 ring-primary/60 dark:ring-primary/50',
                 )}
             >
                 <CutoutCardMedia
@@ -194,7 +191,7 @@ export function UserCard({ user }: Props) {
                             type="button"
                             onClick={handleDelete}
                             aria-label="Remove profile photo"
-                            className="absolute inset-0 z-30 flex items-center justify-center bg-red-600/50 backdrop-blur-[2px] transition-all duration-300 ease-out animate-in fade-in zoom-in-95"
+                            className="absolute inset-0 z-30 flex animate-in items-center justify-center bg-red-600/50 backdrop-blur-[2px] transition-all duration-300 ease-out zoom-in-95 fade-in"
                         >
                             <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white text-red-600 shadow-xl transition-transform duration-300 hover:scale-110">
                                 <Trash2 className="h-6 w-6" />
@@ -243,7 +240,7 @@ export function UserCard({ user }: Props) {
                                         }
                                         disabled={processing}
                                         aria-label="Update profile picture"
-                                        className="absolute left-3 top-3 z-40 flex h-8 w-8 items-center justify-center rounded-full bg-black/50 text-white shadow-md backdrop-blur-sm transition hover:bg-black/70 disabled:opacity-50"
+                                        className="absolute top-3 left-3 z-40 flex h-8 w-8 items-center justify-center rounded-full bg-black/50 text-white shadow-md backdrop-blur-sm transition hover:bg-black/70 disabled:opacity-50"
                                     >
                                         {processing ? (
                                             <Loader2 className="h-4 w-4 animate-spin" />
@@ -271,11 +268,11 @@ export function UserCard({ user }: Props) {
                             variants={stagger.item}
                             className="mb-1 flex items-center gap-2"
                         >
-                            <h3 className="text-card-foreground min-w-0 flex-1 truncate text-base leading-snug font-semibold">
+                            <h3 className="min-w-0 flex-1 truncate text-base leading-snug font-semibold text-card-foreground">
                                 {user.name}
                             </h3>
                             {isCurrentUser && (
-                                <span className="bg-primary text-white inline-flex shrink-0 items-center rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider shadow-sm">
+                                <span className="inline-flex shrink-0 items-center rounded-full bg-primary px-2 py-0.5 text-[10px] font-semibold tracking-wider text-white uppercase shadow-sm">
                                     You
                                 </span>
                             )}
@@ -283,7 +280,7 @@ export function UserCard({ user }: Props) {
 
                         <motion.p
                             variants={stagger.item}
-                            className="text-muted-foreground truncate text-sm"
+                            className="truncate text-sm text-muted-foreground"
                         >
                             {user.email}
                         </motion.p>
@@ -291,12 +288,8 @@ export function UserCard({ user }: Props) {
                 </CutoutCardContent>
 
                 {isCurrentUser ? (
-                    <div className="absolute bottom-5 left-5 right-5">
-                        <Button
-                            className="w-full"
-                            variant="secondary"
-                            disabled
-                        >
+                    <div className="absolute right-5 bottom-5 left-5">
+                        <Button className="w-full" variant="secondary" disabled>
                             <User className="mr-2 h-4 w-4" />
                             This is you
                         </Button>

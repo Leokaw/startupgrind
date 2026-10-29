@@ -71,7 +71,7 @@ export function CompanyEmployeesTable({ employees, filters }: Props) {
                         <UserCheck className="size-6 text-primary" />
                     </div>
                     <div>
-                        <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                        <div className="flex items-center gap-2 text-xs font-medium tracking-wider text-muted-foreground uppercase">
                             <Building2 className="size-3.5" />
                             Team
                         </div>

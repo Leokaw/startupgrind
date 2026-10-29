@@ -11,19 +11,12 @@ import {
     type LucideIcon,
 } from 'lucide-react';
 import { toast } from 'sonner';
-import {
-    Alert,
-    AlertDescription,
-    AlertTitle,
-} from '@/components/ui/alert';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardDescription, CardTitle } from '@/components/ui/card';
 import { BorderBeamButton } from '@/components/ui/border-beam-button';
-import {
-    IntroDisclosure,
-    type IntroStep,
-} from '@/components/intro-disclosure';
+import { IntroDisclosure, type IntroStep } from '@/components/intro-disclosure';
 import {
     SubscriptionOverview,
     type Subscription,
@@ -255,7 +248,9 @@ export default function Billing({
                                 key={plan.slug}
                                 className={
                                     'relative flex flex-col gap-0 rounded-[2rem] p-8' +
-                                    (isPro ? ' border-primary/30 shadow-lg' : '')
+                                    (isPro
+                                        ? ' border-primary/30 shadow-lg'
+                                        : '')
                                 }
                             >
                                 <div className="flex items-start justify-between">

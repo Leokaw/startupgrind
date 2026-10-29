@@ -18,7 +18,7 @@ export default function AcceptInvite({ invite }: Props) {
         <>
             <Head title="Accept Invitation" />
 
-            <div className="flex items-center justify-center h-full min-h-screen flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
+            <div className="flex h-full min-h-screen flex-1 flex-col items-center justify-center gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="mx-auto w-full max-w-md rounded-xl border border-sidebar-border/70 bg-background p-6 dark:border-sidebar-border">
                     <div className="mb-6 space-y-1 text-center">
                         <h1 className="text-xl font-semibold">
@@ -53,7 +53,7 @@ export default function AcceptInvite({ invite }: Props) {
                                                 readOnly
                                                 className="cursor-not-allowed pr-9 opacity-70"
                                             />
-                                            <Mail className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                                            <Mail className="pointer-events-none absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                                         </div>
                                         <p className="text-xs text-muted-foreground">
                                             This is the email your invitation
@@ -82,7 +82,7 @@ export default function AcceptInvite({ invite }: Props) {
                                                 className="pr-9"
                                                 aria-invalid={!!errors.password}
                                             />
-                                            <Lock className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                                            <Lock className="pointer-events-none absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                                         </div>
                                         {errors.password && (
                                             <p className="text-sm text-destructive">

@@ -158,16 +158,12 @@ export default function NotificationsIndex({
     };
 
     const applyFilter = (type: string) => {
-        router.get(
-            '/notifications',
-            type === 'all' ? {} : { type },
-            {
-                preserveState: true,
-                preserveScroll: true,
-                only: ['notifications', 'filters'],
-                replace: true,
-            },
-        );
+        router.get('/notifications', type === 'all' ? {} : { type }, {
+            preserveState: true,
+            preserveScroll: true,
+            only: ['notifications', 'filters'],
+            replace: true,
+        });
     };
 
     const goToPage = (url: string | null) => {
@@ -202,7 +198,7 @@ export default function NotificationsIndex({
                                 <Inbox className="size-6 text-primary" />
                             </div>
                             <div>
-                                <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                                <div className="flex items-center gap-2 text-xs font-medium tracking-wider text-muted-foreground uppercase">
                                     <Bell className="size-3.5" />
                                     Activity
                                 </div>
@@ -245,7 +241,10 @@ export default function NotificationsIndex({
                                         <ChevronDown className="ml-2 h-4 w-4 opacity-60" />
                                     </Button>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end" className="w-48">
+                                <DropdownMenuContent
+                                    align="end"
+                                    className="w-48"
+                                >
                                     <DropdownMenuLabel>
                                         Filter by type
                                     </DropdownMenuLabel>
@@ -318,8 +317,7 @@ export default function NotificationsIndex({
                                         const isNext =
                                             i ===
                                             notifications.links.length - 1;
-                                        const isEllipsis =
-                                            link.label === '...';
+                                        const isEllipsis = link.label === '...';
 
                                         if (isEllipsis) {
                                             return (
@@ -445,7 +443,7 @@ function NotificationRow({
                         {d.credits_earned !== undefined && (
                             <Badge
                                 variant="outline"
-                                className="tabular-nums text-emerald-600 dark:text-emerald-400"
+                                className="text-emerald-600 tabular-nums dark:text-emerald-400"
                             >
                                 +{d.credits_earned} credits
                             </Badge>

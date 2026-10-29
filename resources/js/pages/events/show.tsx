@@ -77,7 +77,7 @@ export default function EventShow({ event }: Props) {
         <>
             <Head title={event.title} />
 
-            <div className="flex h-full flex-1 flex-col md:gap-2 gap-0 overflow-x-auto rounded-xl p-0 md:p-4">
+            <div className="flex h-full flex-1 flex-col gap-0 overflow-x-auto rounded-xl p-0 md:gap-2 md:p-4">
                 <div className="overflow-hidden rounded-xl border border-sidebar-border/70 bg-background dark:border-sidebar-border">
                     {/* ======================================================
                      |  Hero — banner image with overlaid back link + title
@@ -99,7 +99,7 @@ export default function EventShow({ event }: Props) {
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
 
                         {/* Back link */}
-                        <div className="absolute left-6 top-6">
+                        <div className="absolute top-6 left-6">
                             <Button
                                 asChild
                                 variant="ghost"
@@ -114,13 +114,13 @@ export default function EventShow({ event }: Props) {
                         </div>
 
                         {/* Pills — top right */}
-                        <div className="absolute right-6 top-6 flex flex-wrap gap-2">
+                        <div className="absolute top-6 right-6 flex flex-wrap gap-2">
                             {event.is_free && (
-                                <Badge className="rounded-full border-emerald-500/30 bg-emerald-500/90 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-white shadow-sm hover:bg-emerald-500/90">
+                                <Badge className="rounded-full border-emerald-500/30 bg-emerald-500/90 px-3 py-1 text-xs font-semibold tracking-wider text-white uppercase shadow-sm hover:bg-emerald-500/90">
                                     Free
                                 </Badge>
                             )}
-                            <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-black/50 px-3 py-1 text-xs font-medium uppercase tracking-wider text-white backdrop-blur-sm">
+                            <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-black/50 px-3 py-1 text-xs font-medium tracking-wider text-white uppercase backdrop-blur-sm">
                                 <TypeIcon className="size-3.5" />
                                 {typeLabel}
                             </span>
@@ -138,7 +138,7 @@ export default function EventShow({ event }: Props) {
                                 </p>
                             )}
 
-                            <h1 className="max-w-4xl text-2xl font-semibold tracking-tight text-white text-balance sm:text-3xl lg:text-4xl">
+                            <h1 className="max-w-4xl text-2xl font-semibold tracking-tight text-balance text-white sm:text-3xl lg:text-4xl">
                                 {event.title}
                             </h1>
                         </div>
@@ -152,11 +152,11 @@ export default function EventShow({ event }: Props) {
                         <div className="space-y-8">
                             {/* About this event */}
                             <section>
-                                <div className="mb-3 flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                                <div className="mb-3 flex items-center gap-2 text-xs font-medium tracking-wider text-muted-foreground uppercase">
                                     <Sparkles className="size-3.5" />
                                     About this event
                                 </div>
-                                <p className="text-base leading-relaxed text-foreground whitespace-pre-line">
+                                <p className="text-base leading-relaxed whitespace-pre-line text-foreground">
                                     {event.description ||
                                         'No description provided for this event.'}
                                 </p>
@@ -165,7 +165,7 @@ export default function EventShow({ event }: Props) {
                             {/* Tags */}
                             {event.tags.length > 0 && (
                                 <section>
-                                    <div className="mb-3 flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                                    <div className="mb-3 flex items-center gap-2 text-xs font-medium tracking-wider text-muted-foreground uppercase">
                                         <Tag className="size-3.5" />
                                         Categories
                                     </div>
@@ -185,7 +185,7 @@ export default function EventShow({ event }: Props) {
                             {/* Hosted by */}
                             {event.chapter.name && (
                                 <section>
-                                    <div className="mb-3 flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                                    <div className="mb-3 flex items-center gap-2 text-xs font-medium tracking-wider text-muted-foreground uppercase">
                                         <Users className="size-3.5" />
                                         Hosted by
                                     </div>
@@ -194,14 +194,14 @@ export default function EventShow({ event }: Props) {
                                             <img
                                                 src={event.chapter.logo}
                                                 alt={event.chapter.name}
-                                                className="size-24 mt-4 shrink-0 rounded-xl object-cover"
+                                                className="mt-4 size-24 shrink-0 rounded-xl object-cover"
                                             />
                                         ) : (
                                             <div className="flex size-14 shrink-0 items-center justify-center rounded-xl bg-primary/10">
                                                 <Users className="size-6 text-primary" />
                                             </div>
                                         )}
-                                        <div className="flex-1 min-w-0">
+                                        <div className="min-w-0 flex-1">
                                             <p className="truncate text-base font-semibold">
                                                 {event.chapter.name}
                                             </p>
@@ -211,7 +211,6 @@ export default function EventShow({ event }: Props) {
                                                 </p>
                                             )}
                                         </div>
-                                       
                                     </Card>
                                 </section>
                             )}
@@ -220,12 +219,15 @@ export default function EventShow({ event }: Props) {
                             <section className="grid gap-4 sm:grid-cols-2">
                                 {startDate && (
                                     <Card className="rounded-2xl p-4">
-                                        <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                                        <div className="flex items-center gap-2 text-xs font-medium tracking-wider text-muted-foreground uppercase">
                                             <CalendarDays className="size-3.5" />
                                             Date & time
                                         </div>
                                         <p className="mt-2 text-base font-medium">
-                                            {format(startDate, 'EEEE, MMMM d, yyyy')}
+                                            {format(
+                                                startDate,
+                                                'EEEE, MMMM d, yyyy',
+                                            )}
                                         </p>
                                         <p className="mt-0.5 text-sm text-muted-foreground tabular-nums">
                                             {format(startDate, 'HH:mm')}
@@ -241,7 +243,7 @@ export default function EventShow({ event }: Props) {
 
                                 {event.chapter.location && (
                                     <Card className="rounded-2xl p-4">
-                                        <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                                        <div className="flex items-center gap-2 text-xs font-medium tracking-wider text-muted-foreground uppercase">
                                             <MapPin className="size-3.5" />
                                             Location
                                         </div>
@@ -335,22 +337,20 @@ export default function EventShow({ event }: Props) {
                                     variant="outline"
                                     className="w-full"
                                 >
-                                  
                                     <a
                                         href={event.url}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                     >
-                                           <ArrowRight className="ml-1.5 size-4" />
+                                        <ArrowRight className="ml-1.5 size-4" />
                                         Visit event website
-                                       
                                     </a>
                                 </Button>
 
                                 <p className="text-center text-xs text-muted-foreground">
-                                    Discount available to Startup Grind
-                                    members. You'll be redirected to the
-                                    organizer's page to complete registration.
+                                    Discount available to Startup Grind members.
+                                    You'll be redirected to the organizer's page
+                                    to complete registration.
                                 </p>
                             </Card>
                         </aside>

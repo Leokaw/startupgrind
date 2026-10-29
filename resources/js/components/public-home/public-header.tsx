@@ -169,19 +169,14 @@ export default function PublicHeader({ auth }: Props) {
             setError('message', 'The message field is required.');
             valid = false;
         } else if (data.message.trim().length < 10) {
-            setError(
-                'message',
-                'The message must be at least 10 characters.',
-            );
+            setError('message', 'The message must be at least 10 characters.');
             valid = false;
         }
 
         return valid;
     };
 
-    const handleContactSubmit = async (
-        e: React.FormEvent<HTMLFormElement>,
-    ) => {
+    const handleContactSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!validateContact()) return;
 
@@ -211,13 +206,13 @@ export default function PublicHeader({ auth }: Props) {
     };
 
     return (
-        <header className="sticky force-light top-0 z-50 w-full">
+        <header className="force-light sticky top-0 z-50 w-full">
             {/* Top Red Banner */}
             <div className="bg-red-600 text-white">
                 <div className="flex min-h-12 flex-wrap items-center justify-center gap-x-4 gap-y-2 px-4 py-2 text-center text-sm">
                     <span>
-                        Does your business have a monthly revenue of over
-                        50,000 €? Take advantage of exclusive conditions!
+                        Does your business have a monthly revenue of over 50,000
+                        €? Take advantage of exclusive conditions!
                     </span>
 
                     {/* Talk to us → opens the contact dialog */}
@@ -349,7 +344,7 @@ export default function PublicHeader({ auth }: Props) {
             </div>
 
             {/* Main Navigation Bar */}
-            <div className="w-full border-b force-light border-border/40 bg-background/90 backdrop-blur-md supports-[backdrop-filter]:bg-background/40">
+            <div className="force-light w-full border-b border-border/40 bg-background/90 backdrop-blur-md supports-[backdrop-filter]:bg-background/40">
                 <div className="relative mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
                     {/* Logo */}
                     <div className="flex shrink-0 items-center">
@@ -424,8 +419,6 @@ export default function PublicHeader({ auth }: Props) {
                                 </>
                             )}
                         </div>
-
-                       
 
                         {/* Mobile Drawer Menu */}
                         <div className="flex items-center gap-2 md:hidden">

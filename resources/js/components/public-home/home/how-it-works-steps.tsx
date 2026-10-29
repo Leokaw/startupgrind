@@ -18,12 +18,14 @@ const steps = [
     {
         icon: UserPlus,
         title: 'Register to our community!',
-        description: 'Join our global network of founders and start your journey today.',
+        description:
+            'Join our global network of founders and start your journey today.',
     },
     {
         icon: Send,
         title: 'Submit your company',
-        description: 'Provide your company details for a thorough evaluation by our experts.',
+        description:
+            'Provide your company details for a thorough evaluation by our experts.',
     },
     {
         icon: Users,
@@ -33,7 +35,8 @@ const steps = [
     {
         icon: MessageCircle,
         title: 'Send a message!',
-        description: 'Initiate meaningful conversations and build lasting business relationships.',
+        description:
+            'Initiate meaningful conversations and build lasting business relationships.',
     },
 ];
 
@@ -49,9 +52,13 @@ export default function HowItWorksSteps() {
                         key={title}
                         className={cn(
                             'group h-full transition-[opacity,translate] duration-700 ease-out',
-                            inView ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0',
+                            inView
+                                ? 'translate-y-0 opacity-100'
+                                : 'translate-y-6 opacity-0',
                         )}
-                        style={{ transitionDelay: inView ? `${i * 120}ms` : '0ms' }}
+                        style={{
+                            transitionDelay: inView ? `${i * 120}ms` : '0ms',
+                        }}
                     >
                         <FoldedCard className="flex h-full w-full flex-col bg-card transition-transform duration-300 ease-out group-hover:-translate-y-1.5">
                             <FoldedCardFold />
@@ -74,7 +81,7 @@ export default function HowItWorksSteps() {
                                 </span>
 
                                 <div className="absolute inset-0 flex items-center justify-center">
-                                    <span className="relative flex size-14 items-center justify-center rounded-2xl border border-primary/20 bg-primary/10 text-primary shadow-sm transition-transform duration-300 ease-out group-hover:-rotate-6 group-hover:scale-110">
+                                    <span className="relative flex size-14 items-center justify-center rounded-2xl border border-primary/20 bg-primary/10 text-primary shadow-sm transition-transform duration-300 ease-out group-hover:scale-110 group-hover:-rotate-6">
                                         <Icon className="size-6" />
                                     </span>
                                 </div>
@@ -86,7 +93,9 @@ export default function HowItWorksSteps() {
                                         {title}
                                     </FoldedCardTitle>
                                 </FoldedCardHeading>
-                                <FoldedCardDescription className='leading-tight leading-[1.1]'>{description}</FoldedCardDescription>
+                                <FoldedCardDescription className="leading-[1.1] leading-tight">
+                                    {description}
+                                </FoldedCardDescription>
                             </FoldedCardFooter>
                         </FoldedCard>
                     </div>

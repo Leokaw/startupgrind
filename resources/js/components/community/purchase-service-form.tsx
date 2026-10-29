@@ -171,9 +171,7 @@ export function PurchaseServiceForm({
         );
     }
 
-    const selectedService = services.find(
-        (s) => s.id === form.data.service_id,
-    );
+    const selectedService = services.find((s) => s.id === form.data.service_id);
 
     return (
         <>
@@ -184,8 +182,6 @@ export function PurchaseServiceForm({
                     className="flex flex-col gap-3"
                 >
                     {pagedServices.map((service) => {
-                        const isSelected = form.data.service_id === service.id;
-
                         return (
                             <FieldLabel
                                 key={service.id}
@@ -228,7 +224,7 @@ export function PurchaseServiceForm({
                                         aria-disabled={safePage === 1}
                                         className={cn(
                                             safePage === 1 &&
-                                            'pointer-events-none opacity-50',
+                                                'pointer-events-none opacity-50',
                                         )}
                                         onClick={(e) => {
                                             e.preventDefault();
@@ -264,7 +260,7 @@ export function PurchaseServiceForm({
                                         aria-disabled={safePage === totalPages}
                                         className={cn(
                                             safePage === totalPages &&
-                                            'pointer-events-none opacity-50',
+                                                'pointer-events-none opacity-50',
                                         )}
                                         onClick={(e) => {
                                             e.preventDefault();
@@ -274,15 +270,13 @@ export function PurchaseServiceForm({
                                 </PaginationItem>
                             </PaginationContent>
                         </Pagination>
-
-
                     </div>
                 )}
 
                 {/* Selected card stays visible across pages */}
                 {selectedService && (
                     <div className="rounded-lg border border-primary/20 bg-primary/5 p-3">
-                        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                        <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
                             Currently selected
                         </p>
                         <p className="text-sm font-medium text-foreground">
@@ -317,7 +311,10 @@ export function PurchaseServiceForm({
                     <BorderBeamButton
                         variant="secondary"
                         colorVariant="colorful"
-                        beamSize="md" type="submit" disabled={form.processing}>
+                        beamSize="md"
+                        type="submit"
+                        disabled={form.processing}
+                    >
                         {form.processing ? (
                             <>
                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -346,15 +343,15 @@ export function PurchaseServiceForm({
                             {pendingService?.name}
                         </AlertDialogTitle>
                         <AlertDialogDescription>
-                            Review the details of this service before
-                            selecting it.
+                            Review the details of this service before selecting
+                            it.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
 
                     {pendingService && (
                         <div className="space-y-4 py-2">
                             <div className="space-y-1">
-                                <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                                <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
                                     Description
                                 </p>
                                 <p className="text-sm text-foreground">
@@ -365,7 +362,7 @@ export function PurchaseServiceForm({
 
                             {pendingService.category && (
                                 <div className="space-y-1">
-                                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                                    <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
                                         Category
                                     </p>
                                     <Badge
@@ -379,7 +376,7 @@ export function PurchaseServiceForm({
                             )}
 
                             <div className="space-y-1">
-                                <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                                <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
                                     Status
                                 </p>
                                 <Badge
@@ -392,10 +389,10 @@ export function PurchaseServiceForm({
                             </div>
 
                             <div className="space-y-1 rounded-lg border border-primary/20 bg-primary/5 p-3">
-                                <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                                <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
                                     Cost
                                 </p>
-                                <p className="inline-flex items-center gap-1.5 text-lg font-semibold tabular-nums text-primary">
+                                <p className="inline-flex items-center gap-1.5 text-lg font-semibold text-primary tabular-nums">
                                     <Coins className="h-5 w-5" />
                                     {serviceCost} credits
                                 </p>
@@ -421,24 +418,22 @@ export function PurchaseServiceForm({
             >
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>
-                            Confirm purchase?
-                        </AlertDialogTitle>
+                        <AlertDialogTitle>Confirm purchase?</AlertDialogTitle>
                         <AlertDialogDescription>
                             You&apos;re about to purchase{' '}
                             <span className="font-medium text-foreground">
                                 {selectedService?.name ?? 'this service'}
                             </span>
-                            . The cost will be deducted from your credit
-                            balance immediately.
+                            . The cost will be deducted from your credit balance
+                            immediately.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
 
                     <div className="rounded-lg border border-primary/20 bg-primary/5 p-3">
-                        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                        <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
                             Total
                         </p>
-                        <p className="inline-flex items-center gap-1.5 text-lg font-semibold tabular-nums text-primary">
+                        <p className="inline-flex items-center gap-1.5 text-lg font-semibold text-primary tabular-nums">
                             <Coins className="h-5 w-5" />
                             {serviceCost} credits
                         </p>
@@ -457,12 +452,12 @@ export function PurchaseServiceForm({
                         >
                             {form.processing ? (
                                 <>
-                                    <Loader2 className=" h-4 w-4 animate-spin" />
+                                    <Loader2 className="h-4 w-4 animate-spin" />
                                     Purchasing…
                                 </>
                             ) : (
                                 <>
-                                    <ShoppingCart className=" h-4 w-4" />
+                                    <ShoppingCart className="h-4 w-4" />
                                     Confirm purchase
                                 </>
                             )}

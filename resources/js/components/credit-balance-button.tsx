@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { CircleDollarSign, Coins } from 'lucide-react';
+import { CircleDollarSign } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -35,10 +35,10 @@ export function CreditBalanceButton() {
                 >
                     <Link href="/billing">
                         <CircleDollarSign size={33} />
-              
+
                         <Badge
                             variant="default"
-                            className="absolute -right-1.5 -top-1.5 h-5 min-w-5 justify-center rounded-full px-1 text-[10px] tabular-nums"
+                            className="absolute -top-1.5 -right-1.5 h-5 min-w-5 justify-center rounded-full px-1 text-[10px] tabular-nums"
                         >
                             {credits}
                         </Badge>

@@ -1,5 +1,5 @@
 import { Head, router } from '@inertiajs/react';
-import { Compass, Globe2, Sparkles, Users } from 'lucide-react';
+import { Compass, Globe2, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { UserCard } from '@/components/community/user-card';
 import { CommunitySearch } from '@/components/community/community-search';
@@ -98,7 +98,7 @@ export default function CommunityIndex({ me, users, filters }: Props) {
                                 <Users className="size-6 text-primary" />
                             </div>
                             <div>
-                                <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                                <div className="flex items-center gap-2 text-xs font-medium tracking-wider text-muted-foreground uppercase">
                                     <Compass className="size-3.5" />
                                     Discover
                                 </div>
@@ -106,7 +106,8 @@ export default function CommunityIndex({ me, users, filters }: Props) {
                                     Community
                                 </h1>
                                 <p className="mt-0.5 text-sm text-muted-foreground">
-                                    Discover the people building on Startup Grind.
+                                    Discover the people building on Startup
+                                    Grind.
                                 </p>
                             </div>
                         </div>
@@ -122,7 +123,6 @@ export default function CommunityIndex({ me, users, filters }: Props) {
                                     {users.total === 1 ? 'member' : 'members'}
                                 </span>
                             </div>
-                           
                         </div>
                     </div>
 
@@ -162,7 +162,8 @@ export default function CommunityIndex({ me, users, filters }: Props) {
                         {users.last_page > 1 && (
                             <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
                                 <p className="text-sm text-muted-foreground">
-                                    Showing {users.from}–{users.to} of {users.total}
+                                    Showing {users.from}–{users.to} of{' '}
+                                    {users.total}
                                 </p>
 
                                 <nav
@@ -171,7 +172,8 @@ export default function CommunityIndex({ me, users, filters }: Props) {
                                 >
                                     {users.links.map((link, i) => {
                                         const isPrev = i === 0;
-                                        const isNext = i === users.links.length - 1;
+                                        const isNext =
+                                            i === users.links.length - 1;
                                         const isEllipsis = link.label === '...';
 
                                         if (isEllipsis) {
@@ -189,13 +191,19 @@ export default function CommunityIndex({ me, users, filters }: Props) {
                                             <Button
                                                 key={link.label + i}
                                                 variant={
-                                                    link.active ? 'default' : 'outline'
+                                                    link.active
+                                                        ? 'default'
+                                                        : 'outline'
                                                 }
                                                 size="sm"
                                                 disabled={!link.url}
-                                                onClick={() => goToPage(link.url)}
+                                                onClick={() =>
+                                                    goToPage(link.url)
+                                                }
                                                 aria-current={
-                                                    link.active ? 'page' : undefined
+                                                    link.active
+                                                        ? 'page'
+                                                        : undefined
                                                 }
                                             >
                                                 {isPrev

@@ -18,7 +18,10 @@ const group = [...sponsors, ...sponsors];
 
 function Group({ hidden = false }: { hidden?: boolean }) {
     return (
-        <ul aria-hidden={hidden || undefined} className="flex shrink-0 items-stretch">
+        <ul
+            aria-hidden={hidden || undefined}
+            className="flex shrink-0 items-stretch"
+        >
             {group.map((sponsor, i) => (
                 <li
                     key={`${sponsor.name}-${i}`}
@@ -28,7 +31,7 @@ function Group({ hidden = false }: { hidden?: boolean }) {
                         src={sponsor.src}
                         alt={hidden ? '' : sponsor.name}
                         draggable={false}
-                        className="max-h-12 w-auto max-w-full object-contain select-none  lg:max-h-18"
+                        className="max-h-12 w-auto max-w-full object-contain select-none lg:max-h-18"
                     />
                 </li>
             ))}
@@ -55,12 +58,18 @@ export default function SponsorsMarquee() {
 
             <div className="flex">
                 {/* Spacer so the label lines up with the hero content container */}
-                <div aria-hidden className="shrink-0 lg:w-[max(0px,calc((100%-80rem)/2))]" />
+                <div
+                    aria-hidden
+                    className="shrink-0 lg:w-[max(0px,calc((100%-80rem)/2))]"
+                />
 
                 {/* Label */}
                 <div className="relative z-10 flex w-32 shrink-0 items-center border-x border-border bg-background px-3 sm:w-60 sm:px-6">
                     {/* Red corner markers (Hidden on mobile) */}
-                    <span aria-hidden className="absolute -top-[3px] -left-[3px] hidden size-1.5 bg-primary lg:block" />
+                    <span
+                        aria-hidden
+                        className="absolute -top-[3px] -left-[3px] hidden size-1.5 bg-primary lg:block"
+                    />
 
                     <p className="font-mono text-[10px] leading-relaxed tracking-wide text-foreground uppercase sm:text-sm">
                         Powering ideas for

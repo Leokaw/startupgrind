@@ -6,19 +6,39 @@ import { cn } from '@/lib/utils';
 const visible = { overflow: 'visible' } as const;
 
 function Corner({ className }: { className: string }) {
-    return <span aria-hidden className={`absolute z-20 size-1.5 bg-primary ${className}`} />;
+    return (
+        <span
+            aria-hidden
+            className={`absolute z-20 size-1.5 bg-primary ${className}`}
+        />
+    );
 }
 
 const stats = [
     { value: 300, suffix: '+', label: 'Organizations', bar: 'bg-sky-500' },
     { value: 100, suffix: '+', label: 'Countries', bar: 'bg-purple-600' },
     { value: 125, suffix: '+', label: 'Monthly events', bar: 'bg-green-600' },
-    { value: 10, suffix: 'K+', label: 'Conference attendees', bar: 'bg-primary' },
+    {
+        value: 10,
+        suffix: 'K+',
+        label: 'Conference attendees',
+        bar: 'bg-primary',
+    },
 ];
 
 const COUNT_MS = 1800;
 
-function AnimatedNumber({ value, suffix, start, delay = 0 }: { value: number; suffix: string; start: boolean; delay?: number }) {
+function AnimatedNumber({
+    value,
+    suffix,
+    start,
+    delay = 0,
+}: {
+    value: number;
+    suffix: string;
+    start: boolean;
+    delay?: number;
+}) {
     const [display, setDisplay] = useState(0);
 
     useEffect(() => {
@@ -56,10 +76,10 @@ function Stats() {
     const inView = useInView(ref, { once: true, amount: 0.4 });
 
     return (
-        <div 
-            ref={ref} 
+        <div
+            ref={ref}
             // Added rounded-2xl and overflow-hidden
-            className="relative mt-8 grid grid-cols-2 overflow-hidden rounded-2xl border border-border bg-background "
+            className="relative mt-8 grid grid-cols-2 overflow-hidden rounded-2xl border border-border bg-background"
         >
             {stats.map((stat, i) => (
                 <div
@@ -71,7 +91,12 @@ function Stats() {
                     )}
                 >
                     <span className="text-3xl leading-none font-light tracking-tight text-foreground tabular-nums sm:text-4xl">
-                        <AnimatedNumber value={stat.value} suffix={stat.suffix} start={inView} delay={i * 150} />
+                        <AnimatedNumber
+                            value={stat.value}
+                            suffix={stat.suffix}
+                            start={inView}
+                            delay={i * 150}
+                        />
                     </span>
 
                     <span
@@ -94,7 +119,7 @@ function Stats() {
 
 export default function WhyJoinStats() {
     return (
-        <div className="border-border p-6 lg:mt-0 mt-5 lg:border-r lg:p-12">
+        <div className="mt-5 border-border p-6 lg:mt-0 lg:border-r lg:p-12">
             <h2 className="text-3xl leading-[1] font-light tracking-tight text-foreground sm:text-4xl">
                 <TextAnimate
                     as="span"
@@ -106,7 +131,9 @@ export default function WhyJoinStats() {
                 />
             </h2>
             <p className="mt-4 mb-12 text-sm leading-tight text-muted-foreground sm:text-base">
-                Being part of Startup Grind means you are never building alone. We connect you with the people who can help you take the next step.
+                Being part of Startup Grind means you are never building alone.
+                We connect you with the people who can help you take the next
+                step.
             </p>
 
             <Stats />

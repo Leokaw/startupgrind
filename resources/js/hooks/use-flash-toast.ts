@@ -65,7 +65,9 @@ export function useFlashToast(): void {
 
             // 2) Legacy string flashes
             if (flash.success) {
-                toast.success(flash.success, { id: `flash:success:${flash.success}` });
+                toast.success(flash.success, {
+                    id: `flash:success:${flash.success}`,
+                });
             }
             if (flash.error) {
                 toast.error(flash.error, { id: `flash:error:${flash.error}` });

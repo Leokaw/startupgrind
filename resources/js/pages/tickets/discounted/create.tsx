@@ -21,7 +21,6 @@ import { useState } from 'react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 
-
 const inputLikeClasses =
     'flex w-full min-w-0 rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none md:text-sm dark:bg-input/30 placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40';
 
@@ -45,7 +44,7 @@ export default function CreateDiscountedTicket() {
                                 <TicketPercent className="size-6 text-primary" />
                             </div>
                             <div>
-                                <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                                <div className="flex items-center gap-2 text-xs font-medium tracking-wider text-muted-foreground uppercase">
                                     <Tag className="size-3.5" />
                                     New discount
                                 </div>
@@ -112,11 +111,12 @@ export default function CreateDiscountedTicket() {
                                                     aria-invalid={!!errors.name}
                                                     onChange={(e) =>
                                                         setNameLength(
-                                                            e.target.value.length,
+                                                            e.target.value
+                                                                .length,
                                                         )
                                                     }
                                                 />
-                                                <Text className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                                                <Text className="pointer-events-none absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                                             </div>
                                             {errors.name && (
                                                 <FieldError>
@@ -126,7 +126,9 @@ export default function CreateDiscountedTicket() {
                                         </Field>
 
                                         {/* Description */}
-                                        <Field data-invalid={!!errors.description}>
+                                        <Field
+                                            data-invalid={!!errors.description}
+                                        >
                                             <div className="flex items-center justify-between">
                                                 <FieldLabel htmlFor="description">
                                                     Description (Optional)
@@ -163,7 +165,9 @@ export default function CreateDiscountedTicket() {
                                         </Field>
 
                                         {/* Event link — REQUIRED */}
-                                        <Field data-invalid={!!errors.event_url}>
+                                        <Field
+                                            data-invalid={!!errors.event_url}
+                                        >
                                             <div className="flex items-center justify-between">
                                                 <FieldLabel htmlFor="event_url">
                                                     Event link{' '}
@@ -197,12 +201,12 @@ export default function CreateDiscountedTicket() {
                                                         )
                                                     }
                                                 />
-                                                <Link2 className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                                                <Link2 className="pointer-events-none absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                                             </div>
                                             <p className="mt-1.5 text-xs text-muted-foreground">
-                                                Link customers to the event
-                                                this discount applies to. Must
-                                                start with{' '}
+                                                Link customers to the event this
+                                                discount applies to. Must start
+                                                with{' '}
                                                 <code className="rounded bg-muted px-1 py-0.5 font-mono text-[10px]">
                                                     https://
                                                 </code>{' '}
@@ -247,7 +251,7 @@ export default function CreateDiscountedTicket() {
                                                         !!errors.discount_percentage
                                                     }
                                                 />
-                                                <Percent className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                                                <Percent className="pointer-events-none absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                                             </div>
                                             {errors.discount_percentage && (
                                                 <FieldError>
@@ -257,7 +261,9 @@ export default function CreateDiscountedTicket() {
                                         </Field>
 
                                         {/* Valid Until */}
-                                        <Field data-invalid={!!errors.valid_until}>
+                                        <Field
+                                            data-invalid={!!errors.valid_until}
+                                        >
                                             <FieldLabel htmlFor="valid_until">
                                                 Valid Until{' '}
                                                 <span className="text-destructive">
@@ -286,7 +292,7 @@ export default function CreateDiscountedTicket() {
                                                                   'PPP',
                                                               )
                                                             : 'Pick an expiry date'}
-                                                        <CalendarIcon className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                                                        <CalendarIcon className="pointer-events-none absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                                                     </button>
                                                 </PopoverTrigger>
                                                 <PopoverContent

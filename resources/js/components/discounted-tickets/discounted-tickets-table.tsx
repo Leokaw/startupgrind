@@ -88,7 +88,7 @@ export function DiscountedTicketsTable({ tickets, filters }: Props) {
                         <TicketPercent className="size-6 text-primary" />
                     </div>
                     <div>
-                        <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                        <div className="flex items-center gap-2 text-xs font-medium tracking-wider text-muted-foreground uppercase">
                             <Tag className="size-3.5" />
                             Discounts
                         </div>
@@ -139,7 +139,9 @@ export function DiscountedTicketsTable({ tickets, filters }: Props) {
                                 <TableHead>Link</TableHead>
                                 <TableHead>Discount</TableHead>
                                 <TableHead>Valid Until</TableHead>
-                                <TableHead className="text-right">Used</TableHead>
+                                <TableHead className="text-right">
+                                    Used
+                                </TableHead>
                                 <TableHead>Status</TableHead>
                                 <TableHead>Created</TableHead>
                                 <TableHead>Last Updated</TableHead>
@@ -231,8 +233,12 @@ export function DiscountedTicketsTable({ tickets, filters }: Props) {
                                         </TableCell>
                                         <TableCell className="text-right">
                                             <DiscountTicketRowActions
-                                                onEdit={() => setEditing(ticket)}
-                                                onDelete={() => setDeleting(ticket)}
+                                                onEdit={() =>
+                                                    setEditing(ticket)
+                                                }
+                                                onDelete={() =>
+                                                    setDeleting(ticket)
+                                                }
                                             />
                                         </TableCell>
                                     </TableRow>
@@ -271,7 +277,10 @@ export function DiscountedTicketsTable({ tickets, filters }: Props) {
                                             {
                                                 preserveState: true,
                                                 preserveScroll: true,
-                                                only: ['tickets', 'ticketFilters'],
+                                                only: [
+                                                    'tickets',
+                                                    'ticketFilters',
+                                                ],
                                             },
                                         )
                                     }

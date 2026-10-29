@@ -75,7 +75,7 @@ export function CompanyServicesTable({ services, filters, categories }: Props) {
                         <Briefcase className="size-6 text-primary" />
                     </div>
                     <div>
-                        <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                        <div className="flex items-center gap-2 text-xs font-medium tracking-wider text-muted-foreground uppercase">
                             <Package className="size-3.5" />
                             Offering
                         </div>
@@ -124,7 +124,9 @@ export function CompanyServicesTable({ services, filters, categories }: Props) {
                                 <TableHead>Name</TableHead>
                                 <TableHead>Description</TableHead>
                                 <TableHead>Category</TableHead>
-                                <TableHead className="text-right">Price</TableHead>
+                                <TableHead className="text-right">
+                                    Price
+                                </TableHead>
                                 <TableHead>Status</TableHead>
                                 <TableHead>Created</TableHead>
                                 <TableHead>Last Updated</TableHead>
@@ -154,12 +156,14 @@ export function CompanyServicesTable({ services, filters, categories }: Props) {
                                         </TableCell>
                                         <TableCell>
                                             {service.category
-                                                ? categories[service.category] ??
-                                                  service.category
+                                                ? (categories[
+                                                      service.category
+                                                  ] ?? service.category)
                                                 : '—'}
                                         </TableCell>
                                         <TableCell className="text-right font-mono">
-                                            {Number(service.price).toFixed(2)} credits
+                                            {Number(service.price).toFixed(2)}{' '}
+                                            credits
                                         </TableCell>
                                         <TableCell>
                                             {service.is_active ? (
@@ -186,8 +190,12 @@ export function CompanyServicesTable({ services, filters, categories }: Props) {
                                         </TableCell>
                                         <TableCell className="text-right">
                                             <CompanyServiceRowActions
-                                                onEdit={() => setEditing(service)}
-                                                onDelete={() => setDeleting(service)}
+                                                onEdit={() =>
+                                                    setEditing(service)
+                                                }
+                                                onDelete={() =>
+                                                    setDeleting(service)
+                                                }
                                             />
                                         </TableCell>
                                     </TableRow>

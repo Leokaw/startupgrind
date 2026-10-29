@@ -9,10 +9,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { BorderBeamButton } from '@/components/ui/border-beam-button';
-import {
-    IntroDisclosure,
-    type IntroStep,
-} from '@/components/intro-disclosure';
+import { IntroDisclosure, type IntroStep } from '@/components/intro-disclosure';
 
 type Status = 'pending' | 'ready' | 'completed';
 
@@ -71,7 +68,7 @@ export default function BillingSuccess({
         };
 
         const interval = setInterval(tick, 1500);
-        tick();
+        void tick(); // <--- FIX: Added 'void' to ignore the floating promise
 
         return () => {
             cancelled = true;
@@ -154,8 +151,8 @@ export default function BillingSuccess({
                             You're on {plan.name}!
                         </h1>
                         <p className="max-w-md text-muted-foreground">
-                            Your subscription is active. Let's take a quick
-                            tour of your new perks.
+                            Your subscription is active. Let's take a quick tour
+                            of your new perks.
                         </p>
                         <button
                             type="button"
@@ -218,7 +215,7 @@ export default function BillingSuccess({
                     setTourOpen(open);
 
                     if (!open && !tourFinished) {
-                        handleTourFinish();
+                        void handleTourFinish();
                     }
                 }}
                 steps={perks}

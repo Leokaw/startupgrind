@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import {
-    Check,
     ChevronDown,
-    Filter,
     Globe2,
     LayoutGrid,
     Search,
@@ -78,9 +76,6 @@ export function EventFilterBar({ filters, options, onChange }: Props) {
         }
     };
 
-    const labelFor = (list: Option[], value: string, fallback: string) =>
-        list.find((o) => o.value === value)?.label ?? fallback;
-
     return (
         <div className="flex flex-col gap-3">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -98,9 +93,9 @@ export function EventFilterBar({ filters, options, onChange }: Props) {
                             }
                         }}
                         onBlur={commitSearch}
-                        className="pl-9 pr-9"
+                        className="pr-9 pl-9"
                     />
-                    <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                    <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                     {searchDraft && (
                         <button
                             type="button"
@@ -108,7 +103,7 @@ export function EventFilterBar({ filters, options, onChange }: Props) {
                                 setSearchDraft('');
                                 onChange({ search: '' });
                             }}
-                            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1 text-muted-foreground hover:bg-muted"
+                            className="absolute top-1/2 right-2 -translate-y-1/2 rounded-full p-1 text-muted-foreground hover:bg-muted"
                             aria-label="Clear search"
                         >
                             <X className="h-3.5 w-3.5" />
@@ -211,10 +206,7 @@ function FilterDropdown({
                 <Button
                     variant={active ? 'default' : 'outline'}
                     size="sm"
-                    className={cn(
-                        'gap-2',
-                        active && 'border-primary/30',
-                    )}
+                    className={cn('gap-2', active && 'border-primary/30')}
                 >
                     <Icon className="h-3.5 w-3.5" />
                     <span className="truncate">
@@ -233,7 +225,9 @@ function FilterDropdown({
                     onValueChange={(v) => onChange(v === 'all' ? '' : v)}
                 >
                     <DropdownMenuRadioItem value="all">
-                        <span className="text-muted-foreground">{placeholder}</span>
+                        <span className="text-muted-foreground">
+                            {placeholder}
+                        </span>
                     </DropdownMenuRadioItem>
 
                     {options.map((option) => (
@@ -244,7 +238,7 @@ function FilterDropdown({
                             <div className="flex flex-1 items-center justify-between gap-2">
                                 <span>{option.label}</span>
                                 {option.count !== undefined && (
-                                    <span className="text-xs tabular-nums text-muted-foreground">
+                                    <span className="text-xs text-muted-foreground tabular-nums">
                                         {option.count}
                                     </span>
                                 )}

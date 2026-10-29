@@ -144,10 +144,12 @@ export function SendMessageForm({
                     Cancel
                 </Button>
                 <BorderBeamButton
-                                        variant="secondary"
-                                        colorVariant="colorful"
-                                        beamSize="md"
-                type="submit" disabled={form.processing}>
+                    variant="secondary"
+                    colorVariant="colorful"
+                    beamSize="md"
+                    type="submit"
+                    disabled={form.processing}
+                >
                     {form.processing ? (
                         <>
                             <Loader2 className="h-4 w-4 animate-spin" />
@@ -155,7 +157,7 @@ export function SendMessageForm({
                         </>
                     ) : (
                         <>
-                            <Send className=" h-4 w-4" />
+                            <Send className="h-4 w-4" />
                             Send
                         </>
                     )}

@@ -108,8 +108,6 @@ export function NavMain() {
                     </SidebarMenuButton>
                 </SidebarMenuItem>
 
-             
-
                 <SidebarMenuItem>
                     <SidebarMenuButton
                         asChild
@@ -131,8 +129,6 @@ export function NavMain() {
                     </SidebarMenuButton>
                 </SidebarMenuItem>
 
-                
-
                 <SidebarMenuItem>
                     <SidebarMenuButton
                         asChild
@@ -147,8 +143,7 @@ export function NavMain() {
                     </SidebarMenuButton>
                 </SidebarMenuItem>
 
-
-                   {/* Community — always has the animated beam */}
+                {/* Community — always has the animated beam */}
                 <SidebarMenuItem>
                     <BorderBeam
                         size="sm"
@@ -169,25 +164,24 @@ export function NavMain() {
                     </BorderBeam>
                 </SidebarMenuItem>
 
-
                 {/* Events — always has the animated beam */}
                 <SidebarMenuItem>
                     <BorderBeam
                         size="sm"
                         colorVariant="colorful"
-                
+
                         className={beamWrapperClasses}
                     >
                         <SidebarMenuButton
                             asChild
-                            
+
                             isActive={isCurrentUrl('/events')}
                             tooltip={{ children: 'Events' }}
-                        
+
                             className={cn(activeClasses, itemMotion)}
                         >
                             <Link href="/events" prefetch>
-                                <CalendarDays className=" h-4 w-4" />
+                                <CalendarDays className="h-4 w-4" />
                                 <span>Events</span>
                             </Link>
                         </SidebarMenuButton>

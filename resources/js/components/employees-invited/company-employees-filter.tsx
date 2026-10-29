@@ -21,7 +21,10 @@ const STATUS_OPTIONS = {
 export function CompanyEmployeesFilter({ value, onChange }: Props) {
     const current = value && value !== '' ? value : 'all';
     const currentLabel =
-        current === 'all' ? 'All statuses' : (STATUS_OPTIONS[current as keyof typeof STATUS_OPTIONS] ?? 'All statuses');
+        current === 'all'
+            ? 'All statuses'
+            : (STATUS_OPTIONS[current as keyof typeof STATUS_OPTIONS] ??
+              'All statuses');
 
     return (
         <DropdownMenu>
@@ -30,7 +33,7 @@ export function CompanyEmployeesFilter({ value, onChange }: Props) {
                     type="button"
                     className={cn(
                         'relative flex h-9 w-full items-center justify-between gap-2 rounded-md border border-input bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none',
-                        'focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]',
+                        'focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50',
                         'disabled:cursor-not-allowed disabled:opacity-50',
                         'aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40',
                         'dark:bg-input/30',
@@ -48,7 +51,7 @@ export function CompanyEmployeesFilter({ value, onChange }: Props) {
 
                     {/* Kept at right-9 to match the original spacing
                         (right of the value, left of the chevron). */}
-                    <UserCheck className="pointer-events-none absolute right-9 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                    <UserCheck className="pointer-events-none absolute top-1/2 right-9 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
 
                     <ChevronDown className="pointer-events-none h-4 w-4 shrink-0 opacity-50" />
                 </button>
@@ -60,9 +63,13 @@ export function CompanyEmployeesFilter({ value, onChange }: Props) {
             >
                 <DropdownMenuRadioGroup
                     value={current}
-                    onValueChange={(next) => onChange(next === 'all' ? '' : next)}
+                    onValueChange={(next) =>
+                        onChange(next === 'all' ? '' : next)
+                    }
                 >
-                    <DropdownMenuRadioItem value="all">All statuses</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="all">
+                        All statuses
+                    </DropdownMenuRadioItem>
                     {Object.entries(STATUS_OPTIONS).map(([key, label]) => (
                         <DropdownMenuRadioItem key={key} value={key}>
                             {label}

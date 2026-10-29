@@ -28,7 +28,6 @@ const inputLikeClasses =
 const BLOCKED_MESSAGE =
     'Please use a business email. Personal email providers (Gmail, Hotmail, Yahoo, etc.) are not accepted.';
 
-    
 export default function CreateInviteTicket() {
     const [success, setSuccess] = useState(false);
     const [nameLength, setNameLength] = useState(0);
@@ -48,7 +47,7 @@ export default function CreateInviteTicket() {
                                 <UserPlus className="size-6 text-primary" />
                             </div>
                             <div>
-                                <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                                <div className="flex items-center gap-2 text-xs font-medium tracking-wider text-muted-foreground uppercase">
                                     <Send className="size-3.5" />
                                     Invite
                                 </div>
@@ -87,7 +86,9 @@ export default function CreateInviteTicket() {
                                 <>
                                     <div className="grid gap-6">
                                         {/* Invited Name */}
-                                        <Field data-invalid={!!errors.invited_name}>
+                                        <Field
+                                            data-invalid={!!errors.invited_name}
+                                        >
                                             <div className="flex items-center justify-between">
                                                 <FieldLabel htmlFor="invited_name">
                                                     Invited Name{' '}
@@ -115,11 +116,12 @@ export default function CreateInviteTicket() {
                                                     }
                                                     onChange={(e) =>
                                                         setNameLength(
-                                                            e.target.value.length,
+                                                            e.target.value
+                                                                .length,
                                                         )
                                                     }
                                                 />
-                                                <User className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                                                <User className="pointer-events-none absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                                             </div>
                                             {errors.invited_name && (
                                                 <FieldError>
@@ -131,7 +133,10 @@ export default function CreateInviteTicket() {
                                         {/* Invited Email */}
                                         <Field
                                             data-invalid={
-                                                !!(errors.invited_email || emailError)
+                                                !!(
+                                                    errors.invited_email ||
+                                                    emailError
+                                                )
                                             }
                                         >
                                             <FieldLabel htmlFor="invited_email">
@@ -168,9 +173,10 @@ export default function CreateInviteTicket() {
                                                         );
                                                     }}
                                                 />
-                                                <Mail className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                                                <Mail className="pointer-events-none absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                                             </div>
-                                            {(errors.invited_email || emailError) && (
+                                            {(errors.invited_email ||
+                                                emailError) && (
                                                 <FieldError>
                                                     {errors.invited_email ??
                                                         emailError}
@@ -179,7 +185,9 @@ export default function CreateInviteTicket() {
                                         </Field>
 
                                         {/* Expires At */}
-                                        <Field data-invalid={!!errors.expires_at}>
+                                        <Field
+                                            data-invalid={!!errors.expires_at}
+                                        >
                                             <FieldLabel htmlFor="expires_at">
                                                 Expires At
                                             </FieldLabel>
@@ -200,9 +208,12 @@ export default function CreateInviteTicket() {
                                                         )}
                                                     >
                                                         {expiresAt
-                                                            ? format(expiresAt, 'PPP')
+                                                            ? format(
+                                                                  expiresAt,
+                                                                  'PPP',
+                                                              )
                                                             : 'Never (leave empty for no expiry)'}
-                                                        <CalendarIcon className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                                                        <CalendarIcon className="pointer-events-none absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                                                     </button>
                                                 </PopoverTrigger>
                                                 <PopoverContent
@@ -258,7 +269,7 @@ export default function CreateInviteTicket() {
                                                         !!errors.max_uses
                                                     }
                                                 />
-                                                <Users className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                                                <Users className="pointer-events-none absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                                             </div>
                                             {errors.max_uses && (
                                                 <FieldError>
@@ -271,7 +282,9 @@ export default function CreateInviteTicket() {
                                             type="submit"
                                             className="mt-4 w-full"
                                             tabIndex={5}
-                                            disabled={processing || !!emailError}
+                                            disabled={
+                                                processing || !!emailError
+                                            }
                                         >
                                             {processing && (
                                                 <Spinner className="h-4 w-4" />

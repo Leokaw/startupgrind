@@ -1,5 +1,5 @@
 import { usePage } from '@inertiajs/react';
-import { useState, type ReactNode } from 'react';
+import { useState } from 'react';
 import { ArrowRight, Check, Loader2 } from 'lucide-react';
 import {
     Header,
@@ -302,8 +302,8 @@ function FeatureCarousel({
                             className={cn(
                                 'absolute inset-0 h-full w-full object-cover transition-all duration-500 ease-out',
                                 value === i
-                                    ? 'opacity-100 scale-100'
-                                    : 'opacity-0 scale-105',
+                                    ? 'scale-100 opacity-100'
+                                    : 'scale-105 opacity-0',
                             )}
                             draggable={false}
                             onLoad={() => markLoaded(i)}
@@ -542,7 +542,7 @@ function Steps({ flow, categories }: StepsProps) {
                         placeholder="Founder building in fintech. Based in Budapest. Previously at…"
                         rows={4}
                         maxLength={500}
-                        className="w-full resize-none rounded-xl border bg-transparent px-4 py-3 text-sm transition-colors focus:outline-none focus:ring-1 focus:ring-primary"
+                        className="w-full resize-none rounded-xl border bg-transparent px-4 py-3 text-sm transition-colors focus:ring-1 focus:ring-primary focus:outline-none"
                     />
                     <p className="text-right text-xs text-muted-foreground">
                         {flow.description.length} / 500
@@ -570,7 +570,9 @@ function Steps({ flow, categories }: StepsProps) {
             {step !== 1 && (
                 <div className="shrink-0 border-t bg-background/60 px-8 py-4 backdrop-blur-sm md:px-10">
                     <Navigation
-                        completeLabel={flow.submitting ? 'Finishing…' : 'Finish'}
+                        completeLabel={
+                            flow.submitting ? 'Finishing…' : 'Finish'
+                        }
                         onCompleteOverride={flow.submit}
                         nextDisabled={!canProceed}
                         submitting={flow.submitting}

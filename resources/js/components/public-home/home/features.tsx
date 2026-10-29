@@ -23,17 +23,26 @@ const visible = { overflow: 'visible' } as const;
 const PARAGRAPH_STAGGER = 0.04;
 const paragraphVariants = {
     hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: PARAGRAPH_STAGGER, delayChildren: 0.2 } },
+    visible: {
+        opacity: 1,
+        transition: { staggerChildren: PARAGRAPH_STAGGER, delayChildren: 0.2 },
+    },
 };
 
 const countWords = (text: string) => text.split(' ').length;
-const TEXT_DONE_MS = (0.2 + (countWords(description) - 1) * PARAGRAPH_STAGGER + 0.5) * 1000;
+const TEXT_DONE_MS =
+    (0.2 + (countWords(description) - 1) * PARAGRAPH_STAGGER + 0.5) * 1000;
 
 const FADE_MS = 1400;
 const FADE_STAGGER_MS = 300;
 
 function Corner({ className }: { className: string }) {
-    return <span aria-hidden className={`hidden lg:block absolute z-20 size-1.5 bg-primary ${className}`} />;
+    return (
+        <span
+            aria-hidden
+            className={`absolute z-20 hidden size-1.5 bg-primary lg:block ${className}`}
+        />
+    );
 }
 
 export default function Features() {
@@ -50,7 +59,7 @@ export default function Features() {
     const animate = inView ? 'visible' : 'hidden';
 
     return (
-        <section className="relative border-b border-border bg-background overflow-x-clip">
+        <section className="relative overflow-x-clip border-b border-border bg-background">
             <style>{`
                 @keyframes features-fade-in {
                     from { opacity: 0; visibility: hidden; }
@@ -61,19 +70,22 @@ export default function Features() {
                 }
             `}</style>
 
-            <div className="relative mx-auto max-w-7xl border-x border-border lg:px-0 px-3">
+            <div className="relative mx-auto max-w-7xl border-x border-border px-3 lg:px-0">
                 <Corner className="-bottom-[3.5px] -left-[3.5px]" />
                 <Corner className="-right-[3.5px] -bottom-[3.5px]" />
 
                 <div
                     aria-hidden
-                    className="pointer-events-none absolute -top-24 -bottom-64 -right-32 -left-10 rounded-full bg-primary/15 blur-[120px] z-0"
+                    className="pointer-events-none absolute -top-24 -right-32 -bottom-64 -left-10 z-0 rounded-full bg-primary/15 blur-[120px]"
                 />
 
-                <div className="relative overflow-hidden z-10">
+                <div className="relative z-10 overflow-hidden">
                     <div className="relative grid gap-10 px-4 pt-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-12 lg:px-12 lg:pt-0">
                         {/* Left: texts */}
-                        <div ref={ref} className="flex flex-col justify-center lg:py-8">
+                        <div
+                            ref={ref}
+                            className="flex flex-col justify-center lg:py-8"
+                        >
                             <h2 className="text-3xl leading-[1] font-thin tracking-tight text-foreground sm:text-4xl">
                                 {heading.map((line) => (
                                     <TextAnimate
@@ -94,17 +106,25 @@ export default function Features() {
                                 by="word"
                                 type="fadeInUp"
                                 text={description}
-                                className="mt-4 max-w-sm text-sm leading-tight text-muted-foreground sm:text-base leading-[0.9]"
+                                className="mt-4 max-w-sm text-sm leading-[0.9] leading-tight text-muted-foreground sm:text-base"
                                 style={visible}
                                 variants={paragraphVariants}
                                 animate={animate}
                             />
 
                             <ul
-                                className={cn('mt-6 space-y-1', showExtras ? 'features-fade-in' : 'invisible opacity-0')}
+                                className={cn(
+                                    'mt-6 space-y-1',
+                                    showExtras
+                                        ? 'features-fade-in'
+                                        : 'invisible opacity-0',
+                                )}
                             >
                                 {features.map((feature) => (
-                                    <li key={feature} className="flex items-center gap-1.5 text-sm text-foreground">
+                                    <li
+                                        key={feature}
+                                        className="flex items-center gap-1.5 text-sm text-foreground"
+                                    >
                                         <Check className="size-3.5 shrink-0 text-primary" />
                                         {feature}
                                     </li>
@@ -112,11 +132,23 @@ export default function Features() {
                             </ul>
 
                             <div
-                                className={cn('mt-8', showExtras ? 'features-fade-in' : 'invisible opacity-0')}
-                                style={{ animationDelay: `${FADE_STAGGER_MS}ms` }}
+                                className={cn(
+                                    'mt-8',
+                                    showExtras
+                                        ? 'features-fade-in'
+                                        : 'invisible opacity-0',
+                                )}
+                                style={{
+                                    animationDelay: `${FADE_STAGGER_MS}ms`,
+                                }}
                             >
                                 <Button asChild variant="outline">
-                                    <Link href={"https://about.startupgrind.com/?utm_source=website&utm_medium=navigation"} target='_blank'>
+                                    <Link
+                                        href={
+                                            'https://about.startupgrind.com/?utm_source=website&utm_medium=navigation'
+                                        }
+                                        target="_blank"
+                                    >
                                         Learn more about us
                                         <ArrowUpRight className="size-4 text-primary" />
                                     </Link>
@@ -132,7 +164,7 @@ export default function Features() {
                                     alt="Startup Grind community"
                                     loading="lazy"
                                     draggable={false}
-                                    className="block h-auto w-full rounded-tl-[1.75rem] shadow-xl select-none brightness-80"
+                                    className="block h-auto w-full rounded-tl-[1.75rem] shadow-xl brightness-80 select-none"
                                 />
                             </div>
                         </div>

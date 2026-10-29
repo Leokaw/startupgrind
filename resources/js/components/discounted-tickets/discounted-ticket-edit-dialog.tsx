@@ -50,7 +50,11 @@ type Props = {
     onOpenChange: (open: boolean) => void;
 };
 
-export function DiscountTicketEditDialog({ ticket, open, onOpenChange }: Props) {
+export function DiscountTicketEditDialog({
+    ticket,
+    open,
+    onOpenChange,
+}: Props) {
     const [validUntil, setValidUntil] = useState<Date | undefined>(
         ticket.valid_until ? new Date(ticket.valid_until) : undefined,
     );
@@ -112,8 +116,7 @@ export function DiscountTicketEditDialog({ ticket, open, onOpenChange }: Props) 
 
                     <div className="space-y-2">
                         <Label htmlFor="ticket-name">
-                            Name{' '}
-                            <span className="text-destructive">*</span>
+                            Name <span className="text-destructive">*</span>
                         </Label>
                         <Input
                             id="ticket-name"
@@ -168,7 +171,7 @@ export function DiscountTicketEditDialog({ ticket, open, onOpenChange }: Props) 
                                 aria-invalid={!!errors.event_url}
                                 required
                             />
-                            <Link2 className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                            <Link2 className="pointer-events-none absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                         </div>
                         <p className="text-xs text-muted-foreground">
                             Must start with{' '}
@@ -229,7 +232,7 @@ export function DiscountTicketEditDialog({ ticket, open, onOpenChange }: Props) 
                                     {validUntil
                                         ? format(validUntil, 'PPP')
                                         : 'Pick an expiry date'}
-                                    <CalendarIcon className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                                    <CalendarIcon className="pointer-events-none absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                                 </button>
                             </PopoverTrigger>
                             <PopoverContent className="w-auto p-0" align="end">
@@ -261,7 +264,10 @@ export function DiscountTicketEditDialog({ ticket, open, onOpenChange }: Props) 
                                 setData('is_active', v === 'true')
                             }
                         >
-                            <SelectTrigger className="w-full" id="ticket-status">
+                            <SelectTrigger
+                                className="w-full"
+                                id="ticket-status"
+                            >
                                 <SelectValue />
                             </SelectTrigger>
                             <SelectContent>

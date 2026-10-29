@@ -23,7 +23,7 @@ export function AppSidebarHeader({
                 <LanguageSwitcher />
                 <AppearanceDropdown />
                 <CreditBalanceButton />
-                  <HeaderUserMenu /> 
+                <HeaderUserMenu />
             </div>
         </header>
     );

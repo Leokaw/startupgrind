@@ -100,19 +100,20 @@ export function SubscriptionOverview({
     const isEnding = subscription.on_grace_period;
     const isActive = subscription.status === 'active' && !isEnding;
 
-    const upcomingDate = subscription.ends_at ?? subscription.current_period_end;
+    const upcomingDate =
+        subscription.ends_at ?? subscription.current_period_end;
     const upcomingLabel = isEnding
         ? 'Access ends'
         : subscription.on_trial
-            ? 'First charge'
-            : 'Next renewal';
+          ? 'First charge'
+          : 'Next renewal';
 
     const progress =
         subscription.current_period_start && subscription.current_period_end
             ? cycleProgress(
-                subscription.current_period_start,
-                subscription.current_period_end,
-            )
+                  subscription.current_period_start,
+                  subscription.current_period_end,
+              )
             : 0;
 
     const trialInProgress = subscription.on_trial;
@@ -133,7 +134,7 @@ export function SubscriptionOverview({
                 )}
             >
                 <div>
-                    <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                    <div className="flex items-center gap-2 text-xs font-medium tracking-wider text-muted-foreground uppercase">
                         <CreditCard className="size-3.5" />
                         Your subscription
                     </div>
@@ -154,15 +155,15 @@ export function SubscriptionOverview({
                         isEnding
                             ? 'border-amber-500/30 bg-amber-500/15 text-amber-700 dark:text-amber-400'
                             : subscription.on_trial
-                                ? 'border-blue-500/30 bg-blue-500/15 text-blue-700 dark:text-blue-400'
-                                : 'border-emerald-500/30 bg-emerald-500/15 text-emerald-700 dark:text-emerald-400',
+                              ? 'border-blue-500/30 bg-blue-500/15 text-blue-700 dark:text-blue-400'
+                              : 'border-emerald-500/30 bg-emerald-500/15 text-emerald-700 dark:text-emerald-400',
                     )}
                 >
                     {isEnding
                         ? 'Cancelling'
                         : subscription.on_trial
-                            ? 'On trial'
-                            : 'Active'}
+                          ? 'On trial'
+                          : 'Active'}
                 </Badge>
             </div>
 
@@ -186,7 +187,9 @@ export function SubscriptionOverview({
                                         </span>{' '}
                                         on{' '}
                                         <span className="font-medium text-foreground">
-                                            {formatDate(subscription.current_period_end)}
+                                            {formatDate(
+                                                subscription.current_period_end,
+                                            )}
                                         </span>
                                         . No action required, you'll keep your
                                         current perks until then.
@@ -210,7 +213,7 @@ export function SubscriptionOverview({
                 {/* Trial section — only when a trial exists */}
                 {subscription.has_trial && (
                     <div className="space-y-2">
-                        <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                        <div className="flex items-center gap-2 text-xs font-medium tracking-wider text-muted-foreground uppercase">
                             <Hourglass className="size-3.5" />
                             Trial
                             {trialInProgress && (
@@ -228,15 +231,19 @@ export function SubscriptionOverview({
                         <div className="grid gap-4 sm:grid-cols-2">
                             {subscription.trial_started_at && (
                                 <div className="rounded-xl border bg-muted/30 p-4">
-                                    <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                                    <div className="flex items-center gap-2 text-xs font-medium tracking-wider text-muted-foreground uppercase">
                                         <Gift className="size-3.5" />
                                         Trial started
                                     </div>
                                     <p className="mt-2 text-base font-medium">
-                                        {formatDate(subscription.trial_started_at)}
+                                        {formatDate(
+                                            subscription.trial_started_at,
+                                        )}
                                     </p>
                                     <p className="mt-0.5 text-xs text-muted-foreground">
-                                        {relativeDays(subscription.trial_started_at)}
+                                        {relativeDays(
+                                            subscription.trial_started_at,
+                                        )}
                                     </p>
                                 </div>
                             )}
@@ -250,15 +257,19 @@ export function SubscriptionOverview({
                                             : 'bg-muted/30',
                                     )}
                                 >
-                                    <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                                    <div className="flex items-center gap-2 text-xs font-medium tracking-wider text-muted-foreground uppercase">
                                         <Hourglass className="size-3.5" />
-                                        {trialInProgress ? 'Trial ends' : 'Trial ended'}
+                                        {trialInProgress
+                                            ? 'Trial ends'
+                                            : 'Trial ended'}
                                     </div>
                                     <p className="mt-2 text-base font-medium">
                                         {formatDate(subscription.trial_ends_at)}
                                     </p>
                                     <p className="mt-0.5 text-xs text-muted-foreground">
-                                        {relativeDays(subscription.trial_ends_at)}
+                                        {relativeDays(
+                                            subscription.trial_ends_at,
+                                        )}
                                     </p>
                                 </div>
                             )}
@@ -270,7 +281,7 @@ export function SubscriptionOverview({
                 <div className="grid gap-4 sm:grid-cols-2">
                     {subscription.current_period_start && (
                         <div className="rounded-xl border bg-muted/30 p-4">
-                            <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                            <div className="flex items-center gap-2 text-xs font-medium tracking-wider text-muted-foreground uppercase">
                                 <CalendarCheck className="size-3.5" />
                                 Billing period started
                             </div>
@@ -278,7 +289,9 @@ export function SubscriptionOverview({
                                 {formatDate(subscription.current_period_start)}
                             </p>
                             <p className="mt-0.5 text-xs text-muted-foreground">
-                                {relativeDays(subscription.current_period_start)}
+                                {relativeDays(
+                                    subscription.current_period_start,
+                                )}
                             </p>
                         </div>
                     )}
@@ -292,7 +305,7 @@ export function SubscriptionOverview({
                                     : 'border-primary/20 bg-primary/5',
                             )}
                         >
-                            <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                            <div className="flex items-center gap-2 text-xs font-medium tracking-wider text-muted-foreground uppercase">
                                 <CalendarClock className="size-3.5" />
                                 {upcomingLabel}
                             </div>
@@ -314,7 +327,9 @@ export function SubscriptionOverview({
                         <div className="space-y-2">
                             <div className="flex items-center justify-between text-xs text-muted-foreground">
                                 <span>Current billing cycle</span>
-                                <span className="tabular-nums">{progress}%</span>
+                                <span className="tabular-nums">
+                                    {progress}%
+                                </span>
                             </div>
                             <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
                                 <div
@@ -329,7 +344,7 @@ export function SubscriptionOverview({
                 {plan && plan.features.length > 0 && (
                     <div>
                         <div className="mb-3 flex items-center justify-between gap-2">
-                            <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                            <div className="flex items-center gap-2 text-xs font-medium tracking-wider text-muted-foreground uppercase">
                                 <Sparkles className="size-3.5" />
                                 What's included
                             </div>
@@ -340,7 +355,7 @@ export function SubscriptionOverview({
                                     variant="default"
                                     onClick={onReplayTour}
                                     disabled={processing}
-                                    className="  text-xs h-6 px-2 py-0.5"
+                                    className="h-6 px-2 py-0.5 text-xs"
                                 >
                                     <RotateCcw className="size-3" />
                                     Replay tour
@@ -368,10 +383,10 @@ export function SubscriptionOverview({
                         {isEnding
                             ? "You'll keep access until the date above. After that, you'll drop to the Free tier."
                             : subscription.pending_plan
-                                ? subscription.current_period_end
-                                    ? `Your plan switches to ${subscription.pending_plan.name} on ${formatDate(subscription.current_period_end)}.`
-                                    : `Your plan will switch to ${subscription.pending_plan.name} at your next billing cycle.`
-                                : 'Your subscription renews automatically on the card you used to subscribe.'}
+                              ? subscription.current_period_end
+                                  ? `Your plan switches to ${subscription.pending_plan.name} on ${formatDate(subscription.current_period_end)}.`
+                                  : `Your plan will switch to ${subscription.pending_plan.name} at your next billing cycle.`
+                              : 'Your subscription renews automatically on the card you used to subscribe.'}
                     </p>
 
                     {isEnding ? (
@@ -384,17 +399,14 @@ export function SubscriptionOverview({
                             Resume subscription
                         </Button>
                     ) : (
-                        
                         <Button
-                      
                             size="sm"
                             variant="destructive"
                             onClick={onCancel}
                             disabled={processing}
                         >
-                              <X className="size-3" />
+                            <X className="size-3" />
                             Cancel subscription
-                          
                         </Button>
                     )}
                 </div>

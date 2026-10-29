@@ -119,13 +119,16 @@ export function CompanyServiceEditDialog({
                         )}
                     </div>
 
-                    <div className="space-y-2 w-full">
+                    <div className="w-full space-y-2">
                         <Label htmlFor="service-category">Category</Label>
                         <Select
                             value={data.category}
                             onValueChange={(v) => setData('category', v)}
                         >
-                            <SelectTrigger className="w-full" id="service-category">
+                            <SelectTrigger
+                                className="w-full"
+                                id="service-category"
+                            >
                                 <SelectValue placeholder="Select a category" />
                             </SelectTrigger>
                             <SelectContent>
@@ -145,7 +148,7 @@ export function CompanyServiceEditDialog({
                         )}
                     </div>
 
-                    <div className="space-y-2 w-full">
+                    <div className="w-full space-y-2">
                         <Label htmlFor="service-status">Status</Label>
                         <Select
                             value={data.is_active ? 'true' : 'false'}
@@ -153,7 +156,10 @@ export function CompanyServiceEditDialog({
                                 setData('is_active', v === 'true')
                             }
                         >
-                            <SelectTrigger className="w-full" id="service-status">
+                            <SelectTrigger
+                                className="w-full"
+                                id="service-status"
+                            >
                                 <SelectValue />
                             </SelectTrigger>
                             <SelectContent>

@@ -41,7 +41,12 @@ function ResponsiveBubbles() {
         <>
             {bubbleVariants.map(({ size, className }) => (
                 <div key={size} className={className}>
-                    <MergingBubbles size={size} startIcon={startIcon} endIcon={endIcon} showPlus />
+                    <MergingBubbles
+                        size={size}
+                        startIcon={startIcon}
+                        endIcon={endIcon}
+                        showPlus
+                    />
                 </div>
             ))}
         </>
@@ -49,7 +54,12 @@ function ResponsiveBubbles() {
 }
 
 function Corner({ className }: { className: string }) {
-    return <span aria-hidden className={`hidden lg:block absolute z-20 size-1.5 bg-primary ${className}`} />;
+    return (
+        <span
+            aria-hidden
+            className={`absolute z-20 hidden size-1.5 bg-primary lg:block ${className}`}
+        />
+    );
 }
 
 const headline = 'The leading global startup community.';
@@ -71,7 +81,11 @@ export default function Partnership() {
     }, [inView]);
 
     return (
-        <section ref={ref} id="about" className="relative border-b border-border bg-background">
+        <section
+            ref={ref}
+            id="about"
+            className="relative border-b border-border bg-background"
+        >
             <style>{`
                 @keyframes partnership-fade-in {
                     from { opacity: 0; visibility: hidden; transform: translateY(10px); }
@@ -97,7 +111,7 @@ export default function Partnership() {
                             type="fadeInUp"
                             text={headline}
                             style={visible}
-                            className="text-gray-700 text-center text-4xl lg:text-6xl lg:font-thin"
+                            className="text-center text-4xl text-gray-700 lg:text-6xl lg:font-thin"
                             animate={inView ? 'visible' : 'hidden'}
                         />
                     </h2>
@@ -106,7 +120,9 @@ export default function Partnership() {
                     <div
                         className={cn(
                             'flex flex-col items-center gap-5 lg:items-end',
-                            showExtras ? 'partnership-fade-in' : 'invisible opacity-0',
+                            showExtras
+                                ? 'partnership-fade-in'
+                                : 'invisible opacity-0',
                         )}
                     >
                         <ResponsiveBubbles />
@@ -114,7 +130,9 @@ export default function Partnership() {
                         <p className="text-center font-mono text-sm leading-relaxed tracking-wide text-muted-foreground uppercase lg:text-right">
                             In exclusive partnership with
                             <br />
-                            <span className="text-foreground">Tech in the City</span>
+                            <span className="text-foreground">
+                                Tech in the City
+                            </span>
                         </p>
                     </div>
                 </div>

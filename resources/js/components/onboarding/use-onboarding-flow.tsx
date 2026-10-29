@@ -1,13 +1,7 @@
 import { router } from '@inertiajs/react';
 import { useCallback, useState, type ReactNode } from 'react';
 import { toast } from 'sonner';
-import {
-    Briefcase,
-    Calendar,
-    Ticket,
-    UserPlus,
-    Users,
-} from 'lucide-react';
+import { Briefcase, Calendar, Ticket, UserPlus, Users } from 'lucide-react';
 
 /* =================================================================
  |  Types
@@ -73,7 +67,11 @@ export const ROLES: ChoiceGroupItem[] = [
     { value: 'founder', label: 'Founder', description: 'Building a company' },
     { value: 'investor', label: 'Investor', description: 'Backing founders' },
     { value: 'operator', label: 'Operator', description: 'Scaling teams' },
-    { value: 'freelancer', label: 'Freelancer', description: 'Available for hire' },
+    {
+        value: 'freelancer',
+        label: 'Freelancer',
+        description: 'Available for hire',
+    },
     { value: 'designer', label: 'Designer', description: 'Design & brand' },
     { value: 'developer', label: 'Developer', description: 'Building product' },
 ];
@@ -164,8 +162,8 @@ export function useOnboardingFlow({
                 description: description.trim() || null,
             },
             {
-                preserveScroll: true,   // 👈 don't jump the page
-                preserveState: true,    // 👈 keep the layout mounted (was false)
+                preserveScroll: true, // 👈 don't jump the page
+                preserveState: true, // 👈 keep the layout mounted (was false)
                 onSuccess: () => {
                     onClose();
                     toast.success("You're all set. Welcome aboard!");

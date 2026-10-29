@@ -5,14 +5,10 @@ import {
     DropdownMenuContent,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import {
-    Avatar,
-    AvatarFallback,
-    AvatarImage,
-} from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { UserMenuContent } from '@/components/user-menu-content';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { cn } from '@/lib/utils';
+
 import { Button } from './ui/button';
 
 /**
@@ -37,12 +33,11 @@ export function HeaderUserMenu() {
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button
-                    type='button'
+                    type="button"
                     variant="secondary"
                     size="icon"
-                    className="h-8 w-8 outline !border-none"
+                    className="h-8 w-8 !border-none outline"
                     aria-label="Open user menu"
-
                 >
                     <Avatar className="size-8">
                         {user.has_custom_profile_photo ? (

@@ -30,7 +30,7 @@ export function CompanyEmployeeRowActions({ onUnlink }: Props) {
                         e.preventDefault();
                         onUnlink?.();
                     }}
-                    className="cursor-pointer text-red-600 hover:bg-red-500/10 hover:text-red-700 focus:bg-red-500/10 focus:text-red-700 p-2 m-1 dark:text-red-400 dark:hover:bg-red-500/15 dark:hover:text-red-300 dark:focus:bg-red-500/15 dark:focus:text-red-300"
+                    className="m-1 cursor-pointer p-2 text-red-600 hover:bg-red-500/10 hover:text-red-700 focus:bg-red-500/10 focus:text-red-700 dark:text-red-400 dark:hover:bg-red-500/15 dark:hover:text-red-300 dark:focus:bg-red-500/15 dark:focus:text-red-300"
                 >
                     <UserMinus className="mr-2 h-4 w-4" />
                     Remove from company

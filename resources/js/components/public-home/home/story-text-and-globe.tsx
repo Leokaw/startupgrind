@@ -10,33 +10,38 @@ import { Link } from '@inertiajs/react';
 const visible = { overflow: 'visible' } as const;
 
 function Corner({ className }: { className: string }) {
-    return <span aria-hidden className={`absolute z-20 size-1.5 bg-primary ${className}`} />;
+    return (
+        <span
+            aria-hidden
+            className={`absolute z-20 size-1.5 bg-primary ${className}`}
+        />
+    );
 }
 
-const FADE_MS = 1400;
 const FADE_STAGGER_MS = 300;
 const leftText = "Engage with the world's leading startup community";
 
 const p1Text =
     "Founded in 2010, Startup Grind is the largest community for startup founders in the world. With 5M members, 300 chapters in 125 countries, we've spent 15 years connecting founders with the resources and relationships they need to grow.";
 const p2Text =
-    "Our network is powered by 2,000+ local volunteer directors who organize monthly events, alongside a robust digital community. In 2026, our global conference in Silicon Valley brought together over 5,000 founders, generating 14.5 million brand impressions.";
+    'Our network is powered by 2,000+ local volunteer directors who organize monthly events, alongside a robust digital community. In 2026, our global conference in Silicon Valley brought together over 5,000 founders, generating 14.5 million brand impressions.';
 const p3Text =
-    "Our partners play a central role in this ecosystem, gaining exposure to a highly targeted, founder-dense audience at the exact moment key adoption decisions are being made.";
+    'Our partners play a central role in this ecosystem, gaining exposure to a highly targeted, founder-dense audience at the exact moment key adoption decisions are being made.';
 
 const countWords = (text: string) => text.split(' ').length;
 
 // ─── Sequencing / speed tuning ───────────────────────────────────────────────
-const WORD_STAGGER = 0.02;   // was effectively ~0.1s default → 2.5× faster
-const WORD_SETTLE = 0.4;     // approx. time for the last word's spring to settle
-const PARAGRAPH_GAP = 0.12;  // small pause between paragraph hand-offs
+const WORD_STAGGER = 0.02; // was effectively ~0.1s default → 2.5× faster
+const WORD_SETTLE = 0.4; // approx. time for the last word's spring to settle
+const PARAGRAPH_GAP = 0.12; // small pause between paragraph hand-offs
 
 const headingWords = countWords(leftText);
 const p1Words = countWords(p1Text);
 const p2Words = countWords(p2Text);
 const p3Words = countWords(p3Text);
 
-const paragraphDuration = (words: number) => (words - 1) * WORD_STAGGER + WORD_SETTLE;
+const paragraphDuration = (words: number) =>
+    (words - 1) * WORD_STAGGER + WORD_SETTLE;
 
 const headingDelay = 0;
 const p1Delay = headingDelay + paragraphDuration(headingWords) + PARAGRAPH_GAP;
@@ -71,13 +76,13 @@ export default function StoryTextAndGlobe() {
     return (
         <div
             ref={ref}
-            className="relative lg:px-0 px-2 lg:col-span-2 border-b lg:border-b-0 lg:border-r border-border flex flex-col md:flex-row"
+            className="relative flex flex-col border-b border-border px-2 md:flex-row lg:col-span-2 lg:border-r lg:border-b-0 lg:px-0"
         >
-            <Corner className="hidden lg:block -top-[3.5px] -right-[3.5px]" />
-            <Corner className="hidden lg:block -bottom-[3.5px] -right-[3.5px]" />
+            <Corner className="-top-[3.5px] -right-[3.5px] hidden lg:block" />
+            <Corner className="-right-[3.5px] -bottom-[3.5px] hidden lg:block" />
 
             {/* Text Area */}
-            <div className="p-4 lg:p-10 flex-1 flex flex-col">
+            <div className="flex flex-1 flex-col p-4 lg:p-10">
                 <h2 className="text-3xl leading-[1.1] font-thin tracking-tight text-foreground lg:text-3xl">
                     <TextAnimate
                         as="span"
@@ -97,19 +102,19 @@ export default function StoryTextAndGlobe() {
                         by="word"
                         type="fadeInUp"
                         text={p1Text}
-                        className="text-base font-medium text-foreground leading-tight"
+                        className="text-base leading-tight font-medium text-foreground"
                         style={visible}
                         animate={animate}
                         variants={makeSequenceVariants(p1Delay)}
                     />
                 </div>
 
-                <div className="mt-6 space-y-4 text-muted-foreground leading-tight">
+                <div className="mt-6 space-y-4 leading-tight text-muted-foreground">
                     <TextAnimate
                         as="p"
                         by="word"
                         type="fadeInUp"
-                        className="text-base font-thin text-foreground leading-tight"
+                        className="text-base leading-tight font-thin text-foreground"
                         text={p2Text}
                         style={visible}
                         animate={animate}
@@ -120,7 +125,7 @@ export default function StoryTextAndGlobe() {
                         by="word"
                         type="fadeInUp"
                         text={p3Text}
-                        className="text-base font-thin text-foreground leading-tight"
+                        className="text-base leading-tight font-thin text-foreground"
                         style={visible}
                         animate={animate}
                         variants={makeSequenceVariants(p3Delay)}
@@ -128,10 +133,17 @@ export default function StoryTextAndGlobe() {
                 </div>
 
                 <div
-                    className={cn('mt-8', showExtras ? 'story-fade-in' : 'invisible opacity-0')}
+                    className={cn(
+                        'mt-8',
+                        showExtras ? 'story-fade-in' : 'invisible opacity-0',
+                    )}
                     style={{ animationDelay: `${FADE_STAGGER_MS}ms` }}
                 >
-                    <Button asChild size="sm" className="w-full text-base sm:w-auto !h-9 px-10">
+                    <Button
+                        asChild
+                        size="sm"
+                        className="!h-9 w-full px-10 text-base sm:w-auto"
+                    >
                         <Link href="/register">
                             Become a member
                             <ChevronRight className="size-4" />
@@ -140,11 +152,11 @@ export default function StoryTextAndGlobe() {
                 </div>
             </div>
 
-            <div className="lg:mr-10 flex-1 flex items-center justify-center relative overflow-visible">
+            <div className="relative flex flex-1 items-center justify-center overflow-visible lg:mr-10">
                 <img
                     src="/home/globe.png"
                     alt="Global network"
-                    className="lg:w-[120%] w-[90%] max-w-none object-contain"
+                    className="w-[90%] max-w-none object-contain lg:w-[120%]"
                 />
             </div>
         </div>

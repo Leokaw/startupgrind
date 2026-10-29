@@ -3,7 +3,12 @@ import HowItWorksSteps from './how-it-works-steps';
 
 function Corner({ className }: { className: string }) {
     // Added 'hidden lg:block' so corners only show on desktop
-    return <span aria-hidden className={`hidden lg:block absolute z-20 size-1.5 bg-primary ${className}`} />;
+    return (
+        <span
+            aria-hidden
+            className={`absolute z-20 hidden size-1.5 bg-primary lg:block ${className}`}
+        />
+    );
 }
 
 export default function BottomFeatures() {
@@ -20,7 +25,7 @@ export default function BottomFeatures() {
 
                 {/* Inner corners (centered exactly on the vertical divider) */}
                 {/* Note: Removed redundant hidden lg:block here since it's in the base component now */}
-                <Corner className="-translate-x-1/2 -bottom-[3.5px] left-1/2" />
+                <Corner className="-bottom-[3.5px] left-1/2 -translate-x-1/2" />
 
                 <div className="grid lg:grid-cols-2">
                     <WhyJoinStats />

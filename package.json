@@ -3,7 +3,6 @@
     "name": "my-app",
     "private": true,
     "type": "module",
-    "packageManager": "npm@10.9.0",
     "scripts": {
         "build": "vp build",
         "build:ssr": "vp build && vp build --ssr",
@@ -79,5 +78,6 @@
         "@tailwindcss/oxide-win32-x64-msvc": "^4.0.1",
         "lightningcss-linux-x64-gnu": "^1.29.1",
         "lightningcss-win32-x64-msvc": "^1.29.1"
-    }
+    },
+    "packageManager": "npm@10.9.0"
 }

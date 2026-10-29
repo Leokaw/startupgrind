@@ -34,7 +34,9 @@ export function CompanyEmployeeUnlinkDialog({
         destroy(`/company/employees/${employee.id}`, {
             preserveScroll: true,
             onSuccess: () => {
-                toast.success(`${employee.name} was removed from your company.`);
+                toast.success(
+                    `${employee.name} was removed from your company.`,
+                );
                 onOpenChange(false);
             },
             onError: () => {
@@ -53,9 +55,9 @@ export function CompanyEmployeeUnlinkDialog({
                             {employee.name}
                         </span>{' '}
                         ({employee.email}) will be removed from your company.
-                        Their account will remain active as a regular user,
-                        and they will no longer be linked to your company.
-                        This action cannot be undone.
+                        Their account will remain active as a regular user, and
+                        they will no longer be linked to your company. This
+                        action cannot be undone.
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>

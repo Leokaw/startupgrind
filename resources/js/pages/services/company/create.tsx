@@ -10,13 +10,7 @@ import {
     DropdownMenuRadioItem,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import {
-    Building2,
-    Tag,
-    ChevronDown,
-    Briefcase,
-    Package,
-} from 'lucide-react';
+import { Building2, Tag, ChevronDown, Briefcase, Package } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -46,7 +40,7 @@ export default function CreateCompanyService({ serviceCategories }: Props) {
                                 <Briefcase className="size-6 text-primary" />
                             </div>
                             <div>
-                                <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                                <div className="flex items-center gap-2 text-xs font-medium tracking-wider text-muted-foreground uppercase">
                                     <Package className="size-3.5" />
                                     New service
                                 </div>
@@ -112,11 +106,12 @@ export default function CreateCompanyService({ serviceCategories }: Props) {
                                                     aria-invalid={!!errors.name}
                                                     onChange={(e) =>
                                                         setNameLength(
-                                                            e.target.value.length,
+                                                            e.target.value
+                                                                .length,
                                                         )
                                                     }
                                                 />
-                                                <Building2 className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                                                <Building2 className="pointer-events-none absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                                             </div>
                                             {errors.name && (
                                                 <FieldError>
@@ -126,7 +121,9 @@ export default function CreateCompanyService({ serviceCategories }: Props) {
                                         </Field>
 
                                         {/* Description */}
-                                        <Field data-invalid={!!errors.description}>
+                                        <Field
+                                            data-invalid={!!errors.description}
+                                        >
                                             <div className="flex items-center justify-between">
                                                 <FieldLabel htmlFor="description">
                                                     Description (Optional)
@@ -188,7 +185,7 @@ export default function CreateCompanyService({ serviceCategories }: Props) {
                                                         }
                                                         className={cn(
                                                             'relative flex h-9 w-full items-center justify-between gap-2 rounded-md border border-input bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none',
-                                                            'focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]',
+                                                            'focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50',
                                                             'disabled:cursor-not-allowed disabled:opacity-50',
                                                             'aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40',
                                                             'dark:bg-input/30',
@@ -208,7 +205,7 @@ export default function CreateCompanyService({ serviceCategories }: Props) {
                                                                 : 'Select a category'}
                                                         </span>
 
-                                                        <Tag className="pointer-events-none absolute right-9 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                                                        <Tag className="pointer-events-none absolute top-1/2 right-9 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
 
                                                         <ChevronDown className="pointer-events-none h-4 w-4 shrink-0 opacity-50" />
                                                     </button>
@@ -268,7 +265,6 @@ export default function CreateCompanyService({ serviceCategories }: Props) {
         </>
     );
 }
-
 
 CreateCompanyService.layout = {
     breadcrumbs: [

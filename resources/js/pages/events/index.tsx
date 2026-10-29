@@ -150,7 +150,7 @@ export default function EventsIndex({
                                 <CalendarDays className="size-6 text-primary" />
                             </div>
                             <div>
-                                <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                                <div className="flex items-center gap-2 text-xs font-medium tracking-wider text-muted-foreground uppercase">
                                     <Sparkles className="size-3.5" />
                                     Discover
                                 </div>
@@ -218,8 +218,7 @@ export default function EventsIndex({
                                         const isPrev = i === 0;
                                         const isNext =
                                             i === events.links.length - 1;
-                                        const isEllipsis =
-                                            link.label === '...';
+                                        const isEllipsis = link.label === '...';
 
                                         if (isEllipsis) {
                                             return (
@@ -254,8 +253,8 @@ export default function EventsIndex({
                                                 {isPrev
                                                     ? 'Previous'
                                                     : isNext
-                                                        ? 'Next'
-                                                        : link.label}
+                                                      ? 'Next'
+                                                      : link.label}
                                             </Button>
                                         );
                                     })}
@@ -311,10 +310,7 @@ function EventCard({ event }: { event: Event }) {
              | ----------------------------------------------------------- */}
             <CutoutCardMedia className="h-44">
                 {event.image ? (
-                    <CutoutCardImage
-                        alt={event.title}
-                        src={event.image}
-                    />
+                    <CutoutCardImage alt={event.title} src={event.image} />
                 ) : (
                     <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-primary/20 to-primary/5">
                         <CalendarDays className="size-10 text-primary/40" />
@@ -325,27 +321,27 @@ function EventCard({ event }: { event: Event }) {
 
                 {/* Pin — top right. Green when free, primary otherwise */}
                 {event.is_free ? (
-                    <CutoutCardPin className="bg-emerald-500 text-white shadow-foreground/10 top-0 right-0 rounded-bl-[16px] px-3 py-1.5 text-xs font-semibold shadow-md">
+                    <CutoutCardPin className="top-0 right-0 rounded-bl-[16px] bg-emerald-500 px-3 py-1.5 text-xs font-semibold text-white shadow-md shadow-foreground/10">
                         Free
                         <CutoutCorner
-                            className="text-emerald-500 absolute top-0 -left-[23px] -rotate-90"
+                            className="absolute top-0 -left-[23px] -rotate-90 text-emerald-500"
                             size={24}
                         />
                         <CutoutCorner
-                            className="text-emerald-500 absolute right-0 -bottom-[23px] -rotate-90"
+                            className="absolute right-0 -bottom-[23px] -rotate-90 text-emerald-500"
                             size={24}
                         />
                     </CutoutCardPin>
                 ) : (
-                    <CutoutCardPin className="bg-primary text-primary-foreground shadow-foreground/10 top-0 right-0 rounded-bl-[16px] px-3 py-1.5 text-xs font-semibold shadow-md">
+                    <CutoutCardPin className="top-0 right-0 rounded-bl-[16px] bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-md shadow-foreground/10">
                         <TypeIcon className="mr-1 inline size-3" />
                         {typeLabel}
                         <CutoutCorner
-                            className="text-primary absolute top-0 -left-[23px] -rotate-90"
+                            className="absolute top-0 -left-[23px] -rotate-90 text-primary"
                             size={24}
                         />
                         <CutoutCorner
-                            className="text-primary absolute right-0 -bottom-[23px] -rotate-90"
+                            className="absolute right-0 -bottom-[23px] -rotate-90 text-primary"
                             size={24}
                         />
                     </CutoutCardPin>
@@ -353,15 +349,15 @@ function EventCard({ event }: { event: Event }) {
 
                 {/* Inset label — bottom left, location */}
                 {location && (
-                    <CutoutCardInsetLabel className="bg-card bottom-0 left-0 rounded-tr-[20px] px-4 py-2">
-                        <span className="text-muted-foreground flex items-center gap-1.5 text-[10px] font-semibold tracking-widest uppercase">
+                    <CutoutCardInsetLabel className="bottom-0 left-0 rounded-tr-[20px] bg-card px-4 py-2">
+                        <span className="flex items-center gap-1.5 text-[10px] font-semibold tracking-widest text-muted-foreground uppercase">
                             <MapPin className="size-3 shrink-0" />
                             <span className="max-w-[200px] truncate">
                                 {location}
                             </span>
                         </span>
-                        <CutoutCorner className="text-card absolute -right-[31px] -bottom-px rotate-90" />
-                        <CutoutCorner className="text-card absolute -top-[31px] -left-px rotate-90" />
+                        <CutoutCorner className="absolute -right-[31px] -bottom-px rotate-90 text-card" />
+                        <CutoutCorner className="absolute -top-[31px] -left-px rotate-90 text-card" />
                     </CutoutCardInsetLabel>
                 )}
             </CutoutCardMedia>
@@ -378,14 +374,14 @@ function EventCard({ event }: { event: Event }) {
                 >
                     <motion.h3
                         variants={stagger.item}
-                        className="text-card-foreground mb-2 line-clamp-2 text-base leading-snug font-semibold text-balance"
+                        className="mb-2 line-clamp-2 text-base leading-snug font-semibold text-balance text-card-foreground"
                     >
                         {event.title}
                     </motion.h3>
 
                     <motion.p
                         variants={stagger.item}
-                        className="text-muted-foreground mb-3 line-clamp-2 text-sm leading-relaxed text-pretty"
+                        className="mb-3 line-clamp-2 text-sm leading-relaxed text-pretty text-muted-foreground"
                     >
                         {event.description}
                     </motion.p>
@@ -393,7 +389,7 @@ function EventCard({ event }: { event: Event }) {
                     {startDate && (
                         <motion.div
                             variants={stagger.item}
-                            className="text-muted-foreground flex items-center gap-1.5 text-xs"
+                            className="flex items-center gap-1.5 text-xs text-muted-foreground"
                         >
                             <CalendarDays className="size-3 shrink-0" />
                             <span className="tabular-nums">
@@ -410,7 +406,7 @@ function EventCard({ event }: { event: Event }) {
                             {event.tags.slice(0, 2).map((tag) => (
                                 <span
                                     key={tag}
-                                    className="border-primary/20 bg-primary/5 text-primary inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-medium"
+                                    className="inline-flex items-center gap-1 rounded-full border border-primary/20 bg-primary/5 px-2 py-0.5 text-[10px] font-medium text-primary"
                                 >
                                     <Tag className="size-2.5" />
                                     {tag}
@@ -428,7 +424,7 @@ function EventCard({ event }: { event: Event }) {
                 <Link
                     href={`/events/${event.slug}`}
                     prefetch
-                    className="bg-primary text-primary-foreground hover:bg-primary/90 focus-visible:ring-ring inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium shadow-md transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] focus-visible:ring-2 focus-visible:outline-none active:scale-[0.97]"
+                    className="inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-md transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none active:scale-[0.97]"
                 >
                     View event
                     <ArrowRight className="size-3.5" />

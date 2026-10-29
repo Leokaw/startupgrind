@@ -81,30 +81,32 @@ export default function AppearanceDropdown({
                     <DropdownMenuLabel>Appearance</DropdownMenuLabel>
                     <DropdownMenuSeparator />
 
-                    {OPTIONS.map(({ value, icon: Icon, label, description }) => {
-                        const isActive = appearance === value;
+                    {OPTIONS.map(
+                        ({ value, icon: Icon, label, description }) => {
+                            const isActive = appearance === value;
 
-                        return (
-                            <DropdownMenuItem
-                                key={value}
-                                onSelect={() => updateAppearance(value)}
-                                className="flex items-start gap-3"
-                            >
-                                <Icon className="mt-0.5 h-4 w-4 shrink-0" />
-                                <div className="flex flex-1 flex-col">
-                                    <span className="text-sm font-medium">
-                                        {label}
-                                    </span>
-                                    <span className="text-xs text-muted-foreground">
-                                        {description}
-                                    </span>
-                                </div>
-                                {isActive && (
-                                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                                )}
-                            </DropdownMenuItem>
-                        );
-                    })}
+                            return (
+                                <DropdownMenuItem
+                                    key={value}
+                                    onSelect={() => updateAppearance(value)}
+                                    className="flex items-start gap-3"
+                                >
+                                    <Icon className="mt-0.5 h-4 w-4 shrink-0" />
+                                    <div className="flex flex-1 flex-col">
+                                        <span className="text-sm font-medium">
+                                            {label}
+                                        </span>
+                                        <span className="text-xs text-muted-foreground">
+                                            {description}
+                                        </span>
+                                    </div>
+                                    {isActive && (
+                                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                                    )}
+                                </DropdownMenuItem>
+                            );
+                        },
+                    )}
                 </DropdownMenuContent>
             </DropdownMenu>
         </div>

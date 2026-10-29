@@ -16,7 +16,7 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
-import { edit } from '@/routes/profile';
+
 import { send } from '@/routes/verification';
 import type { Auth } from '@/types';
 
@@ -60,12 +60,12 @@ export default function Profile({
         console.log('auth.user (shared)      →', auth?.user);
         console.log(
             'auth.user.area_of_work  →',
-       
+
             auth?.user?.area_of_work,
         );
         console.log(
             'auth.user.description   →',
-      
+
             auth?.user?.description,
         );
         console.log('user prop (controller)  →', user);
@@ -164,9 +164,7 @@ export default function Profile({
                                         <button
                                             type="button"
                                             id="area_of_work"
-                                            aria-invalid={
-                                                !!errors.area_of_work
-                                            }
+                                            aria-invalid={!!errors.area_of_work}
                                             className={cn(
                                                 triggerClasses,
                                                 'cursor-pointer',
@@ -256,9 +254,8 @@ export default function Profile({
                                         {status ===
                                             'verification-link-sent' && (
                                             <div className="mt-2 text-sm font-medium text-green-600">
-                                                A new verification link has
-                                                been sent to your email
-                                                address.
+                                                A new verification link has been
+                                                sent to your email address.
                                             </div>
                                         )}
                                     </div>

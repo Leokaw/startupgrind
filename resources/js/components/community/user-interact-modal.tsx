@@ -91,10 +91,26 @@ const userTypeStyles: Record<
     User['user_type'],
     { label: string; className: string }
 > = {
-    company: { label: 'Company', className: 'bg-blue-500/15 text-blue-700 dark:text-blue-400 border-blue-500/20' },
-    freelancer: { label: 'Freelancer', className: 'bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-500/20' },
-    user: { label: 'Community', className: 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-emerald-500/20' },
-    employee: { label: 'Employee', className: 'bg-purple-500/15 text-purple-700 dark:text-purple-400 border-purple-500/20' },
+    company: {
+        label: 'Company',
+        className:
+            'bg-blue-500/15 text-blue-700 dark:text-blue-400 border-blue-500/20',
+    },
+    freelancer: {
+        label: 'Freelancer',
+        className:
+            'bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-500/20',
+    },
+    user: {
+        label: 'Community',
+        className:
+            'bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-emerald-500/20',
+    },
+    employee: {
+        label: 'Employee',
+        className:
+            'bg-purple-500/15 text-purple-700 dark:text-purple-400 border-purple-500/20',
+    },
 };
 
 export function UserInteractModal({
@@ -370,7 +386,7 @@ function CompanyTeamList({ employees }: { employees: Employee[] }) {
                         <Badge
                             variant="outline"
                             className={cn(
-                                'shrink-0 text-[10px] font-semibold uppercase tracking-wider',
+                                'shrink-0 text-[10px] font-semibold tracking-wider uppercase',
                                 isActive
                                     ? 'border-emerald-500/20 bg-emerald-500/15 text-emerald-700 dark:text-emerald-400'
                                     : 'border-amber-500/20 bg-amber-500/15 text-amber-700 dark:text-amber-400',

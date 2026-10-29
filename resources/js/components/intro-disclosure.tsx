@@ -26,7 +26,6 @@ export type IntroStep = {
 };
 
 const ICONS: Record<string, LucideIcon> = {
-
     sparkles: Sparkles,
     coins: Coins,
     mail: Mail,
@@ -96,7 +95,9 @@ export function IntroDisclosure({
                                     key={i}
                                     className={cn(
                                         'h-full flex-1 transition-colors duration-300',
-                                        i <= current ? 'bg-primary' : 'bg-muted',
+                                        i <= current
+                                            ? 'bg-primary'
+                                            : 'bg-muted',
                                     )}
                                 />
                             ))}
@@ -106,19 +107,19 @@ export function IntroDisclosure({
                     <button
                         type="button"
                         onClick={() => close(false)}
-                        className="absolute right-3 top-3  rounded-full p-1.5 text-muted-foreground transition-colors hover:bg-muted"
+                        className="absolute top-3 right-3 rounded-full p-1.5 text-muted-foreground transition-colors hover:bg-muted"
                         aria-label="Close tour"
                     >
                         <X className="size-4" />
                     </button>
 
-                    <div className="flex flex-col items-center gap-5 px-8 pb-6 pt-10 text-center">
+                    <div className="flex flex-col items-center gap-5 px-8 pt-10 pb-6 text-center">
                         <div className="flex size-16 items-center justify-center rounded-2xl bg-primary/10">
                             <Icon className="size-8 text-primary" />
                         </div>
 
                         <div className="space-y-2">
-                            <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                            <p className="text-xs font-medium tracking-wider text-muted-foreground uppercase">
                                 {current + 1} of {steps.length}
                             </p>
                             <h2 className="text-2xl font-semibold tracking-tight">

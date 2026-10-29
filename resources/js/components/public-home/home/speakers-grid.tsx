@@ -1,5 +1,5 @@
-import { ArrowRight } from "lucide-react"
-import { type CSSProperties } from "react"
+import { ArrowRight } from 'lucide-react';
+import { type CSSProperties } from 'react';
 
 import {
     CutoutCard,
@@ -10,20 +10,23 @@ import {
     CutoutCardMedia,
     CutoutCorner,
     cutoutCardSurfaceClassName,
-} from "@/components/ui/cutout-card"
-import TextAnimate from "@/components/ui/text-animate" // adjust path
-import { cn } from "@/lib/utils"
+} from '@/components/ui/cutout-card';
+import TextAnimate from '@/components/ui/text-animate'; // adjust path
+import { cn } from '@/lib/utils';
 
 // Red corner square
 function Corner({ className }: { className: string }) {
     // Added 'hidden lg:block' so it only shows on desktop
     return (
-        <span aria-hidden className={`hidden lg:block absolute z-20 size-1.5 bg-primary ${className}`} />
-    )
+        <span
+            aria-hidden
+            className={`absolute z-20 hidden size-1.5 bg-primary lg:block ${className}`}
+        />
+    );
 }
 
-const GRID_SIZE = 56
-const line = "color-mix(in srgb, currentColor 9%, transparent)"
+const GRID_SIZE = 56;
+const line = 'color-mix(in srgb, currentColor 9%, transparent)';
 
 const gridStyle: CSSProperties = {
     backgroundImage: `
@@ -38,44 +41,127 @@ const gridStyle: CSSProperties = {
         linear-gradient(to left, #000 20%, transparent 100%),
         linear-gradient(to bottom, transparent 0%, #000 25%, #000 75%, transparent 100%)
     `,
-    WebkitMaskComposite: "source-in",
-    maskComposite: "intersect",
-}
+    WebkitMaskComposite: 'source-in',
+    maskComposite: 'intersect',
+};
 
 const speakers = [
-    { name: "Alexandr Wang", company: "Scale AI", image: "alexandr", link: "https://www.youtube.com/watch?v=cC0XxHr9hok&list=PL6AD_bWsx2JXgS-fXlF66ifpgFK3j55jw" },
-    { name: "Biz Stone", company: "Twitter", image: "biz", link: "https://www.youtube.com/watch?v=4rerytMyqcU&list=PL6AD_bWsx2JXgS-fXlF66ifpgFK3j55jw" },
     {
-        name: "Chamath Palihapitiya",
-        company: "Social Capital",
-        image: "cham",
-        link: "https://www.youtube.com/watch?list=PL6AD_bWsx2JXgS-fXlF66ifpgFK3j55jw&v=ncjum-bkW98&feature=youtu.be",
+        name: 'Alexandr Wang',
+        company: 'Scale AI',
+        image: 'alexandr',
+        link: 'https://www.youtube.com/watch?v=cC0XxHr9hok&list=PL6AD_bWsx2JXgS-fXlF66ifpgFK3j55jw',
     },
-    { name: "Doug Leone", company: "Sequoia Capital", image: "doug", link: "https://www.youtube.com/watch?list=PL6AD_bWsx2JXgS-fXlF66ifpgFK3j55jw&v=CGaHGF0OKXk&feature=youtu.be" },
-    { name: "Eric Yuan", company: "Zoom", image: "eric", link: "https://www.youtube.com/watch?v=hnPIrKg7JMU&list=PL6AD_bWsx2JXgS-fXlF66ifpgFK3j55jw" },
-    { name: "Dr. Fei-Fei Li", company: "Google Cloud", image: "fei", link: "https://www.youtube.com/watch?list=PL6AD_bWsx2JXgS-fXlF66ifpgFK3j55jw&v=Mu3scWZvZKo&feature=youtu.be" },
-    { name: "Garry Tan", company: "Y Combinator", image: "garry", link: "https://www.youtube.com/watch?list=PL6AD_bWsx2JXgS-fXlF66ifpgFK3j55jw&v=y4lm8Yc0XhQ&feature=youtu.be" },
-    { name: "Jessica Livingston", company: "Y Combinator", image: "jessica", link: "https://www.youtube.com/watch?list=PL6AD_bWsx2JXgS-fXlF66ifpgFK3j55jw&v=zMZZPiJrBo0&feature=youtu.be" },
-    { name: "Kevin Systrom", company: "Instagram", image: "kevin", link: "youtube.com/watch?list=PL6AD_bWsx2JXgS-fXlF66ifpgFK3j55jw&v=Y9FzqYpR6iE&feature=youtu.be" },
-    { name: "Marc Andreessen", company: "Andreessen Horowitz", image: "marc", link: "https://www.youtube.com/watch?v=IkBp1ntD3Zc&list=PL6AD_bWsx2JXgS-fXlF66ifpgFK3j55jw&index=7" },
-    { name: "Naval Ravikant", company: "AngelList", image: "naval", link: "https://www.youtube.com/watch?list=PL6AD_bWsx2JXgS-fXlF66ifpgFK3j55jw&v=7_HdxSKCyNQ&feature=youtu.be" },
-    { name: "Patrick Collison", company: "Stripe", image: "patrick", link: "youtube.com/watch?list=PL6AD_bWsx2JXgS-fXlF66ifpgFK3j55jw&v=C5mM5dlcHeg&feature=youtu.be" },
     {
-        name: "Sam Altman",
-        company: "OpenAI",
-        image: "sam",
-        link: "https://www.youtube.com/watch?list=PL6AD_bWsx2JXgS-fXlF66ifpgFK3j55jw&v=kVKaMHgOTP4&feature=youtu.be",
+        name: 'Biz Stone',
+        company: 'Twitter',
+        image: 'biz',
+        link: 'https://www.youtube.com/watch?v=4rerytMyqcU&list=PL6AD_bWsx2JXgS-fXlF66ifpgFK3j55jw',
     },
-    { name: "Eric Schmidt", company: "Alphabet", image: "schmidt", link: "https://www.youtube.com/watch?list=PL6AD_bWsx2JXgS-fXlF66ifpgFK3j55jw&v=cTui1vkow3M&feature=youtu.be" },
-    { name: "Stacey Abrams", company: "Fair Fight", image: "stacey", link: "https://www.youtube.com/watch?list=PL6AD_bWsx2JXgS-fXlF66ifpgFK3j55jw&v=1Sw4MPrn2cY&feature=youtu.be" },
-    { name: "Stan", company: "WhatsApp", image: "stan", link: "https://www.youtube.com/watch?list=PL6AD_bWsx2JXgS-fXlF66ifpgFK3j55jw&v=xbYprCoLsvY&feature=youtu.be" },
-    { name: "Stewart Butterfield", company: "Slack", image: "stewart", link: "https://www.youtube.com/watch?list=PL6AD_bWsx2JXgS-fXlF66ifpgFK3j55jw&v=7kKb_QA32lY&feature=youtu.be" },
-    { name: "Vinod Khosla", company: "Khosla Ventures", image: "vinoda", link: "https://www.youtube.com/watch?list=PL6AD_bWsx2JXgS-fXlF66ifpgFK3j55jw&v=RWTGtjDRLmk&feature=youtu.be" },
-]
+    {
+        name: 'Chamath Palihapitiya',
+        company: 'Social Capital',
+        image: 'cham',
+        link: 'https://www.youtube.com/watch?list=PL6AD_bWsx2JXgS-fXlF66ifpgFK3j55jw&v=ncjum-bkW98&feature=youtu.be',
+    },
+    {
+        name: 'Doug Leone',
+        company: 'Sequoia Capital',
+        image: 'doug',
+        link: 'https://www.youtube.com/watch?list=PL6AD_bWsx2JXgS-fXlF66ifpgFK3j55jw&v=CGaHGF0OKXk&feature=youtu.be',
+    },
+    {
+        name: 'Eric Yuan',
+        company: 'Zoom',
+        image: 'eric',
+        link: 'https://www.youtube.com/watch?v=hnPIrKg7JMU&list=PL6AD_bWsx2JXgS-fXlF66ifpgFK3j55jw',
+    },
+    {
+        name: 'Dr. Fei-Fei Li',
+        company: 'Google Cloud',
+        image: 'fei',
+        link: 'https://www.youtube.com/watch?list=PL6AD_bWsx2JXgS-fXlF66ifpgFK3j55jw&v=Mu3scWZvZKo&feature=youtu.be',
+    },
+    {
+        name: 'Garry Tan',
+        company: 'Y Combinator',
+        image: 'garry',
+        link: 'https://www.youtube.com/watch?list=PL6AD_bWsx2JXgS-fXlF66ifpgFK3j55jw&v=y4lm8Yc0XhQ&feature=youtu.be',
+    },
+    {
+        name: 'Jessica Livingston',
+        company: 'Y Combinator',
+        image: 'jessica',
+        link: 'https://www.youtube.com/watch?list=PL6AD_bWsx2JXgS-fXlF66ifpgFK3j55jw&v=zMZZPiJrBo0&feature=youtu.be',
+    },
+    {
+        name: 'Kevin Systrom',
+        company: 'Instagram',
+        image: 'kevin',
+        link: 'youtube.com/watch?list=PL6AD_bWsx2JXgS-fXlF66ifpgFK3j55jw&v=Y9FzqYpR6iE&feature=youtu.be',
+    },
+    {
+        name: 'Marc Andreessen',
+        company: 'Andreessen Horowitz',
+        image: 'marc',
+        link: 'https://www.youtube.com/watch?v=IkBp1ntD3Zc&list=PL6AD_bWsx2JXgS-fXlF66ifpgFK3j55jw&index=7',
+    },
+    {
+        name: 'Naval Ravikant',
+        company: 'AngelList',
+        image: 'naval',
+        link: 'https://www.youtube.com/watch?list=PL6AD_bWsx2JXgS-fXlF66ifpgFK3j55jw&v=7_HdxSKCyNQ&feature=youtu.be',
+    },
+    {
+        name: 'Patrick Collison',
+        company: 'Stripe',
+        image: 'patrick',
+        link: 'youtube.com/watch?list=PL6AD_bWsx2JXgS-fXlF66ifpgFK3j55jw&v=C5mM5dlcHeg&feature=youtu.be',
+    },
+    {
+        name: 'Sam Altman',
+        company: 'OpenAI',
+        image: 'sam',
+        link: 'https://www.youtube.com/watch?list=PL6AD_bWsx2JXgS-fXlF66ifpgFK3j55jw&v=kVKaMHgOTP4&feature=youtu.be',
+    },
+    {
+        name: 'Eric Schmidt',
+        company: 'Alphabet',
+        image: 'schmidt',
+        link: 'https://www.youtube.com/watch?list=PL6AD_bWsx2JXgS-fXlF66ifpgFK3j55jw&v=cTui1vkow3M&feature=youtu.be',
+    },
+    {
+        name: 'Stacey Abrams',
+        company: 'Fair Fight',
+        image: 'stacey',
+        link: 'https://www.youtube.com/watch?list=PL6AD_bWsx2JXgS-fXlF66ifpgFK3j55jw&v=1Sw4MPrn2cY&feature=youtu.be',
+    },
+    {
+        name: 'Stan',
+        company: 'WhatsApp',
+        image: 'stan',
+        link: 'https://www.youtube.com/watch?list=PL6AD_bWsx2JXgS-fXlF66ifpgFK3j55jw&v=xbYprCoLsvY&feature=youtu.be',
+    },
+    {
+        name: 'Stewart Butterfield',
+        company: 'Slack',
+        image: 'stewart',
+        link: 'https://www.youtube.com/watch?list=PL6AD_bWsx2JXgS-fXlF66ifpgFK3j55jw&v=7kKb_QA32lY&feature=youtu.be',
+    },
+    {
+        name: 'Vinod Khosla',
+        company: 'Khosla Ventures',
+        image: 'vinoda',
+        link: 'https://www.youtube.com/watch?list=PL6AD_bWsx2JXgS-fXlF66ifpgFK3j55jw&v=RWTGtjDRLmk&feature=youtu.be',
+    },
+];
 
 export default function SpeakersGrid() {
     return (
-        <section id="speakers" className="relative isolate border-b border-border bg-background overflow-x-clip">
+        <section
+            id="speakers"
+            className="relative isolate overflow-x-clip border-b border-border bg-background"
+        >
             {/* Grid pattern (same as hero) */}
             <div
                 aria-hidden
@@ -93,24 +179,24 @@ export default function SpeakersGrid() {
                 <Corner className="-right-[3.5px] -bottom-[3.5px]" />
 
                 {/* Intro copy */}
-                <div className="px-6  pt-8 lg:px-8 lg:py-10">
+                <div className="px-6 pt-8 lg:px-8 lg:py-10">
                     <TextAnimate
                         as="h2"
                         type="whipInUp"
                         by="word"
                         text="The world's top builders, thinkers, leaders, and investors come to Startup Grind Conference"
-                        className="max-w-3xl text-balance text-3xl font-thin text-gray-700 tracking-tight text-foreground lg:text-4xl"
+                        className="max-w-3xl text-3xl font-thin tracking-tight text-balance text-foreground text-gray-700 lg:text-4xl"
                     />
                     <TextAnimate
                         as="p"
                         type="whipInUp"
                         by="word"
                         text="Explore the voices shaping the future. Our community connects you with the pioneers building the next generation of global innovation."
-                        className="mt-3 max-w-2xl text-pretty text-base leading-tight text-[#666560] md:text-lg"
+                        className="mt-3 max-w-2xl text-base leading-tight text-pretty text-[#666560] md:text-lg"
                     />
                 </div>
 
-                <div className="grid grid-cols-1 gap-6 p-6  pb-16 md:grid-cols-2 lg:grid-cols-6">
+                <div className="grid grid-cols-1 gap-6 p-6 pb-16 md:grid-cols-2 lg:grid-cols-6">
                     {speakers.map((speaker) => (
                         <a
                             key={speaker.image}
@@ -122,7 +208,7 @@ export default function SpeakersGrid() {
                             <CutoutCard
                                 className={cn(
                                     cutoutCardSurfaceClassName,
-                                    "flex h-full flex-col bg-[#EBEAE4]"
+                                    'flex h-full flex-col bg-[#EBEAE4]',
                                 )}
                             >
                                 <CutoutCardContent className="flex-1 p-4 pb-16">
@@ -145,12 +231,10 @@ export default function SpeakersGrid() {
                                     <span className="text-base font-medium text-foreground" />
                                 </CutoutCardFooter>
 
-                                <CutoutCardInsetLabel
-                                    className="-right-px -bottom-px h-14 w-14 rounded-tl-[20px] bg-background transition-[width] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover/cutout:w-24"
-                                >
+                                <CutoutCardInsetLabel className="-right-px -bottom-px h-14 w-14 rounded-tl-[20px] bg-background transition-[width] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover/cutout:w-24">
                                     <CutoutCorner
                                         size={20}
-                                        className="absolute right-0 -top-[19px] text-background"
+                                        className="absolute -top-[19px] right-0 text-background"
                                     />
                                     <CutoutCorner
                                         size={20}
@@ -169,5 +253,5 @@ export default function SpeakersGrid() {
                 </div>
             </div>
         </section>
-    )
+    );
 }

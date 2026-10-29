@@ -83,7 +83,7 @@ export default function Register({ passwordRules }: Props) {
             user_type:
                 data.account_type === 'company'
                     ? 'company'
-                    : (data.role || 'user'),
+                    : data.role || 'user',
         }));
 
         form.post(store.url());
@@ -187,7 +187,7 @@ export default function Register({ passwordRules }: Props) {
                                 >
                                     <FieldLabel
                                         htmlFor="account-company"
-                                        className="flex-1 min-w-[180px] cursor-pointer"
+                                        className="min-w-[180px] flex-1 cursor-pointer"
                                     >
                                         <Field orientation="horizontal">
                                             <FieldContent>
@@ -208,7 +208,7 @@ export default function Register({ passwordRules }: Props) {
 
                                     <FieldLabel
                                         htmlFor="account-community"
-                                        className="flex-1 min-w-[180px] cursor-pointer"
+                                        className="min-w-[180px] flex-1 cursor-pointer"
                                     >
                                         <Field orientation="horizontal">
                                             <FieldContent>
@@ -258,7 +258,7 @@ export default function Register({ passwordRules }: Props) {
                                     >
                                         <FieldLabel
                                             htmlFor="role-user"
-                                            className="flex-1 min-w-[180px] cursor-pointer"
+                                            className="min-w-[180px] flex-1 cursor-pointer"
                                         >
                                             <Field orientation="horizontal">
                                                 <FieldContent>
@@ -279,7 +279,7 @@ export default function Register({ passwordRules }: Props) {
 
                                         <FieldLabel
                                             htmlFor="role-freelancer"
-                                            className="flex-1 min-w-[180px] cursor-pointer"
+                                            className="min-w-[180px] flex-1 cursor-pointer"
                                         >
                                             <Field orientation="horizontal">
                                                 <FieldContent>
@@ -309,10 +309,7 @@ export default function Register({ passwordRules }: Props) {
                                     autoComplete="new-password"
                                     value={form.data.password}
                                     onChange={(e) =>
-                                        form.setData(
-                                            'password',
-                                            e.target.value,
-                                        )
+                                        form.setData('password', e.target.value)
                                     }
                                     placeholder="Password"
                                     passwordrules={passwordRules}

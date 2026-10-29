@@ -1,6 +1,5 @@
 import { Head } from '@inertiajs/react';
 import { DiscountedTicketsTable } from '@/components/discounted-tickets/discounted-tickets-table';
-import { dashboard } from '@/routes';
 
 type Props = {
     tickets: {

@@ -67,7 +67,9 @@ export function PurchaseTicketForm({
         ticket_id: '',
     });
 
-    const [pendingTicket, setPendingTicket] = useState<DiscountTicket | null>(null);
+    const [pendingTicket, setPendingTicket] = useState<DiscountTicket | null>(
+        null,
+    );
     const [confirmingPurchase, setConfirmingPurchase] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -214,8 +216,6 @@ export function PurchaseTicketForm({
                     className="flex flex-col gap-3"
                 >
                     {pagedTickets.map((ticket) => {
-                        const isSelected = form.data.ticket_id === ticket.id;
-
                         return (
                             <FieldLabel
                                 key={ticket.id}
@@ -264,7 +264,7 @@ export function PurchaseTicketForm({
                                         aria-disabled={safePage === 1}
                                         className={cn(
                                             safePage === 1 &&
-                                            'pointer-events-none opacity-50',
+                                                'pointer-events-none opacity-50',
                                         )}
                                         onClick={(e) => {
                                             e.preventDefault();
@@ -300,7 +300,7 @@ export function PurchaseTicketForm({
                                         aria-disabled={safePage === totalPages}
                                         className={cn(
                                             safePage === totalPages &&
-                                            'pointer-events-none opacity-50',
+                                                'pointer-events-none opacity-50',
                                         )}
                                         onClick={(e) => {
                                             e.preventDefault();
@@ -321,7 +321,7 @@ export function PurchaseTicketForm({
                 {/* Selected card stays visible across pages */}
                 {selectedTicket && (
                     <div className="rounded-lg border border-primary/20 bg-primary/5 p-3">
-                        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                        <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
                             Currently selected
                         </p>
                         <p className="text-sm font-medium text-foreground">
@@ -400,7 +400,7 @@ export function PurchaseTicketForm({
                     {pendingTicket && (
                         <div className="space-y-4 py-2">
                             <div className="space-y-1">
-                                <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                                <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
                                     Description
                                 </p>
                                 <p className="text-sm text-foreground">
@@ -412,7 +412,7 @@ export function PurchaseTicketForm({
                             {/* 👇 Event link — rendered as a full-width button */}
                             {pendingTicket.event_url && (
                                 <div className="space-y-1">
-                                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                                    <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
                                         Event
                                     </p>
                                     <Button
@@ -433,7 +433,9 @@ export function PurchaseTicketForm({
                                                     View event details
                                                 </span>
                                                 <span className="w-full truncate text-xs font-normal text-muted-foreground">
-                                                    {eventHost(pendingTicket.event_url)}
+                                                    {eventHost(
+                                                        pendingTicket.event_url,
+                                                    )}
                                                 </span>
                                             </span>
                                         </a>
@@ -442,17 +444,17 @@ export function PurchaseTicketForm({
                             )}
 
                             <div className="space-y-1 rounded-lg border border-emerald-500/20 bg-emerald-500/5 p-3">
-                                <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                                <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
                                     Discount
                                 </p>
-                                <p className="inline-flex items-center gap-1.5 text-lg font-semibold tabular-nums text-emerald-700 dark:text-emerald-400">
+                                <p className="inline-flex items-center gap-1.5 text-lg font-semibold text-emerald-700 tabular-nums dark:text-emerald-400">
                                     <Percent className="h-5 w-5" />
                                     {discountLabel(pendingTicket)}
                                 </p>
                             </div>
 
                             <div className="space-y-1">
-                                <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                                <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
                                     Status
                                 </p>
                                 <Badge
@@ -465,10 +467,10 @@ export function PurchaseTicketForm({
                             </div>
 
                             <div className="space-y-1 rounded-lg border border-primary/20 bg-primary/5 p-3">
-                                <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                                <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
                                     Purchase cost
                                 </p>
-                                <p className="inline-flex items-center gap-1.5 text-lg font-semibold tabular-nums text-primary">
+                                <p className="inline-flex items-center gap-1.5 text-lg font-semibold text-primary tabular-nums">
                                     <Coins className="h-5 w-5" />
                                     {ticketCost} credits
                                 </p>
@@ -500,28 +502,28 @@ export function PurchaseTicketForm({
                             <span className="font-medium text-foreground">
                                 {selectedTicket?.name ?? 'this ticket'}
                             </span>
-                            . The cost will be deducted from your credit
-                            balance immediately.
+                            . The cost will be deducted from your credit balance
+                            immediately.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
 
                     {selectedTicket && (
                         <div className="space-y-2">
                             <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/5 p-3">
-                                <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                                <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
                                     You&apos;ll get
                                 </p>
-                                <p className="inline-flex items-center gap-1.5 text-lg font-semibold tabular-nums text-emerald-700 dark:text-emerald-400">
+                                <p className="inline-flex items-center gap-1.5 text-lg font-semibold text-emerald-700 tabular-nums dark:text-emerald-400">
                                     <Percent className="h-5 w-5" />
                                     {discountLabel(selectedTicket)}
                                 </p>
                             </div>
 
                             <div className="rounded-lg border border-primary/20 bg-primary/5 p-3">
-                                <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                                <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
                                     Total
                                 </p>
-                                <p className="inline-flex items-center gap-1.5 text-lg font-semibold tabular-nums text-primary">
+                                <p className="inline-flex items-center gap-1.5 text-lg font-semibold text-primary tabular-nums">
                                     <Coins className="h-5 w-5" />
                                     {ticketCost} credits
                                 </p>

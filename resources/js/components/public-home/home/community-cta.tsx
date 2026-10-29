@@ -1,33 +1,34 @@
-import { ArrowUpRight, Users } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from '@inertiajs/react';
 
 export default function CommunityCta() {
     return (
-        <div className="relative flex flex-col h-full lg:pt-0 lg:px-0 px-2 pt-4 bg-muted/5">
+        <div className="relative flex h-full flex-col bg-muted/5 px-2 pt-4 lg:px-0 lg:pt-0">
             {/* The Red Glow - anchored to the bottom right and bleeding upwards */}
             <div
                 aria-hidden
-                className="pointer-events-none absolute -top-64 -bottom-24 -right-32 -left-10 rounded-full bg-primary/15 blur-[120px] z-0"
+                className="pointer-events-none absolute -top-64 -right-32 -bottom-24 -left-10 z-0 rounded-full bg-primary/15 blur-[120px]"
             />
 
             {/* Text & Buttons Area */}
-            <div className="relative z-10 p-4 lg:p-8 flex-1">
-                <h2 className="text-2xl leading-[1.1] w-full tracking-tight font-light text-gray-700 lg:text-3xl">
+            <div className="relative z-10 flex-1 p-4 lg:p-8">
+                <h2 className="w-full text-2xl leading-[1.1] font-light tracking-tight text-gray-700 lg:text-3xl">
                     We are shaping what's next <br />
                     <span className="italic">for your company </span>
                 </h2>
                 <p className="mt-4 text-base leading-tight text-muted-foreground">
-                    Whether you're building your MVP, raising your first round, or scaling to Series A and beyond: we're here to help you grow.
+                    Whether you're building your MVP, raising your first round,
+                    or scaling to Series A and beyond: we're here to help you
+                    grow.
                 </p>
 
-                <div className="mt-8 flex lg:mb-0 mb-6 flex-col gap-3">
-                    <Button asChild className='!h-9' variant="outline">
-                        <Link href={"/events"}>
+                <div className="mt-8 mb-6 flex flex-col gap-3 lg:mb-0">
+                    <Button asChild className="!h-9" variant="outline">
+                        <Link href={'/events'}>
                             Attend an event
                             <ArrowUpRight className="size-4 text-primary" />
                         </Link>
-
                     </Button>
                 </div>
             </div>
@@ -37,7 +38,7 @@ export default function CommunityCta() {
                 <img
                     src="/home/step6.webp"
                     alt="Startup Grind community"
-                    className="aspect-[4/3] lg:aspect-auto lg:h-[300px] w-full h-full object-cover"
+                    className="aspect-[4/3] h-full w-full object-cover lg:aspect-auto lg:h-[300px]"
                 />
             </div>
         </div>
