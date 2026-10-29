@@ -22,50 +22,15 @@ import {
     useCutoutContentStaggerVariants,
 } from '@/components/ui/cutout-card';
 import { cn } from '@/lib/utils';
+import type { CommunityUser } from '@/types/community';
 import { UserInteractModal } from './user-interact-modal';
 
-type User = {
-    id: string;
-    name: string;
-    email: string;
-    user_type: 'company' | 'user' | 'freelancer' | 'employee';
-    profile_photo_url: string;
-    has_custom_profile_photo: boolean;
-    company: { id: string; name: string } | null;
-    email_verified_at: string | null;
-    approved_at: string | null;
-    services: {
-        id: string;
-        name: string;
-        description: string | null;
-        price: number | string;
-        category: string | null;
-    }[];
-    tickets: {
-        id: string;
-        name: string;
-        description: string | null;
-         event_url: string | null;
-        discount_percentage: number | string | null;
-        discount_amount: number | string | null;
-    }[];
-    employees: {
-        id: string;
-        name: string;
-        email: string;
-        profile_photo_url: string;
-        has_custom_profile_photo: boolean;
-        email_verified_at: string | null;
-        created_at: string | null;
-    }[];
-};
-
 type Props = {
-    user: User;
+    user: CommunityUser;
 };
 
 const userTypeStyles: Record<
-    User['user_type'],
+    CommunityUser['user_type'],
     { label: string; pinClass: string; cornerClass: string }
 > = {
     company: {
@@ -325,7 +290,10 @@ export function UserCard({ user }: Props) {
                     open={interactOpen}
                     onOpenChange={setInteractOpen}
                     services={user.services ?? []}
-                    tickets={user.tickets ?? []}
+                    tickets={(user.tickets ?? []).map((ticket) => ({
+                        ...ticket,
+                        event_url: ticket.event_url ?? null,
+                    }))}
                     employees={user.employees ?? []}
                     canViewTeam={can_view_team}
                 />

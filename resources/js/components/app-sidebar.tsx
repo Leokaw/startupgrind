@@ -34,7 +34,7 @@ export function AppSidebar() {
             </SidebarContent>
 
             <SidebarFooter>
-                <NavFooter  />
+                <NavFooter />
                 <NavUser />
             </SidebarFooter>
         </Sidebar>

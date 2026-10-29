@@ -1,5 +1,5 @@
 import { Head, router } from '@inertiajs/react';
-import { Compass, Globe2, Users } from 'lucide-react';
+import { Compass,Globe2, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { UserCard } from '@/components/community/user-card';
 import { CommunitySearch } from '@/components/community/community-search';
