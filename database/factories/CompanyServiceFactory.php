@@ -33,7 +33,7 @@ class CompanyServiceFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'name' => Str::title(fake()->words(rand(2, 4), true)),
+            'name' => Str::title(implode(' ', fake()->words(rand(2, 4)))),
             'description' => fake()->paragraph(3),
             'price' => fake()->randomFloat(2, 20, 500),
             'category' => fake()->randomElement(self::CATEGORIES),
@@ -44,11 +44,11 @@ class CompanyServiceFactory extends Factory
 
     public function inactive(): static
     {
-        return $this->state(fn () => ['is_active' => false]);
+        return $this->state(fn() => ['is_active' => false]);
     }
 
     public function forCategory(string $category): static
     {
-        return $this->state(fn () => ['category' => $category]);
+        return $this->state(fn() => ['category' => $category]);
     }
 }
