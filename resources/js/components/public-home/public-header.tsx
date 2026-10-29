@@ -420,6 +420,10 @@ export default function PublicHeader({ auth }: Props) {
                             )}
                         </div>
 
+                        <div className="hidden md:block">
+                            <LanguageSwitcher />
+                        </div>
+
                         {/* Mobile Drawer Menu */}
                         <div className="flex items-center gap-2 md:hidden">
                             <LanguageSwitcher />
