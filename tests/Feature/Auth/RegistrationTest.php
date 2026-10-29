@@ -1,25 +1,24 @@
 <?php
 
-use Laravel\Fortify\Features;
-
-beforeEach(function () {
-    $this->skipUnlessFortifyHas(Features::registration());
-});
+use App\Models\User;
 
 test('registration screen can be rendered', function () {
-    $response = $this->get(route('register'));
+    $response = $this->get('/register');
 
-    $response->assertOk();
+    $response->assertStatus(200);
 });
 
 test('new users can register', function () {
-    $response = $this->post(route('register.store'), [
+    $response = $this->post('/register', [
         'name' => 'Test User',
         'email' => 'test@example.com',
         'password' => 'password',
         'password_confirmation' => 'password',
+        'user_type' => 'user',
     ]);
 
     $this->assertAuthenticated();
-    $response->assertRedirect(route('dashboard', absolute: false));
+
+    // Fortify handles registration, redirecting to its 'home' config
+    $response->assertRedirect(route('dashboard'));
 });

@@ -42,13 +42,10 @@ return new class extends Migration
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
-            $table->uuid('user_id');
+            $table->string('email')->primary();
+            $table->uuid('user_id')->nullable()->index();
             $table->string('token');
             $table->timestamp('created_at')->nullable();
-
-            $table->primary(['user_id', 'token']);
-
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
 
         Schema::create('sessions', function (Blueprint $table) {

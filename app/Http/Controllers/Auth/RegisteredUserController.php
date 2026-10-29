@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Rules\BusinessEmailDomain;                    // ← added
+use App\Rules\BusinessEmailDomain;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -29,7 +29,7 @@ class RegisteredUserController extends Controller
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => array_filter([                    // ← wrapped in array_filter
+            'email' => array_filter([
                 'required',
                 'string',
                 'lowercase',
@@ -40,12 +40,11 @@ class RegisteredUserController extends Controller
                 $request->input('user_type') === 'company'
                     ? new BusinessEmailDomain
                     : null,
-            ]),                                          // ← end array_filter
+            ]),
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'user_type' => ['required', 'string', 'in:company,user,freelancer'],
         ]);
 
-        // ... everything below stays exactly as it was ...
         if (
             $request->input('account_type') === 'community' &&
             ! in_array($request->input('role'), ['user', 'freelancer'], true)
@@ -90,6 +89,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('events');
+        return redirect()->route('events.index');
     }
 }
