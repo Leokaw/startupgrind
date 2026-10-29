@@ -45,6 +45,8 @@
         }
     },
     "scripts": {
+
+
         "setup": [
             "composer install",
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
@@ -60,6 +62,7 @@
         "lint": [
             "pint --parallel"
         ],
+        
         "lint:check": [
             "pint --parallel --test"
         ],
