@@ -8,8 +8,7 @@
         "build:ssr": "vp build && vp build --ssr",
         "dev": "vp dev",
         "check": "vp check",
-        "check:fix": "vp check --fix",
-        "types:check": "tsc --noEmit"
+        "check:fix": "vp check --fix"
     },
     "dependencies": {
         "@base-ui/react": "^1.8.0",

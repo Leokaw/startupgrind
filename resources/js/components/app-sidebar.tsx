@@ -34,7 +34,7 @@ export function AppSidebar() {
             </SidebarContent>
 
             <SidebarFooter>
-                <NavFooter className="mt-auto" />
+                <NavFooter  />
                 <NavUser />
             </SidebarFooter>
         </Sidebar>

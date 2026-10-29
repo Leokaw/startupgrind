@@ -16,9 +16,12 @@ cd $APP_DIR
 php artisan down || true
 
 # 3. Pull the latest code (Reset is safer for CI/CD to avoid merge conflicts)
+
 echo "Pulling latest code from Git..."
+git config --global --add safe.directory $APP_DIR
 git fetch --all
 git reset --hard origin/main
+
 
 # 4. Install Composer dependencies (production only)
 echo "📦 Installing Composer dependencies..."

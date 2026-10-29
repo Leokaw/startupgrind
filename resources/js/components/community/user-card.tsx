@@ -45,6 +45,7 @@ type User = {
         id: string;
         name: string;
         description: string | null;
+         event_url: string | null;
         discount_percentage: number | string | null;
         discount_amount: number | string | null;
     }[];
