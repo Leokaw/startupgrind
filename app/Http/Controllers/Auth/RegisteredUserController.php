@@ -35,7 +35,7 @@ class RegisteredUserController extends Controller
                 'lowercase',
                 'email',
                 'max:255',
-                'unique:' . User::class,
+                'unique:'.User::class,
                 // Only enforce a professional email when registering as a company.
                 $request->input('user_type') === 'company'
                     ? new BusinessEmailDomain

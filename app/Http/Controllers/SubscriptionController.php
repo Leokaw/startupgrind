@@ -14,9 +14,6 @@ use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 class SubscriptionController extends Controller
 {
-    /**
-     * @return SymfonyResponse|RedirectResponse
-     */
     public function checkout(Request $request, StripePlanResolver $resolver): SymfonyResponse|RedirectResponse
     {
         $validated = $request->validate([

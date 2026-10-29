@@ -55,7 +55,7 @@ class SyncStripePlans extends Command
             $unitAmount = $this->toMinorUnits((int) $plan['price'], $currency);
 
             $this->line("→ <fg=cyan>{$plan['name']}</> ({$slug})");
-            $this->line("    config: {$plan['price']} " . strtoupper($currency) . "  →  unit_amount: {$unitAmount}");
+            $this->line("    config: {$plan['price']} ".strtoupper($currency)."  →  unit_amount: {$unitAmount}");
 
             if ($dryRun) {
                 continue;
@@ -98,7 +98,6 @@ class SyncStripePlans extends Command
      *     lookup_key: string|null
      * }  $plan
      */
-
     private function findOrCreateProduct(string $slug, array $plan): Product
     {
         $stripe = Cashier::stripe();
@@ -132,7 +131,6 @@ class SyncStripePlans extends Command
      *     lookup_key: string|null
      * }  $plan
      */
-
     private function findOrCreatePrice(
         Product $product,
         array $plan,
