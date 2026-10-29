@@ -10,6 +10,33 @@ use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
 
+/**
+ * @phpstan-type EventData array{
+ *     id: mixed,
+ *     slug: string,
+ *     title: string,
+ *     description: string,
+ *     image: string|null,
+ *     url: string,
+ *     start_date: string|null,
+ *     event_type: string,
+ *     is_free: bool,
+ *     is_virtual: bool,
+ *     is_external: bool,
+ *     allows_cohosting: bool,
+ *     tags: array<int, string>,
+ *     chapter: array{
+ *         name: string|null,
+ *         city: string|null,
+ *         country: string|null,
+ *         country_name: string|null,
+ *         location: string|null,
+ *         timezone: string|null,
+ *         logo: string|null,
+ *         website: string|null
+ *     }
+ * }
+ */
 class UpcomingEventsController extends Controller
 {
     private const API_URL = 'https://www.startupgrind.com/api/search/';
@@ -64,12 +91,6 @@ class UpcomingEventsController extends Controller
         ]);
     }
 
-    /**
-     * Show a single event, looked up by slug.
-     *
-     * The upstream API doesn't expose a per-event endpoint, so we reuse the
-     * cached list. Slugs are derived from the event's relative_url.
-     */
     public function show(string $slug): Response
     {
         $all = Cache::remember(
@@ -89,9 +110,18 @@ class UpcomingEventsController extends Controller
         ]);
     }
 
+    /**
+     * @param  array<int, EventData>  $events
+     * @return array{
+     *     countries: array<int, array{value: string, label: string|null, count: int}>,
+     *     tags: array<int, array{value: string, label: string, count: int}>,
+     *     types: array<int, array{value: string, label: string}>,
+     *     prices: array<int, array{value: string, label: string}>
+     * }
+     */
     private function buildOptions(array $events): array
     {
-        $countries = [];   // code => ['name' => ..., 'count' => ...]
+        $countries = [];
         $tags = [];
 
         foreach ($events as $event) {
@@ -110,7 +140,6 @@ class UpcomingEventsController extends Controller
             }
         }
 
-        // Sort countries alphabetically by their display name.
         uasort($countries, fn ($a, $b) => strcasecmp($a['name'], $b['name']));
 
         arsort($tags);
@@ -142,6 +171,11 @@ class UpcomingEventsController extends Controller
         ];
     }
 
+    /**
+     * @param  array<int, EventData>  $events
+     * @param  array<string, string>  $filters
+     * @return array<int, EventData>
+     */
     private function applyFilters(array $events, array $filters): array
     {
         $search = mb_strtolower(trim($filters['search']));
@@ -191,6 +225,9 @@ class UpcomingEventsController extends Controller
         }));
     }
 
+    /**
+     * @return array<int, EventData>
+     */
     private function fetchEvents(): array
     {
         try {
@@ -209,6 +246,7 @@ class UpcomingEventsController extends Controller
                 return [];
             }
 
+            /** @var array<int, array<string, mixed>> $results */
             $results = $response->json('results', []);
 
             Cache::put(
@@ -217,7 +255,7 @@ class UpcomingEventsController extends Controller
                 now()->addHours(self::CACHE_TTL_HOURS),
             );
 
-            return array_map(fn ($e) => $this->normalize($e), $results);
+            return array_map(fn (array $e) => $this->normalize($e), $results);
         } catch (\Throwable $e) {
             Log::error('Failed to fetch upcoming events', [
                 'message' => $e->getMessage(),
@@ -227,6 +265,10 @@ class UpcomingEventsController extends Controller
         }
     }
 
+    /**
+     * @param  array<string, mixed>  $event
+     * @return EventData
+     */
     private function normalize(array $event): array
     {
         $chapter = $event['chapter'] ?? [];
@@ -239,9 +281,6 @@ class UpcomingEventsController extends Controller
 
         $eventType = $event['event_type_title'] ?? 'Event';
 
-        // Derive a stable slug from the event's relative URL.
-        // e.g. /events/details/startup-grind-boston-presents-pitch-practice/
-        //   →  startup-grind-boston-presents-pitch-practice
         $relativeUrl = $event['relative_url'] ?? '';
         $slug = $relativeUrl
             ? basename(rtrim(parse_url($relativeUrl, PHP_URL_PATH) ?: $relativeUrl, '/'))

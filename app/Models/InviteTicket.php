@@ -5,7 +5,25 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
+/**
+ * @property int $id
+ * @property string $code
+ * @property string $user_id
+ * @property string $invited_name
+ * @property string $invited_email
+ * @property string $temporary_password
+ * @property string $status
+ * @property string|null $accepted_by
+ * @property Carbon|null $used_at
+ * @property Carbon|null $expires_at
+ * @property int|null $max_uses
+ * @property int $current_uses
+ * @property bool $is_active
+ * @property-read User $user
+ * @property-read User|null $acceptedBy
+ */
 class InviteTicket extends Model
 {
     use HasUuids;
@@ -34,13 +52,17 @@ class InviteTicket extends Model
         ];
     }
 
-    /** The admin who created this invite. */
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    /** The user account created when this invite was redeemed. */
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function acceptedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'accepted_by');

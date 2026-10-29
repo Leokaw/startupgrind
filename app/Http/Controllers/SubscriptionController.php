@@ -6,14 +6,18 @@ use App\Models\SubscriptionSuccessToken;
 use App\Services\StripePlanResolver;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 class SubscriptionController extends Controller
 {
-    public function checkout(Request $request, StripePlanResolver $resolver): RedirectResponse|Response
+    /**
+     * @return SymfonyResponse|RedirectResponse
+     */
+    public function checkout(Request $request, StripePlanResolver $resolver): SymfonyResponse|RedirectResponse
     {
         $validated = $request->validate([
             'plan' => [
@@ -60,7 +64,10 @@ class SubscriptionController extends Controller
             // Schedule the change for the end of the current period.
             $subscription->update(['pending_stripe_price' => $priceId]);
 
-            $effective = $subscription->current_period_end?->format('F j, Y') ?? 'the next billing cycle';
+            $periodEnd = $subscription->getAttribute('current_period_end');
+            $effective = $periodEnd instanceof Carbon
+                ? $periodEnd->format('F j, Y')
+                : 'the next billing cycle';
 
             return back()->with(
                 'success',
@@ -98,7 +105,12 @@ class SubscriptionController extends Controller
                 ],
             ]);
 
-        return Inertia::location($checkout->url);
+        // Cashier's Checkout class isn't annotated for PHPStan,
+        // so use data_get() to safely grab the url.
+        /** @var string $url */
+        $url = data_get($checkout, 'url', '');
+
+        return Inertia::location($url);
     }
 
     public function cancel(Request $request): RedirectResponse

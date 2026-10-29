@@ -3,16 +3,37 @@
 namespace App\Models;
 
 use App\Enums\PurchaseStatus;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
+/**
+ * @property int $id
+ * @property string $buyer_id
+ * @property string $seller_id
+ * @property string $purchasable_type
+ * @property string $purchasable_id
+ * @property int $subtotal
+ * @property int $platform_fee
+ * @property int $seller_payout
+ * @property PurchaseStatus $status
+ * @property Carbon|null $completed_at
+ * @property Carbon|null $refunded_at
+ * @property Carbon|null $canceled_at
+ * @property array<string, mixed>|null $metadata
+ * @property-read User $buyer
+ * @property-read User $seller
+ * @property-read Model $purchasable
+ * @property-read Collection<int, CreditTransaction> $creditTransactions
+ */
 class Purchase extends Model
 {
-    use HasFactory, HasUuids;
+    use HasUuids;
 
     protected $fillable = [
         'buyer_id',
@@ -43,12 +64,8 @@ class Purchase extends Model
         ];
     }
 
-    /* -----------------------------------------------------------------
-     |  Relationships
-     | ----------------------------------------------------------------- */
-
     /**
-     * Who received the service — the buyer who spent credits.
+     * @return BelongsTo<User, $this>
      */
     public function buyer(): BelongsTo
     {
@@ -56,7 +73,7 @@ class Purchase extends Model
     }
 
     /**
-     * Who gave the service — the seller who created it and earned credits.
+     * @return BelongsTo<User, $this>
      */
     public function seller(): BelongsTo
     {
@@ -64,7 +81,7 @@ class Purchase extends Model
     }
 
     /**
-     * The thing that was purchased: a CompanyService, DiscountTicket, etc.
+     * @return MorphTo<Model, $this>
      */
     public function purchasable(): MorphTo
     {
@@ -72,36 +89,28 @@ class Purchase extends Model
     }
 
     /**
-     * Both ledger entries for this order — the buyer's debit and the
-     * seller's credit. Ordered so the buyer entry (negative amount)
-     * comes first, matching the DB insert order.
+     * @return HasMany<CreditTransaction, $this>
      */
     public function creditTransactions(): HasMany
     {
         return $this->hasMany(CreditTransaction::class);
     }
 
-    /**
-     * Convenience: fetch only the buyer's ledger entry for this order.
-     */
     public function buyerTransaction(): ?CreditTransaction
     {
-        return $this->creditTransactions
+        $transaction = $this->creditTransactions
             ->firstWhere('user_id', $this->buyer_id);
+
+        return $transaction instanceof CreditTransaction ? $transaction : null;
     }
 
-    /**
-     * Convenience: fetch only the seller's ledger entry for this order.
-     */
     public function sellerTransaction(): ?CreditTransaction
     {
-        return $this->creditTransactions
+        $transaction = $this->creditTransactions
             ->firstWhere('user_id', $this->seller_id);
-    }
 
-    /* -----------------------------------------------------------------
-     |  State helpers
-     | ----------------------------------------------------------------- */
+        return $transaction instanceof CreditTransaction ? $transaction : null;
+    }
 
     public function isPending(): bool
     {
@@ -128,38 +137,39 @@ class Purchase extends Model
         return $this->status === PurchaseStatus::CANCELED;
     }
 
-    /**
-     * A purchase can be refunded only if it completed and hasn't been
-     * refunded or disputed already.
-     */
     public function isRefundable(): bool
     {
         return $this->status === PurchaseStatus::COMPLETED;
     }
 
-    /**
-     * A purchase that hasn't yet moved credits can be canceled freely.
-     */
     public function isCancelable(): bool
     {
         return $this->status === PurchaseStatus::PENDING;
     }
 
-    /* -----------------------------------------------------------------
-     |  Scopes — small helpers for common queries
-     | ----------------------------------------------------------------- */
-
-    public function scopeCompleted($query)
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeCompleted(Builder $query): Builder
     {
         return $query->where('status', PurchaseStatus::COMPLETED);
     }
 
-    public function scopeForBuyer($query, User|string $buyer)
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeForBuyer(Builder $query, User|string $buyer): Builder
     {
         return $query->where('buyer_id', $buyer instanceof User ? $buyer->id : $buyer);
     }
 
-    public function scopeForSeller($query, User|string $seller)
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeForSeller(Builder $query, User|string $seller): Builder
     {
         return $query->where('seller_id', $seller instanceof User ? $seller->id : $seller);
     }

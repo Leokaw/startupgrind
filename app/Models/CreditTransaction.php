@@ -3,15 +3,35 @@
 namespace App\Models;
 
 use App\Enums\CreditTransactionCategory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Carbon;
 
+/**
+ * @property int $id
+ * @property string $membership_id
+ * @property string $user_id
+ * @property int|null $purchase_id
+ * @property int $amount
+ * @property int $balance_after
+ * @property CreditTransactionCategory $category
+ * @property string|null $description
+ * @property string|null $reference_type
+ * @property string|null $reference_id
+ * @property array<string, mixed>|null $metadata
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Membership $membership
+ * @property-read User $user
+ * @property-read Purchase|null $purchase
+ * @property-read Model|null $reference
+ */
 class CreditTransaction extends Model
 {
-    use HasFactory, HasUuids;
+    use HasUuids;
 
     protected $fillable = [
         'membership_id',
@@ -36,14 +56,8 @@ class CreditTransaction extends Model
         ];
     }
 
-    /* -----------------------------------------------------------------
-     |  Relationships
-     | ----------------------------------------------------------------- */
-
     /**
-     * The membership this entry belongs to. Every transaction is scoped
-     * to exactly one membership — the ledger is per-membership, not
-     * per-user, so upgrades/downgrades don't confuse history.
+     * @return BelongsTo<Membership, $this>
      */
     public function membership(): BelongsTo
     {
@@ -51,8 +65,7 @@ class CreditTransaction extends Model
     }
 
     /**
-     * Denormalized user_id — mirrors membership.user_id. Kept for fast
-     * "this user's history" queries without a join.
+     * @return BelongsTo<User, $this>
      */
     public function user(): BelongsTo
     {
@@ -60,8 +73,7 @@ class CreditTransaction extends Model
     }
 
     /**
-     * The purchase that caused this entry, if any. Null for grants,
-     * message fees, admin adjustments.
+     * @return BelongsTo<Purchase, $this>
      */
     public function purchase(): BelongsTo
     {
@@ -69,51 +81,29 @@ class CreditTransaction extends Model
     }
 
     /**
-     * The thing that was bought or sold: CompanyService, DiscountTicket,
-     * etc. Nullable because grants and adjustments have no referent.
+     * @return MorphTo<Model, $this>
      */
     public function reference(): MorphTo
     {
         return $this->morphTo();
     }
 
-    /* -----------------------------------------------------------------
-     |  Direction helpers
-     | ----------------------------------------------------------------- */
-
-    /**
-     * True when this entry adds credits to the balance.
-     * Checks BOTH the sign of amount and the category — catches data
-     * bugs where someone writes a positive SERVICE_PURCHASE by accident.
-     */
     public function isCredit(): bool
     {
         return $this->amount > 0 && $this->category->isCredit();
     }
 
-    /**
-     * True when this entry removes credits from the balance.
-     */
     public function isDebit(): bool
     {
         return $this->amount < 0 && ! $this->category->isCredit();
     }
 
-    /**
-     * True when this entry is one side of a two-sided marketplace
-     * purchase (service or ticket). Grants and admin adjustments
-     * return false.
-     */
     public function isMarketplaceEntry(): bool
     {
         return $this->category->isMarketplaceTransaction()
             && $this->purchase_id !== null;
     }
 
-    /**
-     * The opposite entry for the same purchase — the buyer's debit if
-     * this is the seller's credit, or vice versa.
-     */
     public function counterpartTransaction(): ?self
     {
         if (! $this->isMarketplaceEntry()) {
@@ -126,36 +116,43 @@ class CreditTransaction extends Model
             ->first();
     }
 
-    /**
-     * Signed, human-readable amount. Examples:
-     *   +250  → "+250"
-     *   -100  → "−100"
-     */
     public function signedAmount(): string
     {
         return ($this->amount >= 0 ? '+' : '−').abs($this->amount);
     }
 
-    /* -----------------------------------------------------------------
-     |  Scopes — common queries
-     | ----------------------------------------------------------------- */
-
-    public function scopeCredits($query)
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeCredits(Builder $query): Builder
     {
         return $query->where('amount', '>', 0);
     }
 
-    public function scopeDebits($query)
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeDebits(Builder $query): Builder
     {
         return $query->where('amount', '<', 0);
     }
 
-    public function scopeOfCategory($query, CreditTransactionCategory $category)
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeOfCategory(Builder $query, CreditTransactionCategory $category): Builder
     {
         return $query->where('category', $category->value);
     }
 
-    public function scopeForUser($query, User|string $user)
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeForUser(Builder $query, User|string $user): Builder
     {
         return $query->where(
             'user_id',
@@ -163,7 +160,11 @@ class CreditTransaction extends Model
         );
     }
 
-    public function scopeForPurchase($query, Purchase|string $purchase)
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeForPurchase(Builder $query, Purchase|string $purchase): Builder
     {
         return $query->where(
             'purchase_id',
@@ -171,7 +172,11 @@ class CreditTransaction extends Model
         );
     }
 
-    public function scopeBetween($query, $from, $to)
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeBetween(Builder $query, Carbon $from, Carbon $to): Builder
     {
         return $query->whereBetween('created_at', [$from, $to]);
     }

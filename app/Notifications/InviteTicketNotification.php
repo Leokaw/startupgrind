@@ -21,6 +21,9 @@ class InviteTicketNotification extends Notification
         public string $plainTextPassword,
     ) {}
 
+    /**
+     * @return list<string>
+     */
     public function via(object $notifiable): array
     {
         return ['mail'];
@@ -28,11 +31,13 @@ class InviteTicketNotification extends Notification
 
     public function toMail(object $notifiable): MailMessage
     {
-        $acceptUrl = route('invites.accept.show', $this->inviteTicket->code);
+        $code = $this->inviteTicket->getAttribute('code');
+        $invitedName = $this->inviteTicket->getAttribute('invited_name');
+        $acceptUrl = route('invites.accept.show', $code);
 
         return (new MailMessage)
             ->subject('You have been invited')
-            ->greeting('Hello '.$this->inviteTicket->invited_name.',')
+            ->greeting('Hello '.$invitedName.',')
             ->line('You have been invited to join our platform.')
             ->line('**Your temporary password:** '.$this->plainTextPassword)   // ← PLAINTEXT
             ->line('This password is temporary. You will be asked to change it after your first login.')

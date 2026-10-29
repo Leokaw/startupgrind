@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\MembershipTier;
+use Database\Factories\MembershipFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,15 +14,30 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @property int $id
+ * @property string $user_id
+ * @property MembershipTier $tier
+ * @property string $status
+ * @property int $credits_balance
+ * @property int $monthly_credits
+ * @property int $free_messages_used
+ * @property Carbon|null $credits_reset_at
+ * @property Carbon|null $bonus_credits_awarded_at
+ * @property string|null $external_customer_id
+ * @property string|null $external_subscription_id
+ * @property Carbon|null $current_period_start
+ * @property Carbon|null $current_period_end
+ * @property bool $cancel_at_period_end
+ * @property Carbon|null $trial_ends_at
+ * @property Carbon|null $canceled_at
+ * @property-read User $user
+ */
 class Membership extends Model
 {
+    /** @use HasFactory<MembershipFactory> */
     use HasFactory, HasUuids;
 
-    /**
-     * Lifecycle states. Kept as string constants rather than an enum
-     * because billing providers (Stripe, Paddle) send these as strings
-     * and matching them 1:1 avoids a translation layer.
-     */
     public const STATUS_ACTIVE = 'active';
 
     public const STATUS_TRIALING = 'trialing';
@@ -40,6 +56,7 @@ class Membership extends Model
         'status',
         'credits_balance',
         'monthly_credits',
+        'free_messages_used',
         'credits_reset_at',
         'bonus_credits_awarded_at',
         'external_customer_id',
@@ -57,6 +74,7 @@ class Membership extends Model
             'tier' => MembershipTier::class,
             'credits_balance' => 'integer',
             'monthly_credits' => 'integer',
+            'free_messages_used' => 'integer',
             'credits_reset_at' => 'datetime',
             'bonus_credits_awarded_at' => 'datetime',
             'current_period_start' => 'datetime',
@@ -71,13 +89,16 @@ class Membership extends Model
      |  Relationships
      | ----------------------------------------------------------------- */
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
     /**
-     * Every ledger entry for this membership, newest first.
+     * @return HasMany<CreditTransaction, $this>
      */
     public function creditTransactions(): HasMany
     {
@@ -85,22 +106,23 @@ class Membership extends Model
     }
 
     /**
-     * All marketplace purchases made while on this membership.
-     * Goes through the user — purchases are owned by users, not memberships,
-     * but this makes "what did I buy as a Pro member?" trivial.
+     * @return HasManyThrough<Purchase, User, $this>
      */
     public function purchases(): HasManyThrough
     {
         return $this->hasManyThrough(
             Purchase::class,
             User::class,
-            'id',            // users.id (FK on memberships.user_id → users.id)
-            'buyer_id',      // purchases.buyer_id
-            'user_id',       // memberships.user_id (local key)
-            'id',            // users.id (local key on users)
+            'id',
+            'buyer_id',
+            'user_id',
+            'id',
         );
     }
 
+    /**
+     * @return HasManyThrough<Purchase, User, $this>
+     */
     public function sales(): HasManyThrough
     {
         return $this->hasManyThrough(
@@ -127,18 +149,11 @@ class Membership extends Model
         return $this->tier === MembershipTier::PRO;
     }
 
-    /**
-     * True when this membership is at or above the given tier.
-     * Use for feature gating: `if ($membership->isAtLeast(MembershipTier::GROWTH)) { ... }`
-     */
     public function isAtLeast(MembershipTier $tier): bool
     {
         return $this->tier->level() >= $tier->level();
     }
 
-    /**
-     * Compare to another tier. Returns -1 (lower), 0 (same), or 1 (higher).
-     */
     public function compareTo(MembershipTier $tier): int
     {
         return $this->tier->level() <=> $tier->level();
@@ -173,10 +188,6 @@ class Membership extends Model
             || $this->canceled_at !== null;
     }
 
-    /**
-     * True when the current paid period has elapsed and no renewal is due.
-     * Typically set by the billing webhook, not computed on the fly.
-     */
     public function hasEnded(): bool
     {
         return $this->current_period_end !== null
@@ -192,15 +203,6 @@ class Membership extends Model
      |  Credit helpers
      | ----------------------------------------------------------------- */
 
-    /**
-     * Apply the effects of a new Stripe subscription:
-     *  - upgrade the tier
-     *  - refresh monthly_credits
-     *  - sync the billing period from Stripe
-     *  - grant the one-time signup bonus, if it hasn't been granted before
-     *
-     * Idempotent: safe to call twice for the same $externalSubscriptionId.
-     */
     public function applySubscription(
         MembershipTier $tier,
         string $externalSubscriptionId,
@@ -208,7 +210,6 @@ class Membership extends Model
         ?Carbon $periodEnd = null,
         int $signupBonusCredits = 0,
     ): void {
-        // Already applied for this exact subscription — nothing to do.
         if ($this->external_subscription_id === $externalSubscriptionId) {
             return;
         }
@@ -220,8 +221,6 @@ class Membership extends Model
             $periodEnd,
             $signupBonusCredits,
         ) {
-            // Re-fetch under lock so concurrent webhook deliveries can't race
-            // each other across the bonus check.
             /** @var self $fresh */
             $fresh = self::query()->lockForUpdate()->find($this->id);
 
@@ -237,13 +236,11 @@ class Membership extends Model
                 'canceled_at' => null,
             ]);
 
-            // One-time bonus — never more than once per membership lifetime.
             if ($signupBonusCredits > 0 && $fresh->bonus_credits_awarded_at === null) {
                 $fresh->increment('credits_balance', $signupBonusCredits);
                 $fresh->update(['bonus_credits_awarded_at' => now()]);
             }
 
-            // Keep the in-memory instance in sync with the DB.
             $this->setRawAttributes($fresh->getAttributes(), true);
         });
     }
@@ -258,10 +255,6 @@ class Membership extends Model
         return $this->credits_balance <= 0;
     }
 
-    /**
-     * True when credits are due to be topped up. Used by the
-     * ResetMonthlyCredits scheduled job.
-     */
     public function isDueForCreditReset(): bool
     {
         return $this->credits_reset_at !== null
@@ -269,9 +262,6 @@ class Membership extends Model
             && $this->isActive();
     }
 
-    /**
-     * Days until the next credit refresh, or null if not scheduled.
-     */
     public function daysUntilReset(): ?int
     {
         if ($this->credits_reset_at === null) {
@@ -281,9 +271,6 @@ class Membership extends Model
         return max(0, (int) now()->diffInDays($this->credits_reset_at, false));
     }
 
-    /**
-     * Next reset date, or null if not scheduled.
-     */
     public function nextResetDate(): ?Carbon
     {
         return $this->credits_reset_at;
@@ -293,6 +280,10 @@ class Membership extends Model
      |  Scopes
      | ----------------------------------------------------------------- */
 
+    /**
+     * @param  Builder<$this>  $query
+     * @return Builder<$this>
+     */
     public function scopeActive(Builder $query): Builder
     {
         return $query->whereIn('status', [
@@ -301,11 +292,19 @@ class Membership extends Model
         ]);
     }
 
+    /**
+     * @param  Builder<$this>  $query
+     * @return Builder<$this>
+     */
     public function scopeOfTier(Builder $query, MembershipTier $tier): Builder
     {
         return $query->where('tier', $tier->value);
     }
 
+    /**
+     * @param  Builder<$this>  $query
+     * @return Builder<$this>
+     */
     public function scopeDueForCreditReset(Builder $query): Builder
     {
         return $query
@@ -317,11 +316,19 @@ class Membership extends Model
             ]);
     }
 
+    /**
+     * @param  Builder<$this>  $query
+     * @return Builder<$this>
+     */
     public function scopeTrialing(Builder $query): Builder
     {
         return $query->where('status', self::STATUS_TRIALING);
     }
 
+    /**
+     * @param  Builder<$this>  $query
+     * @return Builder<$this>
+     */
     public function scopeCanceled(Builder $query): Builder
     {
         return $query->where('status', self::STATUS_CANCELED);
@@ -344,12 +351,12 @@ class Membership extends Model
 
     public function freeMessagesRemaining(): int
     {
-        return max(0, $this->limit('free_messages_per_month') - $this->free_messages_used);
+        return (int) max(0, $this->limit('free_messages_per_month') - $this->free_messages_used);
     }
 
     public function canSeeCompanyEmployees(): int
     {
-        return $this->limit('company_employee_view_limit'); // -1 = unlimited
+        return $this->limit('company_employee_view_limit');
     }
 
     public function supportResponseHours(): int

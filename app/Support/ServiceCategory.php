@@ -8,6 +8,8 @@ class ServiceCategory
      * All available service categories.
      * The array key is what gets stored in the database;
      * the value is what the user sees in the dropdown.
+     *
+     * @var array<string, string>
      */
     public const ALL = [
         'consulting' => 'Consulting',
@@ -27,11 +29,17 @@ class ServiceCategory
         'implementation_migration' => 'Implementation & Migration',
     ];
 
+    /**
+     * @return array<string, string>
+     */
     public static function all(): array
     {
         return self::ALL;
     }
 
+    /**
+     * @return list<string>
+     */
     public static function values(): array
     {
         return array_keys(self::ALL);

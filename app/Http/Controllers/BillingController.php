@@ -22,7 +22,10 @@ class BillingController extends Controller
             ? $subscription
             : null;
 
-        $plans = collect(config('subscriptions.plans'))
+        /** @var array<string, array<string, mixed>> $rawPlans */
+        $rawPlans = config('subscriptions.plans', []);
+
+        $plans = collect($rawPlans)
             ->map(fn ($plan, $slug) => array_merge($plan, [
                 'slug' => $slug,
                 'stripe_price_id' => $resolver->priceIdFor($slug),
@@ -41,10 +44,11 @@ class BillingController extends Controller
             ? Carbon::parse($activeSubscription->trial_started_at)->toIso8601String()
             : null;
 
-        // Latest usable success token for this user — drives the "Replay tour"
-        // button in SubscriptionOverview. Only `ready` or `completed` tokens
-        // count; `pending` ones haven't been confirmed by Stripe yet, and
-        // expired ones can't be replayed.
+        // Cashier's Subscription model doesn't annotate these columns,
+        // so we fetch them via getAttribute() and narrow with instanceof.
+        $periodStart = $activeSubscription?->getAttribute('current_period_start');
+        $periodEnd = $activeSubscription?->getAttribute('current_period_end');
+
         $subscriptionToken = SubscriptionSuccessToken::query()
             ->where('user_id', $user->id)
             ->whereIn('status', ['ready', 'completed'])
@@ -60,8 +64,12 @@ class BillingController extends Controller
             'subscription' => $activeSubscription ? [
                 'status' => $activeSubscription->stripe_status,
                 'stripe_price' => $activeSubscription->stripe_price,
-                'current_period_start' => $activeSubscription->current_period_start?->toIso8601String(),
-                'current_period_end' => $activeSubscription->current_period_end?->toIso8601String(),
+                'current_period_start' => $periodStart instanceof Carbon
+                    ? $periodStart->toIso8601String()
+                    : null,
+                'current_period_end' => $periodEnd instanceof Carbon
+                    ? $periodEnd->toIso8601String()
+                    : null,
                 'ends_at' => $activeSubscription->ends_at?->toIso8601String(),
 
                 'has_trial' => $activeSubscription->trial_ends_at !== null,
@@ -90,9 +98,6 @@ class BillingController extends Controller
         ]);
     }
 
-    /**
-     * Start a new subscription, or schedule a switch for an existing one.
-     */
     public function subscribe(Request $request, StripePlanResolver $resolver): RedirectResponse|Checkout
     {
         $request->validate([
@@ -112,7 +117,6 @@ class BillingController extends Controller
 
         $subscription = $user->subscription('default');
 
-        // --- Existing subscription: schedule a deferred switch. ---------
         if ($subscription && $subscription->valid()) {
             if ($subscription->stripe_price === $priceId) {
                 return back()->with('toast', [
@@ -123,7 +127,10 @@ class BillingController extends Controller
 
             $subscription->update(['pending_stripe_price' => $priceId]);
 
-            $endsAt = $subscription->current_period_end?->format('M j, Y');
+            $periodEnd = $subscription->getAttribute('current_period_end');
+            $endsAt = $periodEnd instanceof Carbon
+                ? $periodEnd->format('M j, Y')
+                : null;
 
             return back()->with('toast', [
                 'type' => 'success',
@@ -133,7 +140,6 @@ class BillingController extends Controller
             ]);
         }
 
-        // --- First-time paid signup: Stripe Checkout. --------------------
         return $user
             ->newSubscription('default', $priceId)
             ->withMetadata([
@@ -145,9 +151,6 @@ class BillingController extends Controller
             ]);
     }
 
-    /**
-     * Cancel at the end of the current billing period.
-     */
     public function cancel(Request $request): RedirectResponse
     {
         $subscription = $request->user()->subscription('default');
@@ -178,9 +181,6 @@ class BillingController extends Controller
         ]);
     }
 
-    /**
-     * Undo a scheduled cancellation.
-     */
     public function resume(Request $request): RedirectResponse
     {
         $subscription = $request->user()->subscription('default');

@@ -20,12 +20,11 @@ class DiscountTicketFactory extends Factory
 
         return [
             'user_id' => User::factory(),
-            'code' => 'DISC-' . strtoupper(Str::random(8)),
-            'name' => Str::title(implode(' ', fake()->words(rand(2, 4)))),
-
+            'code' => 'DISC-'.strtoupper(Str::random(8)),
+            'name' => Str::title(implode(' ', (array) fake()->words(rand(2, 4)))),
             'description' => fake()->sentence(rand(8, 15)),
             'event_url' => 'https://www.startupgrind.com/events/details/'
-                . Str::slug(implode(' ', fake()->words(rand(3, 6)))),
+                .Str::slug(implode(' ', (array) fake()->words(rand(3, 6)))),
             'discount_percentage' => $isPercentage
                 ? fake()->randomFloat(2, 5, 50)
                 : null,
@@ -45,7 +44,7 @@ class DiscountTicketFactory extends Factory
 
     public function expired(): static
     {
-        return $this->state(fn() => [
+        return $this->state(fn () => [
             'valid_until' => now()->subDays(30),
             'is_active' => false,
         ]);
@@ -53,7 +52,7 @@ class DiscountTicketFactory extends Factory
 
     public function percentage(float $percent): static
     {
-        return $this->state(fn() => [
+        return $this->state(fn () => [
             'discount_percentage' => $percent,
             'discount_amount' => null,
         ]);
@@ -61,7 +60,7 @@ class DiscountTicketFactory extends Factory
 
     public function amount(float $amount): static
     {
-        return $this->state(fn() => [
+        return $this->state(fn () => [
             'discount_amount' => $amount,
             'discount_percentage' => null,
         ]);
@@ -69,7 +68,7 @@ class DiscountTicketFactory extends Factory
 
     public function exhausted(): static
     {
-        return $this->state(fn() => [
+        return $this->state(fn () => [
             'times_used' => 10,
             'usage_limit' => 10,
             'is_active' => false,
@@ -78,11 +77,11 @@ class DiscountTicketFactory extends Factory
 
     public function withEventUrl(string $url): static
     {
-        return $this->state(fn() => ['event_url' => $url]);
+        return $this->state(fn () => ['event_url' => $url]);
     }
 
     public function withoutEventUrl(): static
     {
-        return $this->state(fn() => ['event_url' => null]);
+        return $this->state(fn () => ['event_url' => null]);
     }
 }

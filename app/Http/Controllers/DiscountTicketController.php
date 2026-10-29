@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DiscountTicket;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -73,12 +74,12 @@ class DiscountTicketController extends Controller
         return $code;
     }
 
-    public function show(DiscountTicket $discountTicket)
+    public function show(DiscountTicket $discountTicket): JsonResponse
     {
         return response()->json($discountTicket);
     }
 
-    public function edit(DiscountTicket $discountTicket)
+    public function edit(DiscountTicket $discountTicket): void
     {
         //
     }

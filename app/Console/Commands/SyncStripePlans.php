@@ -21,8 +21,22 @@ class SyncStripePlans extends Command
      * @see https://docs.stripe.com/currencies#zero-decimal
      */
     private const ZERO_DECIMAL = [
-        'BIF', 'CLP', 'DJF', 'GNF', 'JPY', 'KMF', 'KRW', 'MGA',
-        'PYG', 'RWF', 'UGX', 'VND', 'VUV', 'XAF', 'XOF', 'XPF',
+        'BIF',
+        'CLP',
+        'DJF',
+        'GNF',
+        'JPY',
+        'KMF',
+        'KRW',
+        'MGA',
+        'PYG',
+        'RWF',
+        'UGX',
+        'VND',
+        'VUV',
+        'XAF',
+        'XOF',
+        'XPF',
     ];
 
     public function handle(): int
@@ -41,7 +55,7 @@ class SyncStripePlans extends Command
             $unitAmount = $this->toMinorUnits((int) $plan['price'], $currency);
 
             $this->line("→ <fg=cyan>{$plan['name']}</> ({$slug})");
-            $this->line("    config: {$plan['price']} ".strtoupper($currency)."  →  unit_amount: {$unitAmount}");
+            $this->line("    config: {$plan['price']} " . strtoupper($currency) . "  →  unit_amount: {$unitAmount}");
 
             if ($dryRun) {
                 continue;
@@ -76,6 +90,15 @@ class SyncStripePlans extends Command
             : $majorAmount * 100;
     }
 
+    /**
+     * @param  array{
+     *     name: string,
+     *     description?: string|null,
+     *     price: int|string,
+     *     lookup_key: string|null
+     * }  $plan
+     */
+
     private function findOrCreateProduct(string $slug, array $plan): Product
     {
         $stripe = Cashier::stripe();
@@ -100,6 +123,15 @@ class SyncStripePlans extends Command
             'metadata' => ['app_slug' => $slug],
         ]);
     }
+
+    /**
+     * @param  array{
+     *     name: string,
+     *     description?: string|null,
+     *     price: int|string,
+     *     lookup_key: string|null
+     * }  $plan
+     */
 
     private function findOrCreatePrice(
         Product $product,

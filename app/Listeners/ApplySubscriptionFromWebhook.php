@@ -23,6 +23,9 @@ class ApplySubscriptionFromWebhook
         };
     }
 
+    /**
+     * @param  array<string, mixed>  $payload
+     */
     private function onCheckoutCompleted(array $payload): void
     {
         $token = $payload['data']['object']['metadata']['success_token'] ?? null;
@@ -42,13 +45,13 @@ class ApplySubscriptionFromWebhook
      * on the local subscription) is executed. `proration_behavior: none`
      * means the user isn't charged anything extra now — the new price takes
      * effect at the next cycle, keeping the switch truly deferred.
+     *
+     * @param  array<string, mixed>  $payload
      */
     private function onInvoicePaid(array $payload): void
     {
         $invoice = $payload['data']['object'];
 
-        // Only renewals trigger the switch — initial charges and mid-cycle
-        // updates shouldn't count as "end of period".
         if (($invoice['billing_reason'] ?? null) !== 'subscription_cycle') {
             return;
         }
@@ -69,6 +72,9 @@ class ApplySubscriptionFromWebhook
         $subscription->update(['pending_stripe_price' => null]);
     }
 
+    /**
+     * @param  array<string, mixed>  $payload
+     */
     private function onSubscription(array $payload): void
     {
         $subscription = $payload['data']['object'];
@@ -83,8 +89,6 @@ class ApplySubscriptionFromWebhook
             return;
         }
 
-        // Record the trial start the first time we see a trial-bearing
-        // subscription. `trial_start` is a Unix timestamp from Stripe.
         $cashierSub = $user->subscription('default');
         if ($cashierSub
             && $cashierSub->trial_ends_at !== null

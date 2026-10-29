@@ -4,17 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\CompanyService;
 use App\Support\ServiceCategory;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class CompanyServiceController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): JsonResponse
     {
         $companyServices = CompanyService::all();
 
@@ -24,7 +26,7 @@ class CompanyServiceController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): Response
     {
         return Inertia::render('services/company/create');
     }
@@ -49,7 +51,7 @@ class CompanyServiceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(CompanyService $companyService)
+    public function show(CompanyService $companyService): JsonResponse
     {
         return response()->json($companyService);
     }
@@ -57,7 +59,7 @@ class CompanyServiceController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(CompanyService $companyService)
+    public function edit(CompanyService $companyService): void
     {
         //
     }

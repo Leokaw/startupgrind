@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Observers\UserObserver;
 use App\Support\ServiceCategory;
+use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -15,12 +16,31 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Cashier\Billable;
 
+/**
+ * @property string $id
+ * @property string $name
+ * @property string $email
+ * @property string $user_type
+ * @property string|null $company_id
+ * @property string|null $description
+ * @property string|null $area_of_work
+ * @property string|null $role
+ * @property string|null $goal
+ * @property Carbon|null $onboarded_at
+ * @property Carbon|null $email_verified_at
+ * @property Carbon|null $approved_at
+ * @property string|null $profile_photo_path
+ * @property-read User|null $company
+ * @property-read Membership|null $membership
+ */
 #[ObservedBy([UserObserver::class])]
 class User extends Authenticatable implements MustVerifyEmail
 {
+    /** @use HasFactory<UserFactory> */
     use Billable, HasFactory, HasUuids, Notifiable;
 
     public const TYPE_COMPANY = 'company';
@@ -73,6 +93,8 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * Public URL of the user's profile photo, or a generated fallback
      * based on their initials.
+     *
+     * @return Attribute<string, never>
      */
     protected function profilePhotoUrl(): Attribute
     {
@@ -93,6 +115,8 @@ class User extends Authenticatable implements MustVerifyEmail
      * Human-readable label for `area_of_work`.
      * Returns null when unset, or the raw key if it's no longer in the
      * ServiceCategory enum (e.g. an old value after a schema change).
+     *
+     * @return Attribute<string|null, never>
      */
     protected function areaOfWorkLabel(): Attribute
     {
@@ -124,36 +148,57 @@ class User extends Authenticatable implements MustVerifyEmail
      |  Relationships
      | ----------------------------------------------------------------- */
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function company(): BelongsTo
     {
         return $this->belongsTo(User::class, 'company_id');
     }
 
+    /**
+     * @return HasMany<User, $this>
+     */
     public function employees(): HasMany
     {
         return $this->hasMany(User::class, 'company_id');
     }
 
+    /**
+     * @return HasOne<Membership, $this>
+     */
     public function membership(): HasOne
     {
         return $this->hasOne(Membership::class);
     }
 
+    /**
+     * @return HasMany<DiscountTicket, $this>
+     */
     public function discountTickets(): HasMany
     {
         return $this->hasMany(DiscountTicket::class);
     }
 
+    /**
+     * @return HasMany<InviteTicket, $this>
+     */
     public function inviteTickets(): HasMany
     {
         return $this->hasMany(InviteTicket::class, 'user_id');
     }
 
+    /**
+     * @return HasMany<InviteTicket, $this>
+     */
     public function invitesAccepted(): HasMany
     {
         return $this->hasMany(InviteTicket::class, 'accepted_by');
     }
 
+    /**
+     * @return HasMany<CompanyService, $this>
+     */
     public function companyServices(): HasMany
     {
         return $this->hasMany(CompanyService::class);
@@ -222,6 +267,9 @@ class User extends Authenticatable implements MustVerifyEmail
         return $company !== null && $company->approved_at !== null;
     }
 
+    /**
+     * @return Attribute<string|null, never>
+     */
     protected function roleLabel(): Attribute
     {
         return Attribute::get(fn () => match ($this->role) {
@@ -237,6 +285,8 @@ class User extends Authenticatable implements MustVerifyEmail
 
     /**
      * Human-readable label for the `goal` field.
+     *
+     * @return Attribute<string|null, never>
      */
     protected function goalLabel(): Attribute
     {

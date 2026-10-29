@@ -2,9 +2,23 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property int $id
+ * @property string $user_id
+ * @property string $token
+ * @property string $plan_slug
+ * @property string $status
+ * @property string|null $stripe_checkout_session_id
+ * @property string|null $stripe_subscription_id
+ * @property Carbon|null $ready_at
+ * @property Carbon|null $completed_at
+ * @property Carbon|null $expires_at
+ * @property-read User $user
+ */
 class SubscriptionSuccessToken extends Model
 {
     protected $fillable = [
@@ -28,6 +42,9 @@ class SubscriptionSuccessToken extends Model
         ];
     }
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
