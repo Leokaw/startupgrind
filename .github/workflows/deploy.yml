@@ -31,9 +31,17 @@ jobs:
       - name: Install NPM Dependencies
         run: npm ci
 
+      # ▼▼▼ NEW STEPS ▼▼▼
+      - name: Prepare .env for Wayfinder
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - name: Generate Wayfinder helpers
+        run: php artisan wayfinder:generate
+      # ▲▲▲ END NEW STEPS ▲▲▲
+
       - name: Run CI Check
-        # All checks (vp, tsc, pint, phpstan, tests) now pass — no '|| true' needed.
-        # If you ever need to bypass a failing check temporarily, add `|| true` here.
         run: composer ci:check
 
   # 2. Deploy to VPS
