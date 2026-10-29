@@ -28,6 +28,7 @@ const inputLikeClasses =
 const BLOCKED_MESSAGE =
     'Please use a business email. Personal email providers (Gmail, Hotmail, Yahoo, etc.) are not accepted.';
 
+    
 export default function CreateInviteTicket() {
     const [success, setSuccess] = useState(false);
     const [nameLength, setNameLength] = useState(0);
