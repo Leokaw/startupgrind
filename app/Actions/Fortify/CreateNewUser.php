@@ -3,8 +3,10 @@
 namespace App\Actions\Fortify;
 
 use App\Models\User;
+use App\Rules\BusinessEmailDomain;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 
@@ -17,9 +19,20 @@ class CreateNewUser implements CreatesNewUsers
      */
     public function create(array $input): User
     {
+        $isCompany = ($input['user_type'] ?? null) === 'company';
+
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'email' => [
+                'required',
+                'string',
+                'email',
+                'max:255',
+                'unique:users',
+                // Companies must register with a business email —
+                // personal domains like gmail/yahoo are rejected.
+                Rule::when($isCompany, [new BusinessEmailDomain]),
+            ],
             'password' => ['required', 'string', 'confirmed', Password::default()],
             'user_type' => ['required', 'string', 'in:company,user,freelancer'],
         ])->validate();

@@ -10,9 +10,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
-use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -27,53 +26,28 @@ class RegisteredUserController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        $isCompany = $request->input('user_type') === 'company';
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => array_filter([
+            'email' => [
                 'required',
                 'string',
                 'lowercase',
                 'email',
                 'max:255',
                 'unique:'.User::class,
-                // Only enforce a professional email when registering as a company.
-                $request->input('user_type') === 'company'
-                    ? new BusinessEmailDomain
-                    : null,
-            ]),
+                // Companies must register with a business email —
+                // Rule::when() applies BusinessEmailDomain only when
+                // user_type=company, ignoring it otherwise.
+                Rule::when($isCompany, [new BusinessEmailDomain]),
+            ],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'user_type' => ['required', 'string', 'in:company,user,freelancer'],
-        ]);
-
-        if (
-            $request->input('account_type') === 'community' &&
-            ! in_array($request->input('role'), ['user', 'freelancer'], true)
-        ) {
-            throw ValidationException::withMessages([
-                'role' => 'Please pick whether you are a normal user or a freelancer.',
-            ]);
-        }
-
-        if (
-            $request->input('account_type') === 'company' &&
-            $request->filled('role')
-        ) {
-            throw ValidationException::withMessages([
-                'role' => 'Companies cannot have an individual role.',
-            ]);
-        }
-
-        if (empty($validated['user_type'])) {
-            throw ValidationException::withMessages([
-                'user_type' => 'Registration could not determine the account type. Please try again.',
-            ]);
-        }
-
-        Log::info('Register diagnostic', [
-            'validated_user_type' => $validated['user_type'] ?? null,
-            'fillable' => (new User)->getFillable(),
-            'guarded' => (new User)->getGuarded(),
-            'user_model_file' => (new \ReflectionClass(User::class))->getFileName(),
+            'user_type' => [
+                'required',
+                'string',
+                Rule::in(['company', 'user', 'freelancer']),
+            ],
         ]);
 
         $user = new User;
@@ -86,7 +60,6 @@ class RegisteredUserController extends Controller
         $user->save();
 
         event(new Registered($user));
-
         Auth::login($user);
 
         return redirect()->route('events.index');
