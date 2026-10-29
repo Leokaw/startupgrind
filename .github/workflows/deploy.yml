@@ -2,7 +2,7 @@ name: Deploy Laravel App to VPS
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   # 1. Run CI Checks
@@ -15,15 +15,15 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.4'
+          php-version: "8.4"
           extensions: mbstring, xml, curl, zip, bcmath, intl, gd, mysql, sqlite3
           tools: composer
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
 
       - name: Install Composer Dependencies
         run: composer install --no-interaction --prefer-dist
@@ -31,15 +31,13 @@ jobs:
       - name: Install NPM Dependencies
         run: npm ci
 
-      # ▼▼▼ NEW STEPS ▼▼▼
       - name: Prepare .env for Wayfinder
         run: |
           cp .env.example .env
           php artisan key:generate
 
       - name: Generate Wayfinder helpers
-        run: php artisan wayfinder:generate
-      # ▲▲▲ END NEW STEPS ▲▲▲
+        run: php artisan wayfinder:generate --with-form
 
       - name: Run CI Check
         run: composer ci:check
