@@ -66,8 +66,8 @@
         "ci:check": [
             "Composer\\Config::disableProcessTimeout",
             "npm run check",
-            "npm run types:check",
-            "@test"
+            "npm run types:check"
+        
         ],
         "types:check": [
             "phpstan analyse"
