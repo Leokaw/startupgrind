@@ -5,7 +5,7 @@ on:
     branches: [ main ]
 
 jobs:
-  # 1. Run Checks (Ignoring errors so deployment proceeds)
+  # 1. Run CI Checks
   ci-check:
     runs-on: ubuntu-latest
     steps:
@@ -31,9 +31,10 @@ jobs:
       - name: Install NPM Dependencies
         run: npm ci
 
-      - name: Run CI Check (Force Pass)
-        # The '|| true' ensures GitHub doesn't fail the build if vp check finds TS errors
-        run: composer ci:check || true 
+      - name: Run CI Check
+        # All checks (vp, tsc, pint, phpstan, tests) now pass — no '|| true' needed.
+        # If you ever need to bypass a failing check temporarily, add `|| true` here.
+        run: composer ci:check
 
   # 2. Deploy to VPS
   deploy:
@@ -52,4 +53,4 @@ jobs:
           port: ${{ secrets.VPS_PORT || 22 }}
           script: |
             cd /var/www/my-app
-            ./deploy.sh
+            bash deploy.sh
